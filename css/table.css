@@ -1,0 +1,78 @@
+.vktContainer {
+    border: 1px dotted black;
+}
+
+.monthSelector {
+    border: 1px solid peru;
+    width: 100%;
+    display: inline-grid;
+    grid-template-columns: 80% 20%
+}
+
+.vktMonths {
+    border: 1px solid grey;
+    display: inline-grid;
+
+    grid-template-columns: auto auto auto auto auto auto
+}
+
+
+.vktMonths button:focus{
+    outline: 0;
+}
+
+.eventList {
+    display: flex;
+    flex-direction: column;
+    overflow-x: scroll;
+    height: 600px;
+    width: 600px;
+}
+
+.eventElement {
+    border: 1px solid saddlebrown;
+}
+
+
+/* old old
+table {
+    display: flex;
+    flex-direction: column;
+    overflow-x: scroll;
+    height: 400px;
+    width: 800px;
+}
+
+td {
+    text-align: center;
+    border: 1px solid red;
+    height: 100px;
+    width: 100px;
+    min-width: 100px;
+}
+
+th {
+    border: 1px solid blue;
+    min-width: 100px;
+}
+
+.monthHeader {
+    position: sticky;
+    background-color: white;
+
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+    left: 2px;
+}
+
+.groupHeader {
+    position: sticky;
+    background-color: white;
+
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+    left: 108px;
+}
+*/

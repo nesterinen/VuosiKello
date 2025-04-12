@@ -1,0 +1,138 @@
+/*################################################*/
+.EventCreation {
+    display: flex;
+    padding: 0.2em;
+    line-height: 1.1; /*mystery padding removal..*/
+}
+
+.EventCreation .titleGroup {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.EventCreation .baseSettings {
+    outline: 1px solid blue;
+}
+
+.EventCreation .extraSettings {
+    outline: 1px solid red;
+}
+
+.baseElement {
+    margin: 0.2em;
+}
+
+.baseText {
+    font-size: 0.7em;
+}
+
+.baseTextArea {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.baseInput {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.baseSelect {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dateTimeElement {
+    display: grid;
+    grid-template-columns: 50% 25% 25%;
+    grid-template-rows: 2;
+}
+
+/*################################################*/
+
+#VuosiKalenteri {
+    max-width: 90vw;
+    display: flex;
+}
+
+.VuosiKalenteriContainer {
+    border: rebeccapurple solid 1px;
+    /*max-width: fit-content;
+    margin: auto;*/
+}
+
+
+/*https://stackoverflow.com/questions/12813573/position-icons-into-circle*/
+#MonthCircle {
+    aspect-ratio: 1;
+    --d: 19vh; /* image size */
+    --rel: 0.075; /* how much extra space we want between images, 1 = 1 image size */
+    --ba: 1turn/var(--m);  /* base angle = 1 full turn divided by number of edges */
+    /* (1 + var(--rel))*var(--d) = polygon edge = img size + extra space */
+    --r: calc(.5*(1 + var(--rel))*var(--d)/tan(.5*var(--ba))); /* circle radius */
+    display: grid;
+    width: calc(2*var(--r) + var(--d)); /* container size */
+    background: silver;
+    padding: 2px;
+}
+
+#MonthCircle #MonthElement {
+    border:1px solid red;
+    border-radius: 50%;
+    text-align: center;
+    align-content: center;
+
+    grid-area: 1/ 1;
+    place-self: center;
+    /*
+    width: 13vh;
+    height: 13vh;
+    */
+    width: var(--d);
+    height: var(--d);
+    /*--ca: calc(var(--i) * var(--ba));*/
+    --ca: calc(calc(var(--i) * var(--ba)) - 60deg); /*-90deg so that dec12 is top... changed mnths 0-11 so 60deg*/
+    transform: 
+      rotate(var(--ca)) 
+      translate(var(--r))
+      rotate(calc(-1*var(--ca)))
+}
+
+#MonthCircle #MonthElement:hover {
+    border-color: orange;
+}
+
+#MonthCircle #MonthElement p {
+    font-size: 2vh;
+    display: list-item;
+    list-style-position: inside;
+    margin: 0;
+}
+
+#MonthCircle #MonthElement p:hover {
+    color: red;
+}
+
+#MonthCircle #MonthElement h4 {
+    font-size: 2vh;
+    font-weight: bold;
+    text-decoration: underline;
+    padding: 0;
+    margin: 0;
+}
+
+#MonthCircle #CircleCenter {
+    border:1px solid blue;
+    border-radius: 50%;
+    place-self: center;
+    grid-area: 1/ 1;
+    width: 26vh;
+    height: 26vh;
+    text-align: center;
+    align-content: center;
+}
+
+#MonthCircle  #CircleCenter p {
+    font-size: 2em;
+    font-weight: bold;
+    margin: auto 0 0 0;
+}

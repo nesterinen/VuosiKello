@@ -1,0 +1,26 @@
+datatype: {
+    id: int
+    series_id: int | null
+    priority: int
+    group: str
+    title: str
+    content: str
+    start: date
+    end: date
+}
+
+UI: Year calendar on the left, Event list on the right.
+
+UX Functionality, CRUD.
+    -> Create individuals, and series..
+        -> Series requirements?:
+            - First | Last working day of the month
+            - Only on Odd | Even Week.
+            - Specific days (every friday for example)
+            - Specific date number (every 5th of month)
+    -> Delete individuals, and series..
+    -> Update individuals, and series..
+
+Misc:
+    save and download events as json, pdf & excel?
+    automatic backups?

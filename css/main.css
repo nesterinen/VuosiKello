@@ -2,7 +2,9 @@
 .EventCreation {
     display: flex;
     padding: 0.2em;
+    padding-top: 1.7em;
     line-height: 1.1; /*mystery padding removal..*/
+    border-radius: 5px;
 }
 
 .EventCreation .titleGroup {
@@ -47,6 +49,43 @@
     grid-template-rows: 2;
 }
 
+.daySelect {
+    display: flex;
+}
+
+.baseButton {
+    margin: 5px;
+    padding: 5px;
+
+    border: 1px solid transparent;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.baseGreen {
+    background-color: #5baa00;
+}
+.baseGreen:hover {
+    background-color: #498701;
+}
+
+.baseRed {
+    background-color: #d12c0a;
+}
+.baseRed:hover {
+    background-color: #ad2307;
+}
+
+.closeButtonX {
+    position: absolute;
+    margin-top: -2.4em;
+    width: 2em;
+    height: 2em;
+    border: 1px solid transparent;
+    transition: 0.3s;
+    border-radius: 5px;
+    right: 0.2em;
+}
 /*################################################*/
 
 #VuosiKalenteri {

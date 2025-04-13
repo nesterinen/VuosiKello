@@ -62,7 +62,7 @@ function load_plugin(): void{
     wp_enqueue_script(
         handle:'plugin-script',
         src: "{$js_file_dir}/main.js",
-        deps: [],
+        deps: ['jquery'],
         ver: null
     );
 

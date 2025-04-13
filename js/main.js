@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     EventCreationDialog(php_args.groups)
 
-    /*
+    
     const testButton = mainElement.querySelector('.testButton')
     testButton.addEventListener('click', async () => {
 
@@ -55,17 +55,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         console.log('result', dialogResult)
     })
-    */
     
 })
 
 async function EventCreationDialog(groups) {
     let extraIsVisible = true
+    //const seriesTypes = ['weekly', 'oddWeeks', 'evenWeeks', 'lastDayOfMonth', 'firstDayOfMonth']
+    const seriesTypes = [
+        'viikottain',
+        'parittomat viikot',
+        'parilliset viikot',
+        'kuukauden ensimmäinen päivä',
+        'kuukauden viimeinen päivä'
+    ]
 
     return new Promise((resolve, reject) => {
         const dialog = document.createElement('dialog')
         dialog.classList.add('EventCreation')
         dialog.innerHTML = `
+        <button class='closeButtonX baseRed'>X</button>
 
         <div class='baseSettings'>
 
@@ -73,7 +81,7 @@ async function EventCreationDialog(groups) {
 
                 <div class='baseElement'>
                     <div class='baseText'>otsikko</div>
-                    <input class='baseInput'/>
+                    <input class='baseInput titleInput' value='Laborum'/>
                 </div>
                 
                 <div class='baseElement'>
@@ -86,27 +94,27 @@ async function EventCreationDialog(groups) {
             
             <div class='baseElement'>
                 <div class='baseText'>sisältö</div>
-                <textarea rows='5' cols='28' class='baseTextArea'></textarea>
+                <textarea rows='5' cols='28' class='baseTextArea contentInput'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
             </div>
 
             <div class='baseElement dateTimeElement'>
                 <div class='baseText'>päivämäärä</div>
                 <div class='baseText'>alku</div>
                 <div class='baseText'>loppu</div>
-                <input type='date'/>
-                <input type='time'/>
-                <input type='time'/>
+                <input type='date' value='2025-04-13' class='dateInput'/>
+                <input type='time' value='10:00' class='startInput'/>
+                <input type='time' value='12:00' class='endInput'/>
             </div>
 
             <div class='baseElement'>
                 <div class='baseText'>varaaja</div>
-                <input/>
+                <input value='Rackham' class='reserverInput'/>
             </div>
             
             <div class='buttonContainer'>
-                <button class='closeButton'>close</button>
-                <button class='createButton'>create</button>
-                <button class='extraButton'>extra</button>
+                <button class='closeButton baseButton'>close</button>
+                <button class='createButton baseButton baseGreen'>create</button>
+                <button class='extraButton baseButton'>extra</button>
             </div>
 
         </div>
@@ -118,9 +126,38 @@ async function EventCreationDialog(groups) {
                 <select class='prioritySelect'></select>
             </div>
 
-        </div>
+            <div class='baseElement'>
+                <div class='baseText'>sarjan tyyppi</div>
+                <select class='seriesType'></select>
+            </div>
 
-        
+            <div class='baseElement'>
+                <div class='baseText'>päivät</div>
+                <div class='daySelect'>
+                    <div>
+                        <input type='checkbox' id='cbMa' class='cbDay'/>
+                        <label for='cbMa'>ma</label>
+                    </div>
+                    <div>
+                        <input type='checkbox' id='cbTi' class='cbDay'/>
+                        <label for='cbTi'>ti</label>
+                    </div>
+                    <div>
+                        <input type='checkbox' id='cbKe' class='cbDay'/>
+                        <label for='cbKe'>ke</label>
+                    </div>
+                    <div>
+                        <input type='checkbox' id='cbTo' class='cbDay'/>
+                        <label for='cbTo'>to</label>
+                    </div>
+                    <div>
+                        <input type='checkbox' id='cbPe' class='cbDay'/>
+                        <label for='cbPe'>pe</label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
         `
 
         const groupSelector = dialog.querySelector('.groupSelect')
@@ -136,15 +173,40 @@ async function EventCreationDialog(groups) {
             option.appendChild(document.createTextNode(priority))
             prioritySelector.appendChild(option)
         }
+        prioritySelector.value = '5'
+
+        const seriesTypeSelector = dialog.querySelector('.seriesType')
+        for (const type of seriesTypes) {
+            const option = document.createElement('option')
+            option.appendChild(document.createTextNode(type))
+            seriesTypeSelector.appendChild(option)
+        }
 
         const createButton = dialog.querySelector('.createButton')
         createButton.addEventListener('click', () => {
-            dialog.remove()
-            resolve({data:'bla bla ', series: false})
+            const title = dialog.querySelector('.titleInput').value
+            const content = dialog.querySelector('.contentInput').value
+            const reserver = dialog.querySelector('.reserverInput').value
+            const date = dialog.querySelector('.dateInput').value
+            const start = dialog.querySelector('.startInput').value
+            const end = dialog.querySelector('.endInput').value
+            const group = groupSelector.value
+            const priority = prioritySelector.value
+
+
+            console.log({title, content, reserver, date, start, end, group, priority})
+            //dialog.remove()
+            //resolve({data:'bla bla ', series: false})
         })
 
         const closeButton = dialog.querySelector('.closeButton')
         closeButton.addEventListener('click', () => {
+            dialog.remove()
+            reject('Dialog closed.')
+        })
+
+        const closeButtonX = dialog.querySelector('.closeButtonX')
+        closeButtonX.addEventListener('click', () => {
             dialog.remove()
             reject('Dialog closed.')
         })
@@ -161,6 +223,22 @@ async function EventCreationDialog(groups) {
                 extraSettings.style = 'display: none;'
             }
         })
+
+        /*
+        jQuery(($) => {
+            $("h1.jtest").html("wtf")
+        })
+        */
+
+        /*
+        jQuery(($) => {
+            $("button.testButton").on('click', () => {
+                console.log(seriesTypeSelector.value)
+                console.log(seriesTypeSelector.options.selectedIndex)
+                console.log('fromArray:', seriesTypes[seriesTypeSelector.options.selectedIndex])
+            })
+        })
+        */
 
         document.body.appendChild(dialog)
         dialog.showModal()

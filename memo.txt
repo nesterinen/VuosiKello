@@ -1,7 +1,7 @@
 datatype: {
     id: int
     series_id: int | null
-    priority: int
+    priority: int  //0-4
     group: str
     title: str
     content: str

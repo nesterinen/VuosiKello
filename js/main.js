@@ -67,6 +67,19 @@ function dateToHourMin(date) {
     return timeString[0] + ':' + timeString[1]
 }
 
+function addDays(date, days) {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+}
+
+// https://stackoverflow.com/questions/9045868/javascript-date-getweek @alias51
+function getWeek(date){
+    const onejan = new Date(date.getFullYear(),0,1)
+    const dayOfYear = ((date - onejan + 86400000)/86400000)
+    return Math.ceil(dayOfYear/7)
+}
+
 async function EventCreationDialog(groups) {
     let extraIsVisible = true
     //const seriesTypes = ['weekly', 'oddWeeks', 'evenWeeks', 'lastDayOfMonth', 'firstDayOfMonth']
@@ -79,11 +92,13 @@ async function EventCreationDialog(groups) {
         'kuukauden viimeinen päivä'
     ]
 
-    function addDays(date, days) {
-        const result = new Date(date);
-        result.setDate(result.getDate() + days);
-        return result;
-    }
+    const priorities = [
+        '1 - suurin',
+        '2 - suuri',
+        '3 - keskikokoinen',
+        '4 - matala',
+        '5 - matalin'
+    ]
 
     function weeklySeries(
         dateStart,
@@ -91,7 +106,7 @@ async function EventCreationDialog(groups) {
         clockStart,
         clockEnd,
         daysCheckBoxElement,
-        type='default'
+        typeOfSeries='default'
         ){
             const startDateText = `${dateStart}T${clockStart}:00`
             const dateStartObject = new Date(startDateText)
@@ -113,15 +128,25 @@ async function EventCreationDialog(groups) {
             const arrayOfDates = [] //[{start: date, endDate}, {}, ...]
             for (let i = 0; i <= diffDays; i++){
                 const newDate = addDays(dateStartObject , i)
+
+                // mon, tue, wed & etc...
                 if(daysChecked[ newDate.getDay() - 1 ]){
-                const newDateEnd = new Date(newDate)//addDays(endDateInput, i)
-                const [eHours, eMins] = clockEnd.split(':')
-                newDateEnd.setHours(parseInt(eHours))
-                newDateEnd.setMinutes(parseInt(eMins))
-                arrayOfDates.push({
-                    start: dateNoTimezone(newDate),//newDate,
-                    end: dateNoTimezone(newDateEnd)//newDateEnd
-                })
+                    if(typeOfSeries === 'odd'){
+                        if(getWeek(newDate)%2 === 1) continue
+                    }
+
+                    if(typeOfSeries === 'even'){
+                        if(getWeek(newDate)%2 === 0) continue
+                    }
+
+                    const newDateEnd = new Date(newDate)
+                    const [eHours, eMins] = clockEnd.split(':')
+                    newDateEnd.setHours(parseInt(eHours))
+                    newDateEnd.setMinutes(parseInt(eMins))
+                    arrayOfDates.push({
+                        start: dateNoTimezone(newDate),
+                        end: dateNoTimezone(newDateEnd)
+                    })
                 }
             }
 
@@ -174,7 +199,7 @@ async function EventCreationDialog(groups) {
             <div class='buttonContainer'>
                 <button class='closeButton baseButton' style='display:none;'>close</button>
                 <button class='createButton baseButton baseGreen'>luo tapahtuma</button>
-                <button class='extraButton baseButton'>asetukset</button>
+                <button class='extraButton baseButton'>lisä asetukset</button>
             </div>
 
         </div>
@@ -231,12 +256,21 @@ async function EventCreationDialog(groups) {
         })
 
         const prioritySelector = dialog.querySelector('.prioritySelect')
+        for (const p of priorities) {
+            const option = document.createElement('option')
+            option.appendChild(document.createTextNode(p))
+            prioritySelector.appendChild(option)
+        }
+        prioritySelector.value = priorities[4]
+
+        /*
         for (let priority = 1; priority <= 5; priority++){
             const option = document.createElement('option')
             option.appendChild(document.createTextNode(priority))
             prioritySelector.appendChild(option)
         }
         prioritySelector.value = '5'
+        */
 
         const seriesTypeSelector = dialog.querySelector('.seriesType')
         for (const type of seriesTypes) {
@@ -247,8 +281,10 @@ async function EventCreationDialog(groups) {
         seriesTypeSelector.addEventListener('change', () => {
             if(seriesTypeSelector.options.selectedIndex !== 0) {
                 endDateInput.disabled = false
+                endDateInput.style = 'outline: 2px dotted green;'
             } else {
                 endDateInput.disabled = true
+                endDateInput.style = ''
             }
         })
 
@@ -261,10 +297,10 @@ async function EventCreationDialog(groups) {
             const start = dialog.querySelector('.startInput').value
             const end = dialog.querySelector('.endInput').value
             const group = groupSelector.value
-            const priority = prioritySelector.value
+            const priority = prioritySelector.options.selectedIndex//prioritySelector.value
             const daysCheckBoxElement = dialog.getElementsByClassName('cbDay')
 
-            switch(seriesTypeSelector.options.selectedIndex ){
+            switch(seriesTypeSelector.options.selectedIndex){
                 case 0: /*individual*/
                     console.log({title, content, reserver, startDate, start, end, group, priority})
                     break
@@ -275,16 +311,27 @@ async function EventCreationDialog(groups) {
                         endDateInput.value,
                         start,
                         end,
-                        daysCheckBoxElement,
-                        )
+                        daysCheckBoxElement)
                     break
 
                 case 2: /*odd weeks series*/
-                    console.log('odd weekly series TODO')
+                    weeklySeries(
+                        startDate,
+                        endDateInput.value,
+                        start,
+                        end,
+                        daysCheckBoxElement,
+                        'odd')
                     break
 
                 case 3: /*even weeks series*/
-                    console.log('event weekly series TODO')
+                    weeklySeries(
+                        startDate,
+                        endDateInput.value,
+                        start,
+                        end,
+                        daysCheckBoxElement,
+                        'even')
                     break
 
                 case 4: /*month frist*/

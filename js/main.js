@@ -58,16 +58,75 @@ document.addEventListener('DOMContentLoaded', async () => {
     
 })
 
+function dateNoTimezone(date) {
+    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
+}
+
+function dateToHourMin(date) {
+    const timeString = date.split("T")[1].split(".")[0].split(":")
+    return timeString[0] + ':' + timeString[1]
+}
+
 async function EventCreationDialog(groups) {
     let extraIsVisible = true
     //const seriesTypes = ['weekly', 'oddWeeks', 'evenWeeks', 'lastDayOfMonth', 'firstDayOfMonth']
     const seriesTypes = [
+        'ei sarjaa',
         'viikottain',
         'parittomat viikot',
         'parilliset viikot',
         'kuukauden ensimmäinen päivä',
         'kuukauden viimeinen päivä'
     ]
+
+    function addDays(date, days) {
+        const result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    }
+
+    function weeklySeries(
+        dateStart,
+        dateEnd,
+        clockStart,
+        clockEnd,
+        daysCheckBoxElement,
+        type='default'
+        ){
+            const startDateText = `${dateStart}T${clockStart}:00`
+            const dateStartObject = new Date(startDateText)
+
+            const endDateText = `${dateEnd}T${clockEnd}:00`
+            const dateEndObject = new Date(endDateText)
+
+            let daysChecked = []
+            for (const checkbox of daysCheckBoxElement) {
+                daysChecked.push(checkbox.checked)
+            }
+            daysChecked.push(false) // saturday
+            daysChecked.push(false) // sunday
+
+            const diffTime = dateStartObject  - dateEndObject
+            const diffDays = Math.floor(-diffTime / (1000 * 60 * 60 * 24)) // time difference in days.
+
+            // loop through days froms start to end
+            const arrayOfDates = [] //[{start: date, endDate}, {}, ...]
+            for (let i = 0; i <= diffDays; i++){
+                const newDate = addDays(dateStartObject , i)
+                if(daysChecked[ newDate.getDay() - 1 ]){
+                const newDateEnd = new Date(newDate)//addDays(endDateInput, i)
+                const [eHours, eMins] = clockEnd.split(':')
+                newDateEnd.setHours(parseInt(eHours))
+                newDateEnd.setMinutes(parseInt(eMins))
+                arrayOfDates.push({
+                    start: dateNoTimezone(newDate),//newDate,
+                    end: dateNoTimezone(newDateEnd)//newDateEnd
+                })
+                }
+            }
+
+            console.log('series:', arrayOfDates)
+    }
 
     return new Promise((resolve, reject) => {
         const dialog = document.createElement('dialog')
@@ -104,6 +163,7 @@ async function EventCreationDialog(groups) {
                 <input type='date' value='2025-04-13' class='dateInput'/>
                 <input type='time' value='10:00' class='startInput'/>
                 <input type='time' value='12:00' class='endInput'/>
+                <input type='date' value='2025-05-13' class='endDateInput'/>
             </div>
 
             <div class='baseElement'>
@@ -112,9 +172,9 @@ async function EventCreationDialog(groups) {
             </div>
             
             <div class='buttonContainer'>
-                <button class='closeButton baseButton'>close</button>
-                <button class='createButton baseButton baseGreen'>create</button>
-                <button class='extraButton baseButton'>extra</button>
+                <button class='closeButton baseButton' style='display:none;'>close</button>
+                <button class='createButton baseButton baseGreen'>luo tapahtuma</button>
+                <button class='extraButton baseButton'>asetukset</button>
             </div>
 
         </div>
@@ -132,10 +192,10 @@ async function EventCreationDialog(groups) {
             </div>
 
             <div class='baseElement'>
-                <div class='baseText'>päivät</div>
+                <div class='baseText'>sarjan päivät</div>
                 <div class='daySelect'>
                     <div>
-                        <input type='checkbox' id='cbMa' class='cbDay'/>
+                        <input type='checkbox' id='cbMa' class='cbDay' checked/>
                         <label for='cbMa'>ma</label>
                     </div>
                     <div>
@@ -143,7 +203,7 @@ async function EventCreationDialog(groups) {
                         <label for='cbTi'>ti</label>
                     </div>
                     <div>
-                        <input type='checkbox' id='cbKe' class='cbDay'/>
+                        <input type='checkbox' id='cbKe' class='cbDay' checked/>
                         <label for='cbKe'>ke</label>
                     </div>
                     <div>
@@ -151,7 +211,7 @@ async function EventCreationDialog(groups) {
                         <label for='cbTo'>to</label>
                     </div>
                     <div>
-                        <input type='checkbox' id='cbPe' class='cbDay'/>
+                        <input type='checkbox' id='cbPe' class='cbDay' checked/>
                         <label for='cbPe'>pe</label>
                     </div>
                 </div>
@@ -159,6 +219,9 @@ async function EventCreationDialog(groups) {
 
         </div>
         `
+
+        const endDateInput = dialog.querySelector('.endDateInput')
+        //endDateInput.disabled = true  //false on production!
 
         const groupSelector = dialog.querySelector('.groupSelect')
         Object.keys(groups).map(group => {
@@ -181,20 +244,58 @@ async function EventCreationDialog(groups) {
             option.appendChild(document.createTextNode(type))
             seriesTypeSelector.appendChild(option)
         }
+        seriesTypeSelector.addEventListener('change', () => {
+            if(seriesTypeSelector.options.selectedIndex !== 0) {
+                endDateInput.disabled = false
+            } else {
+                endDateInput.disabled = true
+            }
+        })
 
         const createButton = dialog.querySelector('.createButton')
         createButton.addEventListener('click', () => {
             const title = dialog.querySelector('.titleInput').value
             const content = dialog.querySelector('.contentInput').value
             const reserver = dialog.querySelector('.reserverInput').value
-            const date = dialog.querySelector('.dateInput').value
+            const startDate = dialog.querySelector('.dateInput').value
             const start = dialog.querySelector('.startInput').value
             const end = dialog.querySelector('.endInput').value
             const group = groupSelector.value
             const priority = prioritySelector.value
+            const daysCheckBoxElement = dialog.getElementsByClassName('cbDay')
 
+            switch(seriesTypeSelector.options.selectedIndex ){
+                case 0: /*individual*/
+                    console.log({title, content, reserver, startDate, start, end, group, priority})
+                    break
+                
+                case 1: /*weekly series*/
+                    weeklySeries(
+                        startDate,
+                        endDateInput.value,
+                        start,
+                        end,
+                        daysCheckBoxElement,
+                        )
+                    break
 
-            console.log({title, content, reserver, date, start, end, group, priority})
+                case 2: /*odd weeks series*/
+                    console.log('odd weekly series TODO')
+                    break
+
+                case 3: /*even weeks series*/
+                    console.log('event weekly series TODO')
+                    break
+
+                case 4: /*month frist*/
+                    console.log('todo')
+                    break
+
+                case 2: /*month last*/
+                    console.log('todo')
+                    break
+            }
+
             //dialog.remove()
             //resolve({data:'bla bla ', series: false})
         })

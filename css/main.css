@@ -12,12 +12,16 @@
     grid-template-columns: 50% 50%;
 }
 
+
 .EventCreation .baseSettings {
-    outline: 1px solid blue;
+    /*outline: 1px solid blue;*/
+    border-top: 1px solid black;
 }
 
 .EventCreation .extraSettings {
-    outline: 1px solid red;
+    /*outline: 1px solid red;*/
+    border-left: 1px dashed black;
+    border-top: 1px solid black;
 }
 
 .baseElement {
@@ -81,7 +85,7 @@
     margin-top: -2.4em;
     width: 2em;
     height: 2em;
-    border: 1px solid transparent;
+    border: 1px solid black;
     transition: 0.3s;
     border-radius: 5px;
     right: 0.2em;

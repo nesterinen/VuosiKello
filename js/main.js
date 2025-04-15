@@ -3,7 +3,7 @@ datatype: {
     id: int
     series_id: int | null
     priority: int
-    varaaja: str
+    reservor: str
     group: str
     title: str
     content: str
@@ -12,15 +12,49 @@ datatype: {
 }
 */
 
+function getRandomInt(max=2_147_483_647) {
+    return Math.floor(Math.random() * max);
+}
+
+function backendSimulationIndividual(eventObject, series_id=null){
+    return {
+        id: getRandomInt(),
+        series_id: series_id,
+        priority: eventObject.priority,
+        reservor: eventObject.reservor,
+        group: eventObject.group,
+        title: eventObject.title,
+        content: eventObject.content,
+        start: eventObject.start,
+        end: eventObject.end
+    }
+}
+function backendSimulationMultiple(eventObject){
+    let eventObjectsArray = []
+    const series_id = getRandomInt()
+    for(const date of eventObject.arrayOfDates){
+        const newEventObj = backendSimulationIndividual({
+            ...eventObject,
+            start: date.start,
+            end: date.end
+        }, series_id)
+        eventObjectsArray.push(newEventObj)
+    }
+    return eventObjectsArray
+}
+
+
 document.addEventListener('DOMContentLoaded', async () => {
     const mainElement = document.getElementById('VuosiKalenteri')
     if (mainElement === null) return
+
+    let eventData = []
 
     mainElement.innerHTML = `
         <button class='testButton'>Test</button>
     `
 
-    /*
+    
     function downloadLink(data){
         const element = document.createElement('a')
         element.textContent = 'lataa'
@@ -34,10 +68,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         return element
     }
-    mainElement.appendChild(downloadLink(gevents))
-    */
+    mainElement.appendChild(downloadLink(eventData))
+    
 
-    EventCreationDialog(php_args.groups)
+    EventCreationDialog(php_args.groups).then(result => console.log(result))
 
     
     const testButton = mainElement.querySelector('.testButton')
@@ -53,7 +87,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             return
         }
 
-        console.log('result', dialogResult)
+        if(dialogResult.series === false) {
+            const result = backendSimulationIndividual(dialogResult.data)
+            eventData.push(result)
+            console.log('eventData', eventData)
+        } else {
+            const result = backendSimulationMultiple(dialogResult.data)
+            for(const event of result) {
+                eventData.push(event)
+            }
+            console.log('eventData', eventData)
+        }
     })
     
 })
@@ -150,7 +194,7 @@ async function EventCreationDialog(groups) {
                 }
             }
 
-            console.log('series:', arrayOfDates)
+            return arrayOfDates
     }
 
     return new Promise((resolve, reject) => {
@@ -178,7 +222,7 @@ async function EventCreationDialog(groups) {
             
             <div class='baseElement'>
                 <div class='baseText'>sisältö</div>
-                <textarea rows='5' cols='28' class='baseTextArea contentInput'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
+                <textarea rows='10' cols='50' class='baseTextArea contentInput'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
             </div>
 
             <div class='baseElement dateTimeElement'>
@@ -292,44 +336,57 @@ async function EventCreationDialog(groups) {
         createButton.addEventListener('click', () => {
             const title = dialog.querySelector('.titleInput').value
             const content = dialog.querySelector('.contentInput').value
-            const reserver = dialog.querySelector('.reserverInput').value
+            const reservor = dialog.querySelector('.reserverInput').value
             const startDate = dialog.querySelector('.dateInput').value
-            const start = dialog.querySelector('.startInput').value
-            const end = dialog.querySelector('.endInput').value
-            const group = groupSelector.value
-            const priority = prioritySelector.options.selectedIndex//prioritySelector.value
+            const clock_start = dialog.querySelector('.startInput').value
+            const clock_end = dialog.querySelector('.endInput').value
+            const group = groupSelector.value 
+            const priority = prioritySelector.options.selectedIndex + 1//prioritySelector.value
             const daysCheckBoxElement = dialog.getElementsByClassName('cbDay')
+
+            const returnObject = {
+                title,
+                content,
+                priority,
+                reservor,
+                start: dateNoTimezone(new Date(`${startDate}T${clock_start}`)),
+                end: dateNoTimezone(new Date(`${startDate}T${clock_end}`)),
+                group,
+                arrayOfDates: null
+            }
 
             switch(seriesTypeSelector.options.selectedIndex){
                 case 0: /*individual*/
-                    console.log({title, content, reserver, startDate, start, end, group, priority})
-                    break
+                    
+                    resolve({data: returnObject, series: false})
+                    return
+                    // break
                 
                 case 1: /*weekly series*/
-                    weeklySeries(
+                    returnObject.arrayOfDates = weeklySeries(
                         startDate,
                         endDateInput.value,
-                        start,
-                        end,
+                        clock_start,
+                        clock_end,
                         daysCheckBoxElement)
                     break
 
                 case 2: /*odd weeks series*/
-                    weeklySeries(
+                    returnObject.arrayOfDates = weeklySeries(
                         startDate,
                         endDateInput.value,
-                        start,
-                        end,
+                        clock_start,
+                        clock_end,
                         daysCheckBoxElement,
                         'odd')
                     break
 
                 case 3: /*even weeks series*/
-                    weeklySeries(
+                    returnObject.arrayOfDates = weeklySeries(
                         startDate,
                         endDateInput.value,
-                        start,
-                        end,
+                        clock_start,
+                        clock_end,
                         daysCheckBoxElement,
                         'even')
                     break
@@ -343,8 +400,11 @@ async function EventCreationDialog(groups) {
                     break
             }
 
+            // add validation! TODO!!!!!!!!!!!!!!!!
+
             //dialog.remove()
             //resolve({data:'bla bla ', series: false})
+            resolve({data: returnObject, series: true})
         })
 
         const closeButton = dialog.querySelector('.closeButton')

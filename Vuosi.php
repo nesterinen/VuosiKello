@@ -37,6 +37,13 @@ function load_plugin(): void{
     wp_enqueue_style(handle: 'wsp-styles', src: plugin_dir_url(file: __FILE__) . 'css/main.css');
     wp_enqueue_style(handle: 'wsp-table-style', src: plugin_dir_url(file: __FILE__) . 'css/table.css');
 
+    wp_register_script(
+        handle: 'dialogs',
+        src: "{$js_file_dir}/dialogs.js",
+        deps: [],
+        ver: null
+    );
+
     /*
     wp_register_script(
         handle: 'moduuli',
@@ -62,7 +69,7 @@ function load_plugin(): void{
     wp_enqueue_script(
         handle:'plugin-script',
         src: "{$js_file_dir}/main.js",
-        deps: ['jquery'],
+        deps: ['jquery', 'dialogs'],
         ver: null
     );
 

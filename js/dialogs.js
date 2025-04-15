@@ -43,7 +43,7 @@ function backendSimulationMultiple(eventObject){
     return eventObjectsArray
 }
 
-
+/*
 document.addEventListener('DOMContentLoaded', async () => {
     const mainElement = document.getElementById('VuosiKalenteri')
     if (mainElement === null) return
@@ -101,6 +101,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     })
     
 })
+*/
 
 function dateNoTimezone(date) {
     return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();

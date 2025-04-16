@@ -38,7 +38,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     vkElement.innerHTML = `
         <div class='vuosiKalenteriContainer' style='display: flex;'>
             <div class='circleContainer'>
-                <p>a</p>
+                <p>cContainer</p>
+                <button class='testButton'>Test</button>
             </div>
 
             <div class='tableContainer'>
@@ -69,6 +70,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     
 
     vuosiTable.render()
+
+    const testButton = vkElement.querySelector('.testButton')
+    testButton.addEventListener('click', async () => {
+
+        const dialogResult = await EventCreationDialog(php_args.groups).catch((e) => {
+            console.log(e)
+            return null
+        })
+
+        if (!dialogResult) {
+            console.log('done')
+            return
+        }
+
+        if(dialogResult.series === false) {
+            const result = backendSimulationIndividual(dialogResult.data)
+            yearEvents.addEvent(result)
+            yearEvents.sortEventsByDate()
+            vuosiTable.updateTable()
+        } else {
+            const result = backendSimulationMultiple(dialogResult.data)
+            for(const event of result) {
+                yearEvents.addEvent(event)
+            }
+            yearEvents.sortEventsByDate()
+            vuosiTable.updateTable()
+        }
+    })
 })
 
 
@@ -122,15 +151,23 @@ class YearEvents {
         }
 
         // sort by date
+        this.sortEventsByDate()
+        /*
         this.events.sort((a, b) => {
             return a.start - b.start
-        })
+        })*/
     }
 
     #errorLogger(...params){
         if (this.#errorLog) {
             console.log('eLogger:', ...params)
         }
+    }
+
+    sortEventsByDate(){
+        this.events.sort((a, b) => {
+            return a.start - b.start
+        })
     }
 
     getEvent(id) {
@@ -159,9 +196,10 @@ class YearEvents {
 
     }
 
-    addEvent({id, start, group, title, content}) {
+    addEvent({id, series_id,  priority, start, end, group, title, content, reservor}) {
         if(typeof id !== 'number' || id % 1 !== 0) {
             throw new Error('id is not a integer')
+            //id = parseInt(id)
         }
 
         if (this.getEvent(id)) {
@@ -170,10 +208,14 @@ class YearEvents {
 
         this.events.push(new YearEvent(
             id,
+            series_id,
+            priority,
             new Date(start),
-            group,
-            title,
-            content
+            new Date(end),
+            group, 
+            title, 
+            content,
+            reservor
         ))
 
         this.#errorLogger('event with id:', id, 'added.')
@@ -187,9 +229,7 @@ class VuosiTable {
     YearEvents
     groups
 
-    monthClick = null
-    
-    selectedMonth = 3
+    selectedMonth = 0
     monthFilter = false
     groupFilter = null
 
@@ -197,16 +237,28 @@ class VuosiTable {
 
     eventUpdateName = 'vuosiKalenteriUpdate'
 
-    constructor(element, {yearEvents, monthClick, deleteClick, groups}) {
+    firstEventToday = null//{element: null, data: null}
+    dateToday = new Date()
+
+    constructor(element, {yearEvents, eventClick, deleteClick, groups}) {
         this.element = this.#CheckIfDomElement(element)
         this.YearEvents = yearEvents
 
-        this.monthClick = monthClick && typeof monthClick == 'function' ? monthClick : this.#monthClickFunction
-
+        this.eventClick = eventClick && typeof eventClick == 'function' ? eventClick : this.#eventClickFunction
         this.deleteClick = deleteClick && typeof deleteClick == 'function' ? deleteClick : this.#deleteEventFunction
 
         this.groups = groups ? groups : []
 
+    }
+
+    #scrollToTodayEvent(){
+        if(this.firstEventToday){
+            this.element.querySelector('.eventList').scrollTo({
+                top: this.firstEventToday.element.offsetTop -  this.firstEventToday.element.scrollHeight - this.firstEventToday.element.offsetHeight,
+                left: 0,
+                behavior: 'smooth'
+            })
+        }
     }
 
     #CheckIfDomElement(element){
@@ -248,13 +300,12 @@ class VuosiTable {
         }
     }
 
-    #monthClickFunction(month){
-        this.#errorLogger('monthClickFunction:', month)
-        this.updateTable()
-    }
-
     #deleteEventFunction(id){
         this.#errorLogger('deleteEventFunction:', id)
+    }
+
+    #eventClickFunction({element, data}){
+        console.log('eventClickFunction', element, data)
     }
 
     #errorLogger(...params){
@@ -263,7 +314,6 @@ class VuosiTable {
         }
     }
 
-    
     setEventFilterByGroup(group) {
         if(!group){
             this.groupFilter = null
@@ -273,6 +323,7 @@ class VuosiTable {
 
         this.updateTable()
         this.#errorLogger('filter:', group, ', group set.')
+        this.#scrollToTodayEvent()
     }
 
     setEventFilterByMonth(month) {
@@ -285,30 +336,10 @@ class VuosiTable {
 
         this.updateTable()
         this.#errorLogger('filter:', month, ',month set.')
+        this.#scrollToTodayEvent()
     }
 
     // Visual #####################################################################
-
-    #buttonGenerator(){
-        const monthSelection = document.createElement('div')
-        monthSelection.classList.add('vktMonths')
-
-        for (let month = 0; month <= 11; month++){
-            const msButton = document.createElement('button')
-            msButton.textContent = this.#getKuukasiFromNumber(month)
-
-            msButton.addEventListener('click', () => {
-                this.selectedMonth = month
-                this.updateTable()
-                //this.monthClick(month)
-            })
-
-            monthSelection.appendChild(msButton)
-        }
-
-        return monthSelection
-    }
-
     #tableHeader(){
         const header = document.createElement('div')
         header.classList.add('eventTableHeader')
@@ -378,25 +409,7 @@ class VuosiTable {
                 </div>
 
                 <div class='eventList'>
-                    <div class='myTestElem'>
-                        <h1>header</h1>
-                        <p>paragraph</p>
-                    </div>
-
-                    <div class='myTestElem'>
-                        <h1>header</h1>
-                        <p>paragraph</p>
-                    </div>
-
-                    <div class='myTestElem'>
-                        <h1>header</h1>
-                        <p>paragraph</p>
-                    </div>
-
-                    <div class='myTestElem'>
-                        <h1>header</h1>
-                        <p>paragraph</p>
-                    </div>
+                    <div>Error...</div>
                 </div>
             </div>
         `
@@ -405,6 +418,8 @@ class VuosiTable {
         this.element.querySelector(".eventTableHeaderContainer").appendChild(this.#tableHeader())
 
         this.updateTable()
+
+        this.#scrollToTodayEvent()
     }
 
     #eventDomElement(yearEvent){
@@ -429,8 +444,9 @@ class VuosiTable {
             </div>
 
             <div class='eventOtherInfo'>
-                <div>prioriteetti: ${yearEvent.priority}</div>
-                <div>varaaja: ${yearEvent.reservor}</div>
+                <div class='baseText'>prioriteetti: ${yearEvent.priority}</div>
+                <div class='baseText'>varaaja: ${yearEvent.reservor}</div>
+                <div class='baseText'>ryhmä: ${yearEvent.group}</div>
             </div>
 
             <div class='eventButtons'>
@@ -450,34 +466,19 @@ class VuosiTable {
             console.log('grps', this.groups)
         })
 
+        eventElement.addEventListener('click', (e) => {
+            if(e.target instanceof HTMLButtonElement) return
+            this.eventClick({element: eventElement, data:yearEvent})
+        })
+
         return eventElement
-    }
-
-    #eventDomElement2(yearEvent){
-        const eventElement = document.createElement('div')
-                eventElement.classList.add('eventElement')
-
-                eventElement.innerHTML = `
-                    <h1>${yearEvent.title}</h1>
-                    <p>${yearEvent.content}</p>
-                    <p>${yearEvent.group}</p>
-                    <p>${yearEvent.start.toISOString()}</p>
-                `
-
-                const deleteButton = document.createElement('button')
-                deleteButton.innerText = 'delete'
-                deleteButton.addEventListener('click', () => {
-                    this.deleteClick(yearEvent.id)
-                })
-
-                eventElement.append(deleteButton)
-
-                return eventElement
     }
 
     updateTable(){
         const eventList = this.element.querySelector('.eventList')
         eventList.innerHTML = ''
+
+        this.firstEventToday = null
 
         for (const yearEvent of this.YearEvents.events) {
             //filter by group
@@ -493,7 +494,14 @@ class VuosiTable {
                 }
             }
 
-            eventList.append(this.#eventDomElement(yearEvent))
+            const eventElement = this.#eventDomElement(yearEvent)
+            
+            if(this.firstEventToday === null & yearEvent.start >= this.dateToday){
+                this.firstEventToday = {element: eventElement, data: yearEvent}
+                this.firstEventToday.element.style = 'border-top: 5px solid Chartreuse; border-bottom: 5px solid Chartreuse;'
+            }
+
+            eventList.append(eventElement)
         }
     }
 }

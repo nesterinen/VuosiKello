@@ -403,7 +403,7 @@ async function EventCreationDialog(groups) {
 
             // add validation! TODO!!!!!!!!!!!!!!!!
 
-            //dialog.remove()
+            dialog.remove()
             //resolve({data:'bla bla ', series: false})
             resolve({data: returnObject, series: true})
         })

@@ -24,15 +24,41 @@
 .eventList {
     display: flex;
     flex-direction: column;
-    overflow-x: scroll;
+    /*overflow-x: scroll;*/
+    overflow-x: hidden;
     height: 600px;
-    width: 600px;
+    width: 40vw;
+}
+
+.eventTableHeader {
+    display: grid;
+    grid-template-columns: auto auto;
+    outline: 1px solid palegreen;
 }
 
 .eventElement {
-    border: 1px solid saddlebrown;
+    border: 1px solid grey;
+
+    display: grid;
+    grid-template-columns: 20% 40% 20% 20%;
+
+    margin-bottom: 0.25em;
 }
 
+.eventDateInfo {
+    text-align: center;
+    margin: auto;
+}
+
+.eventOtherInfo {
+    text-align: center;
+    margin: auto;
+}
+
+.eventButtons {
+    display: flex;
+    justify-content: center;
+}
 
 /* old old
 table {

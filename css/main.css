@@ -1,4 +1,16 @@
+/*Wordpress Styling           ####################*/
+a {
+    text-decoration: none !important; /*stop underlines*/
+}
+
+.blog-section .container{
+    min-width: 100vw;
+    padding-left: 0;
+}
 /*################################################*/
+
+
+/*EventCreationDialog #############################*/
 .EventCreation {
     display: flex;
     padding: 0.2em;
@@ -30,6 +42,12 @@
 
 .baseText {
     font-size: 0.7em;
+}
+
+.baseTextBold {
+    font-size: 0.9em;
+    color: black;
+    font-weight: bold;
 }
 
 .baseTextArea {
@@ -64,6 +82,7 @@
     border: 1px solid transparent;
     border-radius: 5px;
     transition: 0.3s;
+    color: black;
 }
 
 .baseGreen {

@@ -27,6 +27,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 })
 */
 
+function dateNoTimezone(date) {
+    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     const vkElement = document.getElementById('VuosiKalenteri')
     if (vkElement === null) return
@@ -52,6 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         tableContainer,
         {
             yearEvents,
+            groups: php_args.groups,
             deleteClick: (id) => {
                 yearEvents.deleteEvent(id)
             }
@@ -64,19 +69,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     
 
     vuosiTable.render()
-
-
-    //vuosiTable.setEventFilterByGroup('johto')
 })
 
 
 class YearEvent {
-    constructor (id, start, group, title, content) {
+    constructor (id, series_id,  priority, start, end, group, title, content, reservor) {
         this.id = id
+        this.series_id = series_id
+        this.priority = priority
         this.start = start
+        this.end = end
         this.group = group
         this.title = title
         this.content = content
+        this.reservor = reservor
     }
 }
 
@@ -98,11 +104,16 @@ class YearEvents {
             if('id' in obj && 'start' in obj && 'group' in obj && 'title' in obj && 'content' in obj){
                 this.events.push(
                     new YearEvent(
-                        obj.id, 
-                        new Date(obj.start), 
+                        obj.id,
+                        obj.series_id,
+                        obj.priority,
+                        new Date(obj.start),
+                        new Date(obj.end),
                         obj.group, 
                         obj.title, 
-                        obj.content)
+                        obj.content,
+                        obj.reservor
+                    )
                 )
             } else {
                 this.#errorLog('event:', obj)
@@ -174,20 +185,28 @@ class YearEvents {
 class VuosiTable {
     element
     YearEvents
+    groups
 
-    selectedMonth = 0
     monthClick = null
-    eventFilter = null
+    
+    selectedMonth = 3
+    monthFilter = false
+    groupFilter = null
 
     #errorLog = true
 
     eventUpdateName = 'vuosiKalenteriUpdate'
 
-    constructor(element, {yearEvents, monthClick, deleteClick}) {
+    constructor(element, {yearEvents, monthClick, deleteClick, groups}) {
         this.element = this.#CheckIfDomElement(element)
         this.YearEvents = yearEvents
+
         this.monthClick = monthClick && typeof monthClick == 'function' ? monthClick : this.#monthClickFunction
+
         this.deleteClick = deleteClick && typeof deleteClick == 'function' ? deleteClick : this.#deleteEventFunction
+
+        this.groups = groups ? groups : []
+
     }
 
     #CheckIfDomElement(element){
@@ -247,13 +266,25 @@ class VuosiTable {
     
     setEventFilterByGroup(group) {
         if(!group){
-            this.eventFilter = null
+            this.groupFilter = null
         } else {
-            this.eventFilter = group
+            this.groupFilter = group
         }
 
         this.updateTable()
-        this.#errorLogger('filter:', group, ',set.')
+        this.#errorLogger('filter:', group, ', group set.')
+    }
+
+    setEventFilterByMonth(month) {
+        if(month === null | month === undefined){
+            this.monthFilter = false
+        } else {
+            this.monthFilter = true
+            this.selectedMonth = month
+        }
+
+        this.updateTable()
+        this.#errorLogger('filter:', month, ',month set.')
     }
 
     // Visual #####################################################################
@@ -278,10 +309,72 @@ class VuosiTable {
         return monthSelection
     }
 
+    #tableHeader(){
+        const header = document.createElement('div')
+        header.classList.add('eventTableHeader')
+        header.innerHTML = `
+            <div>
+                <div class='baseTextBold'>ryhmä</div>
+                <select class='groupSelect'></select>
+            </div>
+            <div>
+                <div class='baseTextBold'>kuukausi</div>
+                <select class='monthSelect'></select>
+            </div>
+        `
+
+        /*Group Selector ############################################*/
+        const groupSelector = header.querySelector('.groupSelect')
+
+        const optionGroupAll = document.createElement('option')
+        optionGroupAll.appendChild(document.createTextNode('Kaikki'))
+        groupSelector.appendChild(optionGroupAll)
+
+        Object.keys(this.groups).map(group => {
+            const option = document.createElement('option')
+            option.appendChild(document.createTextNode(group))
+            groupSelector.appendChild(option)
+        })
+
+        groupSelector.addEventListener('change', () => {
+            if(groupSelector.value !== 'Kaikki'){
+                this.setEventFilterByGroup(groupSelector.value)
+            } else {
+                this.setEventFilterByGroup(null)
+            }
+        })
+        /*Group Selector end ########################################*/
+
+
+        /*Month Selector ############################################*/
+        const monthSelector = header.querySelector('.monthSelect')
+
+        const optionMonthAll = document.createElement('option')
+        optionMonthAll.appendChild(document.createTextNode('Kaikki'))
+        monthSelector.appendChild(optionMonthAll)
+
+        for (let month = 0; month <= 11; month++){
+            const option = document.createElement('option')
+            option.appendChild(document.createTextNode(this.#getKuukasiFromNumber(month)))
+            monthSelector.appendChild(option)
+        }
+
+        monthSelector.addEventListener('change', () => {
+            if(monthSelector.value !== 'Kaikki'){
+                this.setEventFilterByMonth(monthSelector.options.selectedIndex - 1)
+            } else {
+                this.setEventFilterByMonth(null)
+            }
+        })
+        /*Month Selector end ########################################*/
+
+        return header
+    }
+
     render(){
         this.element.innerHTML = `
             <div class='vktContainer'>
-                <div class='monthSelector'>
+                <div class='eventTableHeaderContainer'>
                 </div>
 
                 <div class='eventList'>
@@ -308,29 +401,60 @@ class VuosiTable {
             </div>
         `
 
-        this.element.querySelector(".monthSelector").appendChild(this.#buttonGenerator())
-        const p1 = document.createElement('p')
-        p1.textContent = 'hello'
-
-        this.element.querySelector(".monthSelector").appendChild(p1)
+        //this.element.querySelector(".eventTableHeader").appendChild(this.#buttonGenerator())
+        this.element.querySelector(".eventTableHeaderContainer").appendChild(this.#tableHeader())
 
         this.updateTable()
     }
 
-    updateTable(){
-        const eventList = this.element.querySelector('.eventList')
-        eventList.innerHTML = ''
+    #eventDomElement(yearEvent){
+        const eventElement = document.createElement('div')
+        eventElement.classList.add('eventElement')
 
-        for (const yearEvent of this.YearEvents.events) {
-            //filter by group
-            if(this.eventFilter){
-                if (this.eventFilter !== yearEvent.group){
-                    continue
-                }
-            }
+        let [year, clockStart] = yearEvent.start.toISOString().split('T')
+        let [, clockEnd] = yearEvent.end.toISOString().split('T')
+        year = year.split('-').reverse().join('.')
+        clockStart = clockStart.slice(0,5)
+        clockEnd = clockEnd.slice(0,5)
 
-            if(yearEvent.start.getMonth() === this.selectedMonth) {
-                const eventElement = document.createElement('div')
+        eventElement.innerHTML = `
+            <div class='eventDateInfo'>
+                <div>${year}</div>
+                <div>${clockStart}-${clockEnd}</div>
+            </div>
+
+            <div>
+                <div class='baseTextBold'>${yearEvent.title}</div>
+                <div class='baseText'>${yearEvent.content}</div>
+            </div>
+
+            <div class='eventOtherInfo'>
+                <div>prioriteetti: ${yearEvent.priority}</div>
+                <div>varaaja: ${yearEvent.reservor}</div>
+            </div>
+
+            <div class='eventButtons'>
+                <button class='infoButton baseButton'>info</button>
+                <button class='deleteButton baseButton baseRed'>poista</button>
+            </div>
+        `
+
+        const deleteButton = eventElement.querySelector('.deleteButton')
+        deleteButton.addEventListener('click', () => {
+            this.deleteClick(yearEvent.id)
+        })
+
+        const infoButton = eventElement.querySelector('.infoButton')
+        infoButton.addEventListener('click', () => {
+            console.log('date:', year, clockStart, clockEnd)
+            console.log('grps', this.groups)
+        })
+
+        return eventElement
+    }
+
+    #eventDomElement2(yearEvent){
+        const eventElement = document.createElement('div')
                 eventElement.classList.add('eventElement')
 
                 eventElement.innerHTML = `
@@ -345,10 +469,31 @@ class VuosiTable {
                 deleteButton.addEventListener('click', () => {
                     this.deleteClick(yearEvent.id)
                 })
+
                 eventElement.append(deleteButton)
 
-                eventList.append(eventElement)
+                return eventElement
+    }
+
+    updateTable(){
+        const eventList = this.element.querySelector('.eventList')
+        eventList.innerHTML = ''
+
+        for (const yearEvent of this.YearEvents.events) {
+            //filter by group
+            if(this.groupFilter){
+                if (this.groupFilter !== yearEvent.group){
+                    continue
+                }
             }
+
+            if(this.monthFilter){
+                if(yearEvent.start.getMonth() !== this.selectedMonth) {
+                    continue
+                }
+            }
+
+            eventList.append(this.#eventDomElement(yearEvent))
         }
     }
 }

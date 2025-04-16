@@ -358,7 +358,7 @@ async function EventCreationDialog(groups) {
 
             switch(seriesTypeSelector.options.selectedIndex){
                 case 0: /*individual*/
-                    
+                    dialog.remove()
                     resolve({data: returnObject, series: false})
                     return
                     // break
@@ -406,6 +406,7 @@ async function EventCreationDialog(groups) {
             dialog.remove()
             //resolve({data:'bla bla ', series: false})
             resolve({data: returnObject, series: true})
+            return
         })
 
         const closeButton = dialog.querySelector('.closeButton')

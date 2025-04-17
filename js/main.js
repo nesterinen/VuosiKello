@@ -35,6 +35,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <p>tableContainer</p>
             </div>
         </div>
+
+        <button class='testButton'>Test</button>
     `
 
 
@@ -47,7 +49,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const yearCircle = new VuosiKalenteri(
         circleContainer,
         {
-            yearEvents
+            yearEvents,
+            monthClick: (month) => {
+                vuosiTable.setEventFilterByMonth(month)
+            }
         }
     )
 
@@ -70,6 +75,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.addEventListener(yearEvents.eventUpdateName, () => {
         vuosiTable.updateTable()
         yearCircle.updateMonthElements()
+    })
+
+    const testButton = mainElement.querySelector('.testButton')
+    testButton.addEventListener('click', async () => {
+
+    const dialogResult = await EventCreationDialog(php_args.groups).catch((e) => {
+            console.log(e)
+            return null
+        })
+
+        if (!dialogResult) {
+            console.log('done')
+            return
+        }
+
+        if(dialogResult.series === false) {
+            const result = backendSimulationIndividual(dialogResult.data)
+            yearEvents.addEvent(result)
+            yearEvents.sortEventsByDate()
+            vuosiTable.updateTable()
+        } else {
+            const result = backendSimulationMultiple(dialogResult.data)
+            for(const event of result) {
+                yearEvents.addEvent(event)
+            }
+            yearEvents.sortEventsByDate()
+            vuosiTable.updateTable()
+        }
     })
 })
 

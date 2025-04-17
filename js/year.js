@@ -154,7 +154,7 @@ class VuosiKalenteri {
                 newElement.addEventListener('click', (event) => {
                     // call function only if the monthelement was clicked
                     // we dont want call if individual yearEvent was clicked instead
-                    if(event.target.id === 'MonthElement'){
+                    if(event.target.id === 'MonthElement' || event.target.id === 'monthTitle'){
                         this.monthClick(month)
                     }
                 })
@@ -186,7 +186,7 @@ class VuosiKalenteri {
         for(let month = 0; month <= 11; month++){
 
             this.monthElements[month].innerHTML = `
-                <h4>${this._getKuukasiFromNumber(month)}</h4>
+                <h4 id='monthTitle'>${this._getKuukasiFromNumber(month)}</h4>
             `
 
             if (eventsMonthSorted[month].length > 0) {

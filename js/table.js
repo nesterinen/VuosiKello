@@ -164,7 +164,7 @@ class VuosiTable {
     }
 
     #eventClickFunction({element, data}){
-        console.log('eventClickFunction', element, data)
+        this.#errorLogger('eventClickFunction', element, data)
     }
 
     #errorLogger(...params){
@@ -194,12 +194,16 @@ class VuosiTable {
         }
 
         this.updateTable()
+        this.#updateTableHeader(month)
         this.#errorLogger('filter:', month, ',month set.')
         this.#scrollToTodayEvent()
     }
 
     // Visual #####################################################################
-    #tableHeader(){
+    #updateTableHeader(setMonth=false){
+        const parentElement = this.element.querySelector('.eventTableHeaderContainer')
+        parentElement.innerHTML = ``
+
         const header = document.createElement('div')
         header.classList.add('eventTableHeader')
         header.innerHTML = `
@@ -249,6 +253,10 @@ class VuosiTable {
             monthSelector.appendChild(option)
         }
 
+        if(typeof setMonth === 'number' && setMonth >= 0 && setMonth <= 11){
+            monthSelector.value = this.#getKuukasiFromNumber(setMonth)
+        }
+
         monthSelector.addEventListener('change', () => {
             if(monthSelector.value !== 'Kaikki'){
                 this.setEventFilterByMonth(monthSelector.options.selectedIndex - 1)
@@ -257,8 +265,8 @@ class VuosiTable {
             }
         })
         /*Month Selector end ########################################*/
-
-        return header
+        //return header
+        parentElement.appendChild(header)
     }
 
     render(){
@@ -274,8 +282,9 @@ class VuosiTable {
         `
 
         //this.element.querySelector(".eventTableHeader").appendChild(this.#buttonGenerator())
-        this.element.querySelector(".eventTableHeaderContainer").appendChild(this.#tableHeader())
+        //this.element.querySelector(".eventTableHeaderContainer").appendChild(this.updateTableHeader())
 
+        this.#updateTableHeader()
         this.updateTable()
 
         this.#scrollToTodayEvent()
@@ -322,14 +331,43 @@ class VuosiTable {
 
         const infoButton = eventElement.querySelector('.infoButton')
         infoButton.addEventListener('click', () => {
-            console.log('date:', year, clockStart, clockEnd)
-            console.log('grps', this.groups)
+            this.#errorLogger('infoButton:', year, clockStart, clockEnd)
         })
 
         eventElement.addEventListener('click', (e) => {
             if(e.target instanceof HTMLButtonElement) return
             this.eventClick({element: eventElement, data:yearEvent})
         })
+
+        return eventElement
+    }
+
+    #emptyDomElement(){
+        const eventElement = document.createElement('div')
+        eventElement.classList.add('eventElement')
+
+        eventElement.innerHTML = `
+            <div class='eventDateInfo'>
+                <div>vuosi</div>
+                <div>klo-klo</div>
+            </div>
+
+            <div>
+                <div class='baseTextBold'>ostikko</div>
+                <div class='baseText'>sisältö</div>
+            </div>
+
+            <div class='eventOtherInfo'>
+                <div class='baseText'>prioriteetti: numero</div>
+                <div class='baseText'>varaaja: nimi</div>
+                <div class='baseText'>ryhmä: joku</div>
+            </div>
+
+            <div class='eventButtons'>
+                <button class='infoButton baseButton'>info</button>
+                <button class='deleteButton baseButton baseRed'>poista</button>
+            </div>
+        `
 
         return eventElement
     }
@@ -362,6 +400,10 @@ class VuosiTable {
             }
 
             eventList.append(eventElement)
+        }
+
+        if(eventList.innerHTML === ''){
+            eventList.appendChild(this.#emptyDomElement())
         }
     }
 }

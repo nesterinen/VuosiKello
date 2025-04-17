@@ -1,5 +1,7 @@
 .infoContainer {
-    width: 15vw;
+    min-width: 15vw;
+    max-width: 15vw;
+    height: 96vh;
     margin-right: 0.25em;
     outline: 1px solid coral;
 }

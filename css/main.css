@@ -7,6 +7,19 @@ a {
     min-width: 100vw;
     padding-left: 0;
 }
+
+main {
+    min-width: 100vw;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+#VuosiKalenteri {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    max-width: 100vw !important;
+    padding-right: 1em;
+}
 /*################################################*/
 
 
@@ -53,17 +66,17 @@ a {
 }
 
 .baseElement {
-    margin: 0.2em;
+    margin: 0.2em !important;
 }
 
 .baseText {
-    font-size: 0.7em;
+    font-size: 0.7em !important;
 }
 
 .baseTextBold {
-    font-size: 0.9em;
-    color: black;
-    font-weight: bold;
+    font-size: 0.9em !important;
+    color: black !important;
+    font-weight: bold !important;
 }
 
 .baseTextArea {

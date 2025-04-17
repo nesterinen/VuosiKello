@@ -1,5 +1,9 @@
+.tableContainer {
+    width: 100%;
+}
+
 .vktContainer {
-    max-height: 95vh;
+    max-height: 96vh;
 
     margin-left: 0.25em;
 
@@ -43,11 +47,21 @@
     /*overflow-x: scroll;*/
 }
 
+.eventTableHeaderContainer {
+    width: auto;
+}
+
 .eventTableHeader {
     display: grid;
     grid-template-columns: auto auto;
     border-bottom: 2px solid black;
     padding-bottom: 0.25em;
+    padding-top: 0.25em;
+}
+
+.eventTableHeader div {
+    display: flex;
+    padding: 0.2em;
 }
 
 .eventElement {
@@ -59,6 +73,15 @@
     margin-bottom: 0.25em;
 }
 
+.eventMainInfo {
+    padding-right: 0.1em;
+}
+
+.eventContent {
+    max-height: 5em;
+    overflow-y: auto;
+}
+
 .eventDateInfo {
     text-align: center;
     margin: auto;
@@ -66,6 +89,7 @@
 
 .eventOtherInfo {
     margin: auto;
+    padding-right: 0.1em;
 }
 
 .eventButtons {

@@ -302,19 +302,19 @@ class VuosiTable {
 
         eventElement.innerHTML = `
             <div class='eventDateInfo'>
-                <div>${year}</div>
-                <div>${clockStart}-${clockEnd}</div>
+                <div class='baseText'>${year}</div>
+                <div class='baseText'>${clockStart}-${clockEnd}</div>
             </div>
 
-            <div>
+            <div class='eventMainInfo'>
                 <div class='baseTextBold'>${yearEvent.title}</div>
-                <div class='baseText'>${yearEvent.content}</div>
+                <div class='baseText eventContent'>${yearEvent.content}</div>
             </div>
 
             <div class='eventOtherInfo'>
-                <div class='baseText'>prioriteetti: ${yearEvent.priority}</div>
-                <div class='baseText'>varaaja: ${yearEvent.reservor}</div>
-                <div class='baseText'>ryhmä: ${yearEvent.group}</div>
+                <div class='baseText'>p: ${yearEvent.priority}</div>
+                <div class='baseText'>v: ${yearEvent.reservor}</div>
+                <div class='baseText'>r: ${yearEvent.group}</div>
             </div>
 
             <div class='eventButtons'>
@@ -338,36 +338,6 @@ class VuosiTable {
             if(e.target instanceof HTMLButtonElement) return
             this.eventClick({element: eventElement, data:yearEvent})
         })
-
-        return eventElement
-    }
-
-    #emptyDomElement(){
-        const eventElement = document.createElement('div')
-        eventElement.classList.add('eventElement')
-
-        eventElement.innerHTML = `
-            <div class='eventDateInfo'>
-                <div>vuosi</div>
-                <div>klo-klo</div>
-            </div>
-
-            <div>
-                <div class='baseTextBold'>ostikko</div>
-                <div class='baseText'>sisältö</div>
-            </div>
-
-            <div class='eventOtherInfo'>
-                <div class='baseText'>prioriteetti: numero</div>
-                <div class='baseText'>varaaja: nimi</div>
-                <div class='baseText'>ryhmä: joku</div>
-            </div>
-
-            <div class='eventButtons'>
-                <button class='infoButton baseButton'>info</button>
-                <button class='deleteButton baseButton baseRed'>poista</button>
-            </div>
-        `
 
         return eventElement
     }
@@ -400,10 +370,6 @@ class VuosiTable {
             }
 
             eventList.append(eventElement)
-        }
-
-        if(eventList.innerHTML === ''){
-            eventList.appendChild(this.#emptyDomElement())
         }
     }
 }

@@ -317,6 +317,7 @@ class VuosiTable {
         const deleteButton = eventElement.querySelector('.deleteButton')
         deleteButton.addEventListener('click', () => {
             this.deleteClick(yearEvent.id)
+            //this.updateTable()
         })
 
         const infoButton = eventElement.querySelector('.infoButton')

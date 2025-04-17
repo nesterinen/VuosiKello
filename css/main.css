@@ -10,6 +10,23 @@ a {
 /*################################################*/
 
 
+/*Main.js Styling ################################*/
+/*
+#VuosiKalenteri {
+    display: flex;
+}
+*/
+
+.vuosiKalenteriContainer {
+    border: rebeccapurple solid 1px;
+    display: flex;
+    /*max-width: fit-content;
+    margin: auto;*/
+}
+
+/*################################################*/
+
+
 /*EventCreationDialog #############################*/
 .EventCreation {
     display: flex;
@@ -111,29 +128,17 @@ a {
 }
 /*################################################*/
 
-#VuosiKalenteri {
-    max-width: 90vw;
-    display: flex;
-}
-
-.VuosiKalenteriContainer {
-    border: rebeccapurple solid 1px;
-    /*max-width: fit-content;
-    margin: auto;*/
-}
-
-
 /*https://stackoverflow.com/questions/12813573/position-icons-into-circle*/
 #MonthCircle {
     aspect-ratio: 1;
-    --d: 19vh; /* image size */
+    --d: 19vh; /*19vh image size */
     --rel: 0.075; /* how much extra space we want between images, 1 = 1 image size */
     --ba: 1turn/var(--m);  /* base angle = 1 full turn divided by number of edges */
     /* (1 + var(--rel))*var(--d) = polygon edge = img size + extra space */
     --r: calc(.5*(1 + var(--rel))*var(--d)/tan(.5*var(--ba))); /* circle radius */
     display: grid;
     width: calc(2*var(--r) + var(--d)); /* container size */
-    background: silver;
+    outline: 1px solid blue;
     padding: 2px;
 }
 

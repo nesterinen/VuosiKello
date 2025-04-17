@@ -117,6 +117,7 @@ class VuosiKalenteri {
     // Visual side ###################
 
     render() {
+        /*
         this.element.innerHTML = `
         <div class='VuosiKalenteriContainer'>
             <div id='MonthCircle' style='--m: 12'>
@@ -125,6 +126,15 @@ class VuosiKalenteri {
                 </div>
             </div>
         </div>
+        `
+        */
+
+        this.element.innerHTML = `
+            <div id='MonthCircle' style='--m: 12'>
+                <div id='CircleCenter'>
+                    <p>${this.#dateNow.getFullYear()}</p>
+                </div>
+            </div>
         `
 
         const circleElement = document.getElementById('MonthCircle')
@@ -159,7 +169,7 @@ class VuosiKalenteri {
         let eventsMonthSorted = {0:[], 1:[], 2:[], 3:[], 4:[], 5:[], 6:[], 7:[], 8:[], 9:[], 10:[], 11:[], 12:[]}
         for (const yearEvent of this.YearEvents.events) {
             // get only events from current year
-            if(yearEvent.date.getFullYear() !== this.#dateNow.getFullYear()){
+            if(yearEvent.start.getFullYear() !== this.#dateNow.getFullYear()){
                 continue
             }
 
@@ -170,7 +180,7 @@ class VuosiKalenteri {
                 }
             }
 
-            eventsMonthSorted[yearEvent.date.getMonth()].push(yearEvent)
+            eventsMonthSorted[yearEvent.start.getMonth()].push(yearEvent)
         }
         
         for(let month = 0; month <= 11; month++){

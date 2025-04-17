@@ -1,5 +1,11 @@
 .vktContainer {
-    border: 1px dotted black;
+
+    max-height: 95vh;
+
+    outline: 2px solid red;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
 }
 
 .monthSelector {
@@ -22,12 +28,18 @@
 }
 
 .eventList {
+    overflow-y: auto;
+    /*
     display: flex;
     flex-direction: column;
-    /*overflow-x: scroll;*/
     overflow-x: hidden;
-    height: 600px;
+    
+    
+    height: 40vw;
     width: 40vw;
+    */
+
+    /*overflow-x: scroll;*/
 }
 
 .eventTableHeader {

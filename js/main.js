@@ -1,4 +1,9 @@
 /*
+import YearEvents from eventsHandler.js
+import VuosiTable from table.js
+*/
+
+/*
 datatype: {
     id: int
     series_id: int | null
@@ -12,20 +17,55 @@ datatype: {
 }
 */
 
-/*
 document.addEventListener('DOMContentLoaded', async () => {
     const mainElement = document.getElementById('VuosiKalenteri')
     if (mainElement === null) return
 
-    let eventData = []
-
     mainElement.innerHTML = `
-        <button class='testButton'>Test</button>
+        <div class='vuosiKalenteriContainer'>
+            <div class='circleContainer'>
+                <p>circleContainer</p>
+            </div>
+
+            <div class='tableContainer'>
+                <p>tableContainer</p>
+            </div>
+        </div>
     `
 
-    console.log(testData)
+
+    const yearEvents = new YearEvents(testData)
+
+    const circleContainer = mainElement.querySelector('.circleContainer')
+    const yearCircle = new VuosiKalenteri(
+        circleContainer,
+        {
+            yearEvents
+        }
+    )
+
+    const tableContainer = mainElement.querySelector('.tableContainer')
+    const vuosiTable = new VuosiTable(
+        tableContainer,
+        {
+            yearEvents,
+            groups: php_args.groups,
+            deleteClick: (id) => {
+                yearEvents.deleteEvent(id)
+            }
+        }
+    )
+
+    yearCircle.render()
+    vuosiTable.render()
+
+    document.addEventListener(yearEvents.eventUpdateName, () => {
+        vuosiTable.updateTable()
+        yearCircle.updateMonthElements()
+    })
 })
-*/
+
+/*
 document.addEventListener('DOMContentLoaded', async () => {
     const vkElement = document.getElementById('VuosiKalenteri')
     if (vkElement === null) return
@@ -92,6 +132,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     })
 })
+
+*/
 
 
 let testData = [

@@ -38,21 +38,21 @@ function load_plugin(): void{
     wp_enqueue_style(handle: 'wsp-table-style', src: plugin_dir_url(file: __FILE__) . 'css/table.css');
 
     wp_register_script(
-        handle: 'dialogs',
+        handle: 'year-dialogs',
         src: "{$js_file_dir}/dialogs.js",
         deps: [],
         ver: null
     );
 
     wp_register_script(
-        handle: 'table',
+        handle: 'year-table',
         src: "{$js_file_dir}/table.js",
         deps: [],
         ver: null
     );
 
     wp_register_script(
-        handle: 'events-handler',
+        handle: 'year-events-handler',
         src: "{$js_file_dir}/eventsHandler.js",
         deps: [],
         ver: null
@@ -60,7 +60,7 @@ function load_plugin(): void{
 
     
     wp_enqueue_script(
-        handle:'year',
+        handle:'year-circle',
         src: "{$js_file_dir}/year.js",
         deps: [],
         ver: null
@@ -76,7 +76,7 @@ function load_plugin(): void{
     wp_enqueue_script(
         handle:'plugin-script',
         src: "{$js_file_dir}/main.js",
-        deps: ['jquery', 'dialogs', 'table', 'events-handler', 'year', 'year-utils'],
+        deps: ['jquery', 'year-dialogs', 'year-table', 'year-events-handler', 'year-circle', 'year-utils'],
         ver: null
     );
     

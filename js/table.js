@@ -96,6 +96,7 @@ class VuosiTable {
 
     eventUpdateName = 'vuosiKalenteriUpdate'
 
+    selectedEvent = null
     firstEventToday = null//{element: null, data: null}
     dateToday = new Date()
 
@@ -118,6 +119,27 @@ class VuosiTable {
                 behavior: 'smooth'
             })
         }
+    }
+
+    #scrollToEventElement(eventElement){
+        if(eventElement && eventElement instanceof HTMLElement){
+            this.element.querySelector('.eventList').scrollTo({
+                top: eventElement.offsetTop -  eventElement.scrollHeight - eventElement.offsetHeight,
+                left: 0,
+                behavior: 'smooth'
+            })
+        }
+    }
+
+    #getEventElement(id){
+        const eventList = this.element.querySelector('.eventList')
+        for (const element of eventList.children) {
+            if(element.id == id) {
+                return element
+            }
+        }
+
+        return null
     }
 
     #CheckIfDomElement(element){
@@ -165,6 +187,16 @@ class VuosiTable {
 
     #eventClickFunction({element, data}){
         this.#errorLogger('eventClickFunction', element, data)
+    }
+
+    selectEvent(id){
+        if(this.selectedEvent) {
+            this.selectedEvent.style = ''
+        }
+        this.selectedEvent = this.#getEventElement(id)
+        this.#scrollToEventElement(this.selectedEvent)
+        this.selectedEvent.style = 'border-top: 5px solid Yellow; border-bottom: 5px solid Yellow;'
+        //this.updateTable(id)
     }
 
     #errorLogger(...params){
@@ -287,12 +319,16 @@ class VuosiTable {
         this.#updateTableHeader()
         this.updateTable()
 
-        this.#scrollToTodayEvent()
+        //this.#scrollToTodayEvent()
+        if(this.firstEventToday){
+            this.#scrollToEventElement(this.firstEventToday.element)
+        }
     }
 
     #eventDomElement(yearEvent){
         const eventElement = document.createElement('div')
         eventElement.classList.add('eventElement')
+        eventElement.id = yearEvent.id
 
         let [year, clockStart] = yearEvent.start.toISOString().split('T')
         let [, clockEnd] = yearEvent.end.toISOString().split('T')
@@ -342,7 +378,7 @@ class VuosiTable {
         return eventElement
     }
 
-    updateTable(){
+    updateTable(selectId=null){
         const eventList = this.element.querySelector('.eventList')
         eventList.innerHTML = ''
 
@@ -367,6 +403,12 @@ class VuosiTable {
             if(this.firstEventToday === null & yearEvent.start >= this.dateToday){
                 this.firstEventToday = {element: eventElement, data: yearEvent}
                 this.firstEventToday.element.style = 'border-top: 5px solid Chartreuse; border-bottom: 5px solid Chartreuse;'
+            }
+
+            if(selectId){
+                if(yearEvent.id === selectId){
+                    eventElement.style = 'border-top: 5px solid Yellow; border-bottom: 5px solid Yellow;'
+                }
             }
 
             eventList.append(eventElement)

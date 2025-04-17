@@ -55,7 +55,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             },
             eventClick: (id) => {
                 //console.log(yearEvents.getEvent(id))
-                vuosiTable.selectEvent(id)
+                //vuosiTable.selectEvent(id)
+                yearEvents.selectEvent(id)
             }
         }
     )
@@ -68,6 +69,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             groups: php_args.groups,
             deleteClick: (id) => {
                 yearEvents.deleteEvent(id)
+            },
+            eventClick: (eventObj) => {
+                yearEvents.selectEvent(eventObj.data.id)
             }
         }
     )
@@ -79,6 +83,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.addEventListener(yearEvents.eventUpdateName, () => {
         vuosiTable.updateTable()
         yearCircle.updateMonthElements()
+    })
+
+    document.addEventListener(yearEvents.eventSelectName, (event) => {
+        vuosiTable.selectEvent(event.detail.id)
     })
 
     const testButton = mainElement.querySelector('.testButton')

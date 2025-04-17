@@ -187,6 +187,7 @@ class VuosiTable {
 
     #eventClickFunction({element, data}){
         this.#errorLogger('eventClickFunction', element, data)
+        //this.selectEvent(data.id)
     }
 
     selectEvent(id){
@@ -194,6 +195,7 @@ class VuosiTable {
             this.selectedEvent.style = ''
         }
         this.selectedEvent = this.#getEventElement(id)
+        if(this.selectedEvent === null) return
         this.#scrollToEventElement(this.selectedEvent)
         this.selectedEvent.style = 'border-top: 5px solid Yellow; border-bottom: 5px solid Yellow;'
         //this.updateTable(id)

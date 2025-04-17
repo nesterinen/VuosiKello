@@ -18,6 +18,7 @@ class YearEvents {
     #errorLog = true
 
     eventUpdateName = 'vuosiKalenteriUpdate'
+    eventSelectName = 'vuosiKalenteriSelect'
     
     constructor(eventsJsonArray) {
         if(Array.isArray(eventsJsonArray) === false) throw new Error('eventsJsonArray not an array')
@@ -117,5 +118,13 @@ class YearEvents {
 
         this.#errorLogger('event with id:', id, 'added.')
         document.dispatchEvent(new Event(this.eventUpdateName))
+    }
+
+    selectEvent(id){
+        if(typeof id !== 'number' || id % 1 !== 0) {
+            throw new Error('id is not a integer')
+        }
+
+        document.dispatchEvent(new CustomEvent(this.eventSelectName, {detail:{id:id}}))
     }
 }

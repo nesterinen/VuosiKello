@@ -1,3 +1,22 @@
+/*
+datatype: {
+    id: int
+    series_id: int | null
+    priority: int
+    reservor: str
+    group: str
+    title: str
+    content: str
+    start: date
+    end: date
+}
+*/
+
+function dateNoTimezone(date) {
+    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
+}
+
+/*
 document.addEventListener('DOMContentLoaded', async () => {
     const vkElement = document.getElementById('VuosiKalenteri')
     if (vkElement === null) return
@@ -5,7 +24,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     vkElement.innerHTML = `
         <div class='vuosiKalenteriContainer' style='display: flex;'>
             <div class='circleContainer'>
-                <p>a</p>
+                <p>cContainer</p>
+                <button class='testButton'>Test</button>
             </div>
 
             <div class='tableContainer'>
@@ -14,74 +34,94 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
     `
     const tableContainer = vkElement.querySelector('.tableContainer')
-    const circleContainer = vkElement.querySelector('.circleContainer')
 
-    const yearEvents = new YearEvents(generatedEvents)
+    const yearEvents = new YearEvents(testData)
+
+    console.log(yearEvents)
 
     const vuosiTable = new VuosiTable(
         tableContainer,
         {
             yearEvents,
+            groups: php_args.groups,
             deleteClick: (id) => {
                 yearEvents.deleteEvent(id)
             }
         }
     )
 
-    const YearCircle = new VuosiKalenteri(
-        circleContainer,
-        {
-            yearEvents,
-            monthClick: (month) => {
-                let pResult = confirm('Add test event?')
-                if(pResult) {
-                    yearEvents.addEvent({
-                        id: idGenerator(),
-                        date: new Date(new Date().setMonth(month)).toUTCString(),
-                        group: 'johto',
-                        title: 'TEST',
-                        content: 'TEST CONTENT BLA BLA BLA'
-                    })
-                }
-            },
-            eventClick: (id) => {
-                yearEvents.deleteEvent(id)
-            }
-        }
-    )
-
-    
     document.addEventListener(yearEvents.eventUpdateName, () => {
         vuosiTable.updateTable()
-        YearCircle.updateMonthElements()
     })
     
 
-    YearCircle.render()
     vuosiTable.render()
 
+    const testButton = vkElement.querySelector('.testButton')
+    testButton.addEventListener('click', async () => {
 
-    //vuosiTable.setEventFilterByGroup('johto')
+        const dialogResult = await EventCreationDialog(php_args.groups).catch((e) => {
+            console.log(e)
+            return null
+        })
+
+        if (!dialogResult) {
+            console.log('done')
+            return
+        }
+
+        if(dialogResult.series === false) {
+            const result = backendSimulationIndividual(dialogResult.data)
+            yearEvents.addEvent(result)
+            yearEvents.sortEventsByDate()
+            vuosiTable.updateTable()
+        } else {
+            const result = backendSimulationMultiple(dialogResult.data)
+            for(const event of result) {
+                yearEvents.addEvent(event)
+            }
+            yearEvents.sortEventsByDate()
+            vuosiTable.updateTable()
+        }
+    })
 })
-
+*/
 
 class VuosiTable {
     element
     YearEvents
+    groups
 
     selectedMonth = 0
-    monthClick = null
-    eventFilter = null
+    monthFilter = false
+    groupFilter = null
 
     #errorLog = true
 
     eventUpdateName = 'vuosiKalenteriUpdate'
 
-    constructor(element, {yearEvents, monthClick, deleteClick}) {
+    firstEventToday = null//{element: null, data: null}
+    dateToday = new Date()
+
+    constructor(element, {yearEvents, eventClick, deleteClick, groups}) {
         this.element = this.#CheckIfDomElement(element)
         this.YearEvents = yearEvents
-        this.monthClick = monthClick && typeof monthClick == 'function' ? monthClick : this.#monthClickFunction
+
+        this.eventClick = eventClick && typeof eventClick == 'function' ? eventClick : this.#eventClickFunction
         this.deleteClick = deleteClick && typeof deleteClick == 'function' ? deleteClick : this.#deleteEventFunction
+
+        this.groups = groups ? groups : []
+
+    }
+
+    #scrollToTodayEvent(){
+        if(this.firstEventToday){
+            this.element.querySelector('.eventList').scrollTo({
+                top: this.firstEventToday.element.offsetTop -  this.firstEventToday.element.scrollHeight - this.firstEventToday.element.offsetHeight,
+                left: 0,
+                behavior: 'smooth'
+            })
+        }
     }
 
     #CheckIfDomElement(element){
@@ -123,13 +163,12 @@ class VuosiTable {
         }
     }
 
-    #monthClickFunction(month){
-        this.#errorLogger('monthClickFunction:', month)
-        this.updateTable()
-    }
-
     #deleteEventFunction(id){
         this.#errorLogger('deleteEventFunction:', id)
+    }
+
+    #eventClickFunction({element, data}){
+        console.log('eventClickFunction', element, data)
     }
 
     #errorLogger(...params){
@@ -138,111 +177,194 @@ class VuosiTable {
         }
     }
 
-    
     setEventFilterByGroup(group) {
         if(!group){
-            this.eventFilter = null
+            this.groupFilter = null
         } else {
-            this.eventFilter = group
+            this.groupFilter = group
         }
 
         this.updateTable()
-        this.#errorLogger('filter:', group, ',set.')
+        this.#errorLogger('filter:', group, ', group set.')
+        this.#scrollToTodayEvent()
+    }
+
+    setEventFilterByMonth(month) {
+        if(month === null | month === undefined){
+            this.monthFilter = false
+        } else {
+            this.monthFilter = true
+            this.selectedMonth = month
+        }
+
+        this.updateTable()
+        this.#errorLogger('filter:', month, ',month set.')
+        this.#scrollToTodayEvent()
     }
 
     // Visual #####################################################################
+    #tableHeader(){
+        const header = document.createElement('div')
+        header.classList.add('eventTableHeader')
+        header.innerHTML = `
+            <div>
+                <div class='baseTextBold'>ryhmä</div>
+                <select class='groupSelect'></select>
+            </div>
+            <div>
+                <div class='baseTextBold'>kuukausi</div>
+                <select class='monthSelect'></select>
+            </div>
+        `
 
-    #buttonGenerator(){
-        const monthSelection = document.createElement('div')
-        monthSelection.classList.add('vktMonths')
+        /*Group Selector ############################################*/
+        const groupSelector = header.querySelector('.groupSelect')
+
+        const optionGroupAll = document.createElement('option')
+        optionGroupAll.appendChild(document.createTextNode('Kaikki'))
+        groupSelector.appendChild(optionGroupAll)
+
+        Object.keys(this.groups).map(group => {
+            const option = document.createElement('option')
+            option.appendChild(document.createTextNode(group))
+            groupSelector.appendChild(option)
+        })
+
+        groupSelector.addEventListener('change', () => {
+            if(groupSelector.value !== 'Kaikki'){
+                this.setEventFilterByGroup(groupSelector.value)
+            } else {
+                this.setEventFilterByGroup(null)
+            }
+        })
+        /*Group Selector end ########################################*/
+
+
+        /*Month Selector ############################################*/
+        const monthSelector = header.querySelector('.monthSelect')
+
+        const optionMonthAll = document.createElement('option')
+        optionMonthAll.appendChild(document.createTextNode('Kaikki'))
+        monthSelector.appendChild(optionMonthAll)
 
         for (let month = 0; month <= 11; month++){
-            const msButton = document.createElement('button')
-            msButton.textContent = this.#getKuukasiFromNumber(month)
-
-            msButton.addEventListener('click', () => {
-                this.selectedMonth = month
-                this.updateTable()
-                //this.monthClick(month)
-            })
-
-            monthSelection.appendChild(msButton)
+            const option = document.createElement('option')
+            option.appendChild(document.createTextNode(this.#getKuukasiFromNumber(month)))
+            monthSelector.appendChild(option)
         }
 
-        return monthSelection
+        monthSelector.addEventListener('change', () => {
+            if(monthSelector.value !== 'Kaikki'){
+                this.setEventFilterByMonth(monthSelector.options.selectedIndex - 1)
+            } else {
+                this.setEventFilterByMonth(null)
+            }
+        })
+        /*Month Selector end ########################################*/
+
+        return header
     }
 
     render(){
         this.element.innerHTML = `
             <div class='vktContainer'>
-                <div class='monthSelector'>
+                <div class='eventTableHeaderContainer'>
                 </div>
 
                 <div class='eventList'>
-                    <div class='myTestElem'>
-                        <h1>header</h1>
-                        <p>paragraph</p>
-                    </div>
-
-                    <div class='myTestElem'>
-                        <h1>header</h1>
-                        <p>paragraph</p>
-                    </div>
-
-                    <div class='myTestElem'>
-                        <h1>header</h1>
-                        <p>paragraph</p>
-                    </div>
-
-                    <div class='myTestElem'>
-                        <h1>header</h1>
-                        <p>paragraph</p>
-                    </div>
+                    <div>Error...</div>
                 </div>
             </div>
         `
 
-        this.element.querySelector(".monthSelector").appendChild(this.#buttonGenerator())
-        const p1 = document.createElement('p')
-        p1.textContent = 'hello'
-
-        this.element.querySelector(".monthSelector").appendChild(p1)
+        //this.element.querySelector(".eventTableHeader").appendChild(this.#buttonGenerator())
+        this.element.querySelector(".eventTableHeaderContainer").appendChild(this.#tableHeader())
 
         this.updateTable()
+
+        this.#scrollToTodayEvent()
+    }
+
+    #eventDomElement(yearEvent){
+        const eventElement = document.createElement('div')
+        eventElement.classList.add('eventElement')
+
+        let [year, clockStart] = yearEvent.start.toISOString().split('T')
+        let [, clockEnd] = yearEvent.end.toISOString().split('T')
+        year = year.split('-').reverse().join('.')
+        clockStart = clockStart.slice(0,5)
+        clockEnd = clockEnd.slice(0,5)
+
+        eventElement.innerHTML = `
+            <div class='eventDateInfo'>
+                <div>${year}</div>
+                <div>${clockStart}-${clockEnd}</div>
+            </div>
+
+            <div>
+                <div class='baseTextBold'>${yearEvent.title}</div>
+                <div class='baseText'>${yearEvent.content}</div>
+            </div>
+
+            <div class='eventOtherInfo'>
+                <div class='baseText'>prioriteetti: ${yearEvent.priority}</div>
+                <div class='baseText'>varaaja: ${yearEvent.reservor}</div>
+                <div class='baseText'>ryhmä: ${yearEvent.group}</div>
+            </div>
+
+            <div class='eventButtons'>
+                <button class='infoButton baseButton'>info</button>
+                <button class='deleteButton baseButton baseRed'>poista</button>
+            </div>
+        `
+
+        const deleteButton = eventElement.querySelector('.deleteButton')
+        deleteButton.addEventListener('click', () => {
+            this.deleteClick(yearEvent.id)
+        })
+
+        const infoButton = eventElement.querySelector('.infoButton')
+        infoButton.addEventListener('click', () => {
+            console.log('date:', year, clockStart, clockEnd)
+            console.log('grps', this.groups)
+        })
+
+        eventElement.addEventListener('click', (e) => {
+            if(e.target instanceof HTMLButtonElement) return
+            this.eventClick({element: eventElement, data:yearEvent})
+        })
+
+        return eventElement
     }
 
     updateTable(){
         const eventList = this.element.querySelector('.eventList')
         eventList.innerHTML = ''
 
+        this.firstEventToday = null
+
         for (const yearEvent of this.YearEvents.events) {
             //filter by group
-            if(this.eventFilter){
-                if (this.eventFilter !== yearEvent.group){
+            if(this.groupFilter){
+                if (this.groupFilter !== yearEvent.group){
                     continue
                 }
             }
 
-            if(yearEvent.date.getMonth() === this.selectedMonth) {
-                const eventElement = document.createElement('div')
-                eventElement.classList.add('eventElement')
-
-                eventElement.innerHTML = `
-                    <h1>${yearEvent.title}</h1>
-                    <p>${yearEvent.content}</p>
-                    <p>${yearEvent.group}</p>
-                    <p>${yearEvent.date.toISOString()}</p>
-                `
-
-                const deleteButton = document.createElement('button')
-                deleteButton.innerText = 'delete'
-                deleteButton.addEventListener('click', () => {
-                    this.deleteClick(yearEvent.id)
-                })
-                eventElement.append(deleteButton)
-
-                eventList.append(eventElement)
+            if(this.monthFilter){
+                if(yearEvent.start.getMonth() !== this.selectedMonth) {
+                    continue
+                }
             }
+
+            const eventElement = this.#eventDomElement(yearEvent)
+            
+            if(this.firstEventToday === null & yearEvent.start >= this.dateToday){
+                this.firstEventToday = {element: eventElement, data: yearEvent}
+                this.firstEventToday.element.style = 'border-top: 5px solid Chartreuse; border-bottom: 5px solid Chartreuse;'
+            }
+
+            eventList.append(eventElement)
         }
     }
 }

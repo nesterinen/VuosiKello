@@ -44,14 +44,6 @@ function load_plugin(): void{
         ver: null
     );
 
-    /*
-    wp_register_script(
-        handle: 'moduuli',
-        src: "{$js_file_dir}/moduuli.js",
-        deps: [],
-        ver: null
-    );
-
     wp_register_script(
         handle: 'table',
         src: "{$js_file_dir}/table.js",
@@ -59,17 +51,26 @@ function load_plugin(): void{
         ver: null
     );
 
-    wp_enqueue_script(
-        handle:'plugin-script',
-        src: "{$js_file_dir}/main.js",
-        deps: ['moduuli', 'table'],
+    wp_register_script(
+        handle: 'events-handler',
+        src: "{$js_file_dir}/eventsHandler.js",
+        deps: [],
         ver: null
     );
-    */
+
+    
+    wp_enqueue_script(
+        handle:'year',
+        src: "{$js_file_dir}/year.js",
+        deps: [],
+        ver: null
+    );
+    
+
     wp_enqueue_script(
         handle:'plugin-script',
         src: "{$js_file_dir}/main.js",
-        deps: ['jquery', 'dialogs'],
+        deps: ['jquery', 'dialogs', 'table', 'events-handler', 'year'],
         ver: null
     );
 

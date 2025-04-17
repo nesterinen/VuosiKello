@@ -36,6 +36,8 @@ function load_plugin(): void{
     $js_file_dir = plugin_dir_url(file: __FILE__) . 'js';
     wp_enqueue_style(handle: 'wsp-styles', src: plugin_dir_url(file: __FILE__) . 'css/main.css');
     wp_enqueue_style(handle: 'wsp-table-style', src: plugin_dir_url(file: __FILE__) . 'css/table.css');
+    wp_enqueue_style(handle: 'wsp-info-style', src: plugin_dir_url(file: __FILE__) . 'css/info.css');
+
 
     wp_register_script(
         handle: 'year-dialogs',
@@ -58,7 +60,6 @@ function load_plugin(): void{
         ver: null
     );
 
-    
     wp_enqueue_script(
         handle:'year-circle',
         src: "{$js_file_dir}/year.js",
@@ -74,9 +75,24 @@ function load_plugin(): void{
     );
 
     wp_enqueue_script(
+        handle:'year-info',
+        src: "{$js_file_dir}/info.js",
+        deps: [],
+        ver: null
+    );
+
+    wp_enqueue_script(
         handle:'plugin-script',
         src: "{$js_file_dir}/main.js",
-        deps: ['jquery', 'year-dialogs', 'year-table', 'year-events-handler', 'year-circle', 'year-utils'],
+        deps: [
+            'jquery',
+            'year-dialogs',
+            'year-table',
+            'year-events-handler',
+            'year-circle',
+            'year-utils',
+            'year-info'
+        ],
         ver: null
     );
     

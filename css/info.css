@@ -1,0 +1,17 @@
+.infoContainer {
+    width: 15vw;
+    margin-right: 0.25em;
+    outline: 1px solid coral;
+}
+
+.generalInfo {
+    padding: auto;
+    text-align: center;
+    height: 50%;
+}
+
+.eventInfo {
+    padding: auto;
+    text-align: center;
+    height: 50%;
+}

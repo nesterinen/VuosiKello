@@ -23,6 +23,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     mainElement.innerHTML = `
         <div class='vuosiKalenteriContainer'>
+            <div class='infoContainer'>
+                <p>infoContainer</p>
+            </div>
+
             <div class='circleContainer'>
                 <p>circleContainer</p>
             </div>
@@ -35,6 +39,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
     const yearEvents = new YearEvents(testData)
+
+    const infoContainer = mainElement.querySelector('.infoContainer')
+    const infoElement = new InfoElement(infoContainer)
 
     const circleContainer = mainElement.querySelector('.circleContainer')
     const yearCircle = new VuosiKalenteri(
@@ -56,6 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     )
 
+    infoElement.render()
     yearCircle.render()
     vuosiTable.render()
 

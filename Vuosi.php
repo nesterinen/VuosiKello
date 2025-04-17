@@ -66,13 +66,20 @@ function load_plugin(): void{
         ver: null
     );
     
+    wp_enqueue_script(
+        handle:'year-utils',
+        src: "{$js_file_dir}/utils.js",
+        deps: [],
+        ver: null
+    );
 
     wp_enqueue_script(
         handle:'plugin-script',
         src: "{$js_file_dir}/main.js",
-        deps: ['jquery', 'dialogs', 'table', 'events-handler', 'year'],
+        deps: ['jquery', 'dialogs', 'table', 'events-handler', 'year', 'year-utils'],
         ver: null
     );
+    
 
     wp_localize_script(
         handle:'plugin-script',

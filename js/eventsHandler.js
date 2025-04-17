@@ -1,4 +1,3 @@
-
 class YearEvent {
     constructor (id, series_id,  priority, start, end, group, title, content, reservor) {
         this.id = id

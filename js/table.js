@@ -12,10 +12,6 @@ datatype: {
 }
 */
 
-function dateNoTimezone(date) {
-    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
-}
-
 /*
 document.addEventListener('DOMContentLoaded', async () => {
     const vkElement = document.getElementById('VuosiKalenteri')

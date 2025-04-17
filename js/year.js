@@ -1,8 +1,3 @@
-function idGenerator(){
-    const randomness = Math.random() * 10000 + 100
-    return parseInt(randomness);
-}
-
 /*
 document.addEventListener('DOMContentLoaded', async () => {
     const vkElement = document.getElementById('VuosiKalenteri')

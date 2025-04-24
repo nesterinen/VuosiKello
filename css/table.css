@@ -2,7 +2,7 @@
 .tableContainer {
     width: 100vw;
     min-width: 38em;
-    max-width: max-content;
+    /*max-width: max-content;*/
 
     flex-grow: 1;
     flex-shrink: 1;
@@ -24,7 +24,7 @@
     border: 1px solid peru;
     width: 100%;
     display: inline-grid;
-    grid-template-columns: 80% 20%
+    grid-template-columns: 80% 20%;
 }
 
 .vktMonths {
@@ -55,7 +55,8 @@
 }
 
 .eventTableHeaderContainer {
-    width: auto;
+    /*width: auto;*/
+    width: 100%;
 }
 
 .eventTableHeader {

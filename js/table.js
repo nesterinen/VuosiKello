@@ -190,11 +190,16 @@ class VuosiTable {
         //this.selectEvent(data.id)
     }
 
-    selectEvent(id){
+    selectEvent(event){
+        if(this.selectedMonth !== event.start.getMonth() && this.monthFilter === true) {
+            this.setEventFilterByMonth(event.start.getMonth())
+        }
+
         if(this.selectedEvent) {
             this.selectedEvent.style = ''
         }
-        this.selectedEvent = this.#getEventElement(id)
+        //this.selectedEvent = this.#getEventElement(id)
+        this.selectedEvent = this.#getEventElement(event.id)
         if(this.selectedEvent === null) return
         this.#scrollToEventElement(this.selectedEvent)
         this.selectedEvent.style = 'border-top: 5px solid Yellow; border-bottom: 5px solid Yellow;'

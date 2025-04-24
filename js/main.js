@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     })
 
     document.addEventListener(yearEvents.eventSelectName, (args) => {
-        vuosiTable.selectEvent(args.detail.event.id)
+        vuosiTable.selectEvent(args.detail.event)
         infoElement.updateEventInfo(yearEvents.getEvent(args.detail.event.id))
     })
 

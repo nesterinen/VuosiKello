@@ -194,10 +194,12 @@ class VuosiKalenteri {
                     const newEventElement = document.createElement('p')
                     newEventElement.textContent = eventsMonthSorted[month][index].title
 
-                    const id = eventsMonthSorted[month][index].id
+                    //const id = eventsMonthSorted[month][index].id
+                    const event = eventsMonthSorted[month][index]
                     newEventElement.addEventListener('click', () => {
                         //this.eventClick(this.getEvent(id))
-                        this.eventClick(id)
+                        //this.eventClick(id)
+                        this.eventClick(event)
                         this.updateMonthElements()
                     })
 

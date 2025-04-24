@@ -252,7 +252,7 @@ class VuosiTable {
         `
 
         /*
-            <div>
+        <div>
                 <div class='baseTextBold'>ryhmä</div>
                 <select class='groupSelect'></select>
             </div>

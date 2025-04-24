@@ -121,6 +121,7 @@ class YearEvents {
         document.dispatchEvent(new Event(this.eventUpdateName))
     }
 
+    /*
     selectEvent(id){
         if(typeof id !== 'number' || id % 1 !== 0) {
             throw new Error('id is not a integer')
@@ -128,6 +129,15 @@ class YearEvents {
 
         this.#errorLogger('id', id, 'selected')
         document.dispatchEvent(new CustomEvent(this.eventSelectName, {detail:{id:id}}))
+    }
+    */
+    selectEvent(event){
+        if(typeof event.id !== 'number' || event.id % 1 !== 0) {
+            throw new Error('id is not a integer')
+        }
+
+        this.#errorLogger('event', event, 'selected')
+        document.dispatchEvent(new CustomEvent(this.eventSelectName, {detail:{event:event}}))
     }
 
     selectGroup(group) {

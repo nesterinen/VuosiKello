@@ -61,10 +61,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             monthClick: (month) => {
                 vuosiTable.setEventFilterByMonth(month)
             },
-            eventClick: (id) => {
-                //console.log(yearEvents.getEvent(id))
-                //vuosiTable.selectEvent(id)
-                yearEvents.selectEvent(id)
+            eventClick: (event) => {
+                yearEvents.selectEvent(event)
             }
         }
     )
@@ -79,7 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 yearEvents.deleteEvent(id)
             },
             eventClick: (eventObj) => {
-                yearEvents.selectEvent(eventObj.data.id)
+                yearEvents.selectEvent(eventObj.data)
             }
         }
     )
@@ -94,8 +92,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     })
 
     document.addEventListener(yearEvents.eventSelectName, (args) => {
-        vuosiTable.selectEvent(args.detail.id)
-        infoElement.updateEventInfo(yearEvents.getEvent(args.detail.id))
+        vuosiTable.selectEvent(args.detail.event.id)
+        infoElement.updateEventInfo(yearEvents.getEvent(args.detail.event.id))
     })
 
     document.addEventListener(yearEvents.groupSelectName, (args) => {

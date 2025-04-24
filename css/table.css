@@ -60,7 +60,10 @@
 
 .eventTableHeader {
     display: grid;
+
+    /*
     grid-template-columns: auto auto;
+    */
     border-bottom: 2px solid black;
     padding-bottom: 0.25em;
     padding-top: 0.25em;

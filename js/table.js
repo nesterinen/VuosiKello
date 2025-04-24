@@ -246,16 +246,19 @@ class VuosiTable {
         header.classList.add('eventTableHeader')
         header.innerHTML = `
             <div>
-                <div class='baseTextBold'>ryhmä</div>
-                <select class='groupSelect'></select>
-            </div>
-            <div>
                 <div class='baseTextBold'>kuukausi</div>
                 <select class='monthSelect'></select>
             </div>
         `
 
-        /*Group Selector ############################################*/
+        /*
+            <div>
+                <div class='baseTextBold'>ryhmä</div>
+                <select class='groupSelect'></select>
+            </div>
+        */
+
+        /*Group Selector ############################################
         const groupSelector = header.querySelector('.groupSelect')
 
         const optionGroupAll = document.createElement('option')
@@ -275,7 +278,7 @@ class VuosiTable {
                 this.setEventFilterByGroup(null)
             }
         })
-        /*Group Selector end ########################################*/
+        Group Selector end ########################################*/
 
 
         /*Month Selector ############################################*/

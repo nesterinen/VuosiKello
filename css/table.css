@@ -1,5 +1,12 @@
+
 .tableContainer {
-    width: 100%;
+    width: 100vw;
+    min-width: 38em;
+    max-width: max-content;
+
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 38em;
 }
 
 .vktContainer {
@@ -68,7 +75,7 @@
     border: 1px solid grey;
 
     display: grid;
-    grid-template-columns: 20% 40% 20% 20%;
+    grid-template-columns: 15% 45% 20% 20%;
 
     margin-bottom: 0.25em;
 }

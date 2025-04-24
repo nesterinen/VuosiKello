@@ -1,9 +1,7 @@
 .infoContainer {
-    min-width: 15vw;
-    max-width: 15vw;
-    height: 96vh;
+    width: 15vw;
     margin-right: 0.25em;
-    outline: 1px solid coral;
+    min-width: 19em;
 }
 
 .generalInfo {
@@ -12,8 +10,68 @@
     height: 50%;
 }
 
+.generalInfo .groupSelect {
+    text-align: center;
+    color: black;
+}
+
+/* EVENT INFO ##################################################start*/
 .eventInfo {
+    border-top: 1px solid black;
+
     padding: auto;
     text-align: center;
     height: 50%;
+
+    display: grid;
+    grid-template-rows: min-content min-content auto min-content;
 }
+
+.eiHeaderText {
+    font-size: 2em;
+    color: black;
+    font-weight: bold;
+}
+
+.eiHeaderText2 {
+    font-size: 1.2em;
+    color: grey;
+    font-weight: bold;
+} 
+
+.eiBaseText {
+    font-size: 1em;
+}
+
+/*
+.eiEventHeader {
+    max-height: 1em;
+}
+*/
+
+.eiDateTime {
+    display: grid;
+    text-align: center;
+    grid-template-columns: 33% 33% 33%;
+    align-content: center;
+
+    padding-bottom: 0.1em;
+    padding-top: 0.1em;
+}
+
+.eiTextArea {
+    resize: none;
+    height: 100%;
+}
+
+.eiEventFooter {
+    padding-bottom: 0.1em;
+}
+.eiEventFooter .eventIds{
+    display: grid;
+    grid-template-columns: auto auto;
+}
+.eventIds .eiIdText {
+    font-size: 0.6em;
+}
+/* EVENT INFO ##################################################end*/

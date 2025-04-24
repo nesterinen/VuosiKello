@@ -43,7 +43,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const yearEvents = new YearEvents(testData)
 
     const infoContainer = mainElement.querySelector('.infoContainer')
-    const infoElement = new InfoElement(infoContainer)
+    const infoElement = new InfoElement(
+        infoContainer,
+        php_args.groups,
+        {
+            selectGroup: (group) => {
+                yearEvents.selectGroup(group)
+            }
+        }
+    )
 
     const circleContainer = mainElement.querySelector('.circleContainer')
     const yearCircle = new VuosiKalenteri(
@@ -85,8 +93,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         yearCircle.updateMonthElements()
     })
 
-    document.addEventListener(yearEvents.eventSelectName, (event) => {
-        vuosiTable.selectEvent(event.detail.id)
+    document.addEventListener(yearEvents.eventSelectName, (args) => {
+        vuosiTable.selectEvent(args.detail.id)
+        infoElement.updateEventInfo(yearEvents.getEvent(args.detail.id))
+    })
+
+    document.addEventListener(yearEvents.groupSelectName, (args) => {
+        vuosiTable.setEventFilterByGroup(args.detail.group)
     })
 
     const testButton = mainElement.querySelector('.testButton')

@@ -18,7 +18,8 @@ class YearEvents {
     #errorLog = true
 
     eventUpdateName = 'vuosiKalenteriUpdate'
-    eventSelectName = 'vuosiKalenteriSelect'
+    eventSelectName = 'vuosiKalenteriEventSelect'
+    groupSelectName = 'vuosiKalenteriGroupSelect'
     
     constructor(eventsJsonArray) {
         if(Array.isArray(eventsJsonArray) === false) throw new Error('eventsJsonArray not an array')
@@ -58,7 +59,7 @@ class YearEvents {
 
     #errorLogger(...params){
         if (this.#errorLog) {
-            console.log('eLogger:', ...params)
+            console.log('eLogger(eventHandler.js):', ...params)
         }
     }
 
@@ -125,6 +126,12 @@ class YearEvents {
             throw new Error('id is not a integer')
         }
 
+        this.#errorLogger('id', id, 'selected')
         document.dispatchEvent(new CustomEvent(this.eventSelectName, {detail:{id:id}}))
+    }
+
+    selectGroup(group) {
+        this.#errorLogger('group', group, 'selected')
+        document.dispatchEvent(new CustomEvent(this.groupSelectName, {detail:{group:group}}))
     }
 }

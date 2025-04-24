@@ -203,7 +203,7 @@ class VuosiTable {
 
     #errorLogger(...params){
         if (this.#errorLog) {
-            console.log('tLogger:', ...params)
+            console.log('eLogger(table.js):', ...params)
         }
     }
 
@@ -212,6 +212,10 @@ class VuosiTable {
             this.groupFilter = null
         } else {
             this.groupFilter = group
+        }
+
+        if(group === 'Kaikki'){
+            this.groupFilter = null
         }
 
         this.updateTable()

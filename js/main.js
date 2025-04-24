@@ -36,11 +36,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
         </div>
 
-        <button class='testButton'>Test</button>
+        <button class='testButton'>Luo</button>
+        <button class='downloadButton'>Lataa</button>
     `
 
 
-    const yearEvents = new YearEvents(testData)
+    const yearEvents = new YearEvents(php_args.test_data) //testData
 
     const infoContainer = mainElement.querySelector('.infoContainer')
     const infoElement = new InfoElement(
@@ -102,8 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const testButton = mainElement.querySelector('.testButton')
     testButton.addEventListener('click', async () => {
-
-    const dialogResult = await EventCreationDialog(php_args.groups).catch((e) => {
+        const dialogResult = await EventCreationDialog(php_args.groups).catch((e) => {
             console.log(e)
             return null
         })
@@ -126,6 +126,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             yearEvents.sortEventsByDate()
             vuosiTable.updateTable()
         }
+    })
+
+    const downloadButton = mainElement.querySelector('.downloadButton')
+    downloadButton.addEventListener('click', () => {
+        const asdasd = JSON.stringify(yearEvents.events, null, " ")
+
+        let fileToSave = new Blob([asdasd] ,{
+            type: 'application/json'
+        })
+
+        const link = document.createElement("a")
+        link.download = 'data.json'
+        link.href = window.URL.createObjectURL(fileToSave)
+        link.click()
+        link.remove()
     })
 })
 

@@ -7,6 +7,8 @@
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 38em;
+
+    border-left: 1px solid black;
 }
 
 .vktContainer {
@@ -14,7 +16,7 @@
 
     margin-left: 0.25em;
 
-    outline: 2px solid red;
+    /*outline: 2px solid red;*/
     display: flex;
     flex-direction: column;
     overflow: auto;

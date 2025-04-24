@@ -32,6 +32,8 @@ function to_module($tag, $handle, $src): string{
 
 function load_plugin(): void{
     global $organization_groups;
+    $data_string = file_get_contents(plugin_dir_url(__FILE__) . 'dev/test_data.json');
+    $test_data_json = json_decode((string)$data_string, true);
 
     $js_file_dir = plugin_dir_url(file: __FILE__) . 'js';
     wp_enqueue_style(handle: 'wsp-styles', src: plugin_dir_url(file: __FILE__) . 'css/main.css');
@@ -101,7 +103,8 @@ function load_plugin(): void{
         handle:'plugin-script',
         object_name: 'php_args',
         l10n: [
-            'groups' => $organization_groups
+            'groups' => $organization_groups,
+            'test_data' => $test_data_json
         ]
     );
 }

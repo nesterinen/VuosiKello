@@ -151,12 +151,12 @@ main {
     --r: calc(.5*(1 + var(--rel))*var(--d)/tan(.5*var(--ba))); /* circle radius */
     display: grid;
     width: calc(2*var(--r) + var(--d)); /* container size */
-    outline: 1px solid blue;
+    /*outline: 1px solid blue;*/
     padding: 2px;
 }
 
 #MonthCircle #MonthElement {
-    border:1px solid red;
+    border:1px solid grey;
     border-radius: 50%;
     text-align: center;
     align-content: center;
@@ -178,7 +178,7 @@ main {
 }
 
 #MonthCircle #MonthElement:hover {
-    border-color: orange;
+    border-color: black;
 }
 
 #MonthCircle #MonthElement p {
@@ -189,7 +189,7 @@ main {
 }
 
 #MonthCircle #MonthElement p:hover {
-    color: red;
+    color: limegreen;
 }
 
 #MonthCircle #MonthElement h4 {
@@ -201,7 +201,7 @@ main {
 }
 
 #MonthCircle #CircleCenter {
-    border:1px solid blue;
+    border:1px solid black;
     border-radius: 50%;
     place-self: center;
     grid-area: 1/ 1;

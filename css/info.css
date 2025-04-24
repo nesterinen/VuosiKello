@@ -2,6 +2,8 @@
     width: 15vw;
     margin-right: 0.25em;
     min-width: 19em;
+
+    border-right: 1px solid black;
 }
 
 .generalInfo {

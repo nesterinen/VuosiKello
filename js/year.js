@@ -114,28 +114,27 @@ class VuosiKalenteri {
         this.#errorLogger('filter:', group, ',set.')
     }
 
+    dateString(date){
+        return date.toISOString().split('T')[0].split('-').reverse().join('.')
+    }
+
     // Visual side ###################
-
     render() {
-        /*
         this.element.innerHTML = `
-        <div class='VuosiKalenteriContainer'>
             <div id='MonthCircle' style='--m: 12'>
-                <div id='CircleCenter'>
-                    <p>${this.#dateNow.getFullYear()}</p>
+                <div class='CircleCenter'>
                 </div>
             </div>
-        </div>
         `
-        */
 
-        this.element.innerHTML = `
-            <div id='MonthCircle' style='--m: 12'>
-                <div id='CircleCenter'>
-                    <p>${this.#dateNow.getFullYear()}</p>
-                </div>
-            </div>
+        const center = this.element.querySelector('.CircleCenter')
+        center.innerHTML = `
+            <div class='ycHeaderText'>${this.#dateNow.getFullYear()}</div>
+            <div class='ycBaseText'>${this.dateString(this.#dateNow)}</div>
         `
+        center.addEventListener('click', () => {
+            console.log('hello center clicked')
+        })
 
         const circleElement = document.getElementById('MonthCircle')
         this._createMonthElements(circleElement)

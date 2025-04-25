@@ -25,3 +25,9 @@ UX Functionality, CRUD.
 Misc:
     save and download events as json, pdf & excel?
     automatic backups?
+
+
+- groupfilter checkboxes
+- click on yearCircle month opens info circle?
+- priority colors
+- deadline nearing colors

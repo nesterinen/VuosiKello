@@ -212,11 +212,18 @@ class VuosiTable {
         }
     }
 
+    // group used to be string, now its array.
     setEventFilterByGroup(group) {
         if(!group){
             this.groupFilter = null
         } else {
-            this.groupFilter = group
+            if(typeof group === 'string') {
+                this.groupFilter = [group]
+            }
+
+            if(Array.isArray(group)){
+                this.groupFilter = group
+            }
         }
 
         if(group === 'Kaikki'){
@@ -224,7 +231,7 @@ class VuosiTable {
         }
 
         this.updateTable()
-        this.#errorLogger('filter:', group, ', group set.')
+        this.#errorLogger('filter:', group, ', group(s) set.')
         this.#scrollToTodayEvent()
     }
 
@@ -254,16 +261,21 @@ class VuosiTable {
                 <div class='baseTextBold'>kuukausi</div>
                 <select class='monthSelect'></select>
             </div>
+
+            <div>
+                <div class='baseTextBold'>ryhmä</div>
+                <select class='groupSelect'></select>
+            </div>
         `
 
         /*
         <div>
-                <div class='baseTextBold'>ryhmä</div>
-                <select class='groupSelect'></select>
-            </div>
+            <div class='baseTextBold'>ryhmä</div>
+            <select class='groupSelect'></select>
+        </div>
         */
 
-        /*Group Selector ############################################
+        /*Group Selector ############################################*/
         const groupSelector = header.querySelector('.groupSelect')
 
         const optionGroupAll = document.createElement('option')
@@ -283,7 +295,7 @@ class VuosiTable {
                 this.setEventFilterByGroup(null)
             }
         })
-        Group Selector end ########################################*/
+        /*Group Selector end ########################################*/
 
 
         /*Month Selector ############################################*/
@@ -362,16 +374,20 @@ class VuosiTable {
             </div>
 
             <div class='eventOtherInfo'>
-                <div class='baseText'>p: ${yearEvent.priority}</div>
-                <div class='baseText'>v: ${yearEvent.reservor}</div>
-                <div class='baseText'>r: ${yearEvent.group}</div>
             </div>
 
             <div class='eventButtons'>
-                <button class='infoButton baseButton'>info</button>
                 <button class='deleteButton baseButton baseRed'>poista</button>
             </div>
         `
+
+        /*
+            <div class='baseText'>p: ${yearEvent.priority}</div>
+            <div class='baseText'>v: ${yearEvent.reservor}</div>
+            <div class='baseText'>r: ${yearEvent.group}</div>
+        
+            <button class='infoButton baseButton'>info</button>
+        */
 
         const deleteButton = eventElement.querySelector('.deleteButton')
         deleteButton.addEventListener('click', () => {
@@ -379,10 +395,12 @@ class VuosiTable {
             //this.updateTable()
         })
 
+        /*
         const infoButton = eventElement.querySelector('.infoButton')
         infoButton.addEventListener('click', () => {
             this.#errorLogger('infoButton:', year, clockStart, clockEnd)
         })
+        */
 
         eventElement.addEventListener('click', (e) => {
             if(e.target instanceof HTMLButtonElement) return
@@ -399,10 +417,28 @@ class VuosiTable {
         this.firstEventToday = null
 
         for (const yearEvent of this.YearEvents.events) {
-            //filter by group
-            if(this.groupFilter){
-                if (this.groupFilter !== yearEvent.group){
-                    continue
+
+            
+            // filter style if event.group is array... workaround because it used to only be string..
+            if(this.groupFilter) {
+                if(Array.isArray(yearEvent.group)){
+                    let groupMatches = false
+    
+                    for(const group_filter of this.groupFilter){
+                        for(const event_group of yearEvent.group) {
+                            if(group_filter === event_group){
+                                groupMatches = true
+                            }
+                        }
+                    }
+    
+                    // filter out if no match
+                    if(!groupMatches) continue
+                    
+                } else if(typeof yearEvent.group === 'string'){
+                    if(!this.groupFilter.includes(yearEvent.group)){
+                        continue
+                    }
                 }
             }
 

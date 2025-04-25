@@ -45,7 +45,7 @@ class YearEvents {
                 )
             } else {
                 this.#errorLog('event:', obj)
-                throw new Error('malformed eventsJsonArray')
+                throw new Error('malformed eventsJsonArray object', obj)
             }
         }
 

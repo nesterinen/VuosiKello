@@ -4,85 +4,13 @@ datatype: {
     series_id: int | null
     priority: int
     reservor: str
-    group: str
+    group: str | array
     title: str
     content: str
     start: date
     end: date
 }
 */
-
-/*
-document.addEventListener('DOMContentLoaded', async () => {
-    const vkElement = document.getElementById('VuosiKalenteri')
-    if (vkElement === null) return
-
-    vkElement.innerHTML = `
-        <div class='vuosiKalenteriContainer' style='display: flex;'>
-            <div class='circleContainer'>
-                <p>cContainer</p>
-                <button class='testButton'>Test</button>
-            </div>
-
-            <div class='tableContainer'>
-                <p>b</p>        
-            </div>
-        </div>
-    `
-    const tableContainer = vkElement.querySelector('.tableContainer')
-
-    const yearEvents = new YearEvents(testData)
-
-    console.log(yearEvents)
-
-    const vuosiTable = new VuosiTable(
-        tableContainer,
-        {
-            yearEvents,
-            groups: php_args.groups,
-            deleteClick: (id) => {
-                yearEvents.deleteEvent(id)
-            }
-        }
-    )
-
-    document.addEventListener(yearEvents.eventUpdateName, () => {
-        vuosiTable.updateTable()
-    })
-    
-
-    vuosiTable.render()
-
-    const testButton = vkElement.querySelector('.testButton')
-    testButton.addEventListener('click', async () => {
-
-        const dialogResult = await EventCreationDialog(php_args.groups).catch((e) => {
-            console.log(e)
-            return null
-        })
-
-        if (!dialogResult) {
-            console.log('done')
-            return
-        }
-
-        if(dialogResult.series === false) {
-            const result = backendSimulationIndividual(dialogResult.data)
-            yearEvents.addEvent(result)
-            yearEvents.sortEventsByDate()
-            vuosiTable.updateTable()
-        } else {
-            const result = backendSimulationMultiple(dialogResult.data)
-            for(const event of result) {
-                yearEvents.addEvent(event)
-            }
-            yearEvents.sortEventsByDate()
-            vuosiTable.updateTable()
-        }
-    })
-})
-*/
-
 class VuosiTable {
     element
     YearEvents
@@ -261,11 +189,6 @@ class VuosiTable {
                 <div class='baseTextBold'>kuukausi</div>
                 <select class='monthSelect'></select>
             </div>
-
-            <div>
-                <div class='baseTextBold'>ryhmä</div>
-                <select class='groupSelect'></select>
-            </div>
         `
 
         /*
@@ -275,7 +198,7 @@ class VuosiTable {
         </div>
         */
 
-        /*Group Selector ############################################*/
+        /*Group Selector ############################################
         const groupSelector = header.querySelector('.groupSelect')
 
         const optionGroupAll = document.createElement('option')
@@ -295,7 +218,7 @@ class VuosiTable {
                 this.setEventFilterByGroup(null)
             }
         })
-        /*Group Selector end ########################################*/
+        Group Selector end ########################################*/
 
 
         /*Month Selector ############################################*/

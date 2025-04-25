@@ -121,16 +121,22 @@ class YearEvents {
         document.dispatchEvent(new Event(this.eventUpdateName))
     }
 
-    /*
-    selectEvent(id){
+    selectEventById(id){
         if(typeof id !== 'number' || id % 1 !== 0) {
             throw new Error('id is not a integer')
         }
 
+        const foundEvent = this.events.find((obj) => obj.id === id)
+
+        if(!foundEvent){
+            this.#errorLogger('id', id, 'not found')
+            return
+        }
+
         this.#errorLogger('id', id, 'selected')
-        document.dispatchEvent(new CustomEvent(this.eventSelectName, {detail:{id:id}}))
+        document.dispatchEvent(new CustomEvent(this.eventSelectName, {detail:{event: foundEvent}}))
     }
-    */
+
     selectEvent(event){
         if(typeof event.id !== 'number' || event.id % 1 !== 0) {
             throw new Error('id is not a integer')

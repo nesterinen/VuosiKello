@@ -4,7 +4,7 @@ datatype: {
     series_id: int | null
     priority: int
     reservor: str
-    group: str
+    group: str | array
     title: str
     content: str
     start: date
@@ -90,10 +90,12 @@ class InfoElement {
         const [, endTime] = this.#dateToString(event.end)
         const weekDay = this.days[event.start.getDay()]
 
+        const spacedGroups = event.group.toString().replaceAll(',', ', ')
+
         eventInfo.innerHTML = `
             <div class='eiEventHeader'>
-                <div class='eiHeaderText'>${event.title}</div>
-                <div class='eiHeaderText2'>${event.group} (${event.priority})</div>
+                <div class='eiHeaderText'>${event.title} (${event.priority})</div>
+                <div class='eiHeaderText2Groups'>${spacedGroups}</div>
             </div>
 
 

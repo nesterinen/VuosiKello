@@ -16,7 +16,7 @@
      "priority": 4,
      "start": "2025-04-16T08:00:00.000Z",
      "end": "2025-04-16T21:00:00.000Z",
-     "group": "Wörkkis",
+     "group": ["Esihenkilöt", "Wörkkis", "Henkilöstö", "Kouhu"],
      "title": "Viikkopalaveri",
      "content": "Viikkopalaveri parittomien viikkojen keskiviikkona klo 8-9",
      "reservor": "Pena"

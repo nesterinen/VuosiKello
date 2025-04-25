@@ -1,9 +1,10 @@
 .infoContainer {
     width: 15vw;
     margin-right: 0.25em;
-    min-width: 19em;
+    width: 21em;
 
     border-right: 1px solid black;
+    outline: 1px solid blue;
 }
 
 .generalInfo {
@@ -29,8 +30,13 @@
     grid-template-rows: min-content min-content auto min-content;
 }
 
+.eiEventHeader {
+    outline: 1px solid green;
+    overflow: hidden;
+}
+
 .eiHeaderText {
-    font-size: 2em;
+    font-size: 1.5em;
     color: black;
     font-weight: bold;
 }
@@ -40,6 +46,12 @@
     color: grey;
     font-weight: bold;
 } 
+
+.eiHeaderText2Groups {
+    font-size: 1em;
+    color: grey;
+    font-weight: bold;
+}
 
 .eiBaseText {
     font-size: 1em;

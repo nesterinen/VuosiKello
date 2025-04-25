@@ -46,6 +46,7 @@ class InfoElement {
             <div class='generalInfo'>
                 <h1>PKMTT</h1>
                 <select class='groupSelect'></select>
+                <div class='groupSelectCheckBoxes'></div>
             </div>
 
             <div class='eventInfo'>
@@ -53,6 +54,7 @@ class InfoElement {
             </div>
         `
 
+        // Group selector
         const groupSelector = this.element.querySelector('.groupSelect')
 
         const optionGroupAll = document.createElement('option')
@@ -69,6 +71,68 @@ class InfoElement {
             //console.log('args', groupSelector.value, args.target.value)
             this.selectGroup(args.target.value)
         })
+        // Group selector end
+
+        // Group checkbox selector start
+        let showDropDown = false
+
+        const groupSelectCheckBoxes = this.element.querySelector('.groupSelectCheckBoxes')
+        groupSelectCheckBoxes.innerHTML = `
+            <div>
+                <div class='gsbHeaderText'>blablabla</div>
+            </div>
+            <div class='gsbSelections'>
+            </div>
+        `
+
+        /*
+                <label for="one">
+                    <input type="checkbox" id="one" />First checkbox</label>
+                <label for="two">
+                    <input type="checkbox" id="two" />Second checkbox</label>
+                <label for="three">
+                    <input type="checkbox" id="three" />Third checkbox</label>
+                <label for="four">
+                    <input type="checkbox" id="four" />Fourth checkbox</label>
+                <label for="five">
+                    <input type="checkbox" id="five" />Fifth checkbox</label>
+        */
+
+        const groupSelections = groupSelectCheckBoxes.querySelector('.gsbSelections')
+        Object.keys(this.groups).map(group => {
+            const selectBoxDiv = document.createElement('div')
+            selectBoxDiv.innerHTML = `
+                <label for="cb${group}">
+                <input type="checkbox" id="cb${group}" />${group}</label>
+            `
+
+            groupSelections.appendChild(selectBoxDiv)
+        })
+
+        /*
+        for (let i = 0; i < 5; i++){
+            const selectBoxDiv = document.createElement('div')
+            selectBoxDiv.innerHTML = `
+                <label for="one">
+                <input type="checkbox" id="one" />First checkbox</label>
+            `
+
+            groupSelections.appendChild(selectBoxDiv)
+        }
+        */
+
+        console.log('grasdasd', groupSelections)
+
+        const gsbHeader = groupSelectCheckBoxes.querySelector('.gsbHeaderText')
+        gsbHeader.addEventListener('click', () => {
+            showDropDown = !showDropDown
+            if(showDropDown){
+                groupSelections.style = 'display: block;'
+            } else {
+                groupSelections.style = 'display: none;'
+            }
+        })
+        // Group checkbox selector end
     }
 
     #groupFilterFunction(group){

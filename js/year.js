@@ -99,19 +99,24 @@ class VuosiKalenteri {
 
     #errorLogger(...params){
         if (this.#errorLog) {
-            console.log('cLogger:', ...params)
+            console.log('cLogger(year.js):', ...params)
         }
     }
 
+    // assuming group is string array.
     setEventFilterByGroup(group) {
         if(!group){
             this.eventFilter = null
         } else {
-            this.eventFilter = group
+            if(group.length === 0) {
+                this.eventFilter = null
+            } else {
+                this.eventFilter = group
+            }
         }
 
         this.updateMonthElements()
-        this.#errorLogger('filter:', group, ',set.')
+        this.#errorLogger('filter:', this.eventFilter, ',set.')
     }
 
     dateString(date){
@@ -172,10 +177,26 @@ class VuosiKalenteri {
                 continue
             }
 
-            //filter by group
             if(this.eventFilter){
-                if (this.eventFilter !== yearEvent.group){
-                    continue
+                if(Array.isArray(yearEvent.group)){
+                    //filter by group array
+                    if(this.eventFilter){
+                        let groupMatches = false
+                        for(const groupFilter of this.eventFilter) {
+                            for (const groupEvent of yearEvent.group) {
+                                if(groupFilter === groupEvent){
+                                    groupMatches = true
+                                }
+                            }
+                        }
+                        
+                        //no matches, skip rest.
+                        if(!groupMatches) continue
+                    }
+                } else if(typeof yearEvent.group === 'string'){
+                    if(!this.eventFilter.includes(yearEvent.group)){
+                        continue
+                    }
                 }
             }
 

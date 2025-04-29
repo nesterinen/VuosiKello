@@ -31,7 +31,7 @@ main {
 */
 
 .vuosiKalenteriContainer {
-    border: rebeccapurple solid 1px;
+    border: black solid 1px;
     display: flex;
     flex-wrap: wrap;
     /*max-width: fit-content;

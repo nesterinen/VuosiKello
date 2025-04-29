@@ -99,6 +99,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.addEventListener(yearEvents.groupSelectName, (args) => {
         vuosiTable.setEventFilterByGroup(args.detail.group)
+        yearCircle.setEventFilterByGroup(args.detail.group)
     })
 
     yearEvents.selectEventById(2132173363)

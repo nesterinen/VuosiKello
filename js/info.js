@@ -79,7 +79,7 @@ class InfoElement {
         const groupSelectCheckBoxes = this.element.querySelector('.groupSelectCheckBoxes')
         groupSelectCheckBoxes.innerHTML = `
             <div>
-                <div class='gsbHeaderText'>blablabla</div>
+                <div class='gsbHeaderText'>Kaikki</div>
             </div>
             <div class='gsbSelections'>
             </div>
@@ -108,6 +108,12 @@ class InfoElement {
             }
             
             this.selectGroup(checkedGroups)
+
+            if(checkedGroups.length === 0){
+                gsbHeader.textContent = 'Kaikki'
+            } else {
+                gsbHeader.textContent = checkedGroups
+            }
         })
 
         const gsbHeader = groupSelectCheckBoxes.querySelector('.gsbHeaderText')

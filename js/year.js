@@ -71,13 +71,14 @@ class VuosiKalenteri {
 
     #errorLog = true
 
-    constructor(element, {yearEvents, monthClick, eventClick, eventFilter}) {
+    constructor(element, {yearEvents, monthClick, eventClick, eventFilter, centerClick}) {
         this.element = this.#CheckIfDomElement(element)
         this.YearEvents = yearEvents
         this.monthElements = []
 
         this.monthClick = monthClick && typeof monthClick == 'function' ? monthClick : this.#monthClickFunction
         this.eventClick = eventClick && typeof eventClick == 'function' ? eventClick : this.#eventClickFunction
+        this.centerClick = eventClick && typeof centerClick == 'function' ? centerClick : this.#centerClickFunction
         this.eventFilter = eventFilter ? eventFilter : null
     }
 
@@ -95,6 +96,10 @@ class VuosiKalenteri {
 
     #monthClickFunction(month){
         this.#errorLogger('#monthClickFunction:', month)
+    }
+
+    #centerClickFunction(){
+        console.log('#centerClickFunction:')
     }
 
     #errorLogger(...params){
@@ -138,7 +143,7 @@ class VuosiKalenteri {
             <div class='ycBaseText'>${this.dateString(this.#dateNow)}</div>
         `
         center.addEventListener('click', () => {
-            console.log('hello center clicked')
+            this.centerClick()
         })
 
         const circleElement = document.getElementById('MonthCircle')

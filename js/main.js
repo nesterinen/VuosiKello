@@ -64,6 +64,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             },
             eventClick: (event) => {
                 yearEvents.selectEvent(event)
+            },
+            centerClick: () => {
+                vuosiTable.setEventFilterByMonth(null)
             }
         }
     )

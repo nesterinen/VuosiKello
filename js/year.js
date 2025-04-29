@@ -110,6 +110,10 @@ class VuosiKalenteri {
 
     // assuming group is string array.
     setEventFilterByGroup(group) {
+        if(!Array.isArray(group)){
+            throw new Error('setEventFilterByGroup parameter was not an array.')
+        }
+
         if(!group){
             this.eventFilter = null
         } else {
@@ -211,12 +215,14 @@ class VuosiKalenteri {
         for(let month = 0; month <= 11; month++){
 
             this.monthElements[month].innerHTML = `
-                <h4 id='monthTitle'>${this._getKuukasiFromNumber(month)}</h4>
+                <div id='monthTitle'>${this._getKuukasiFromNumber(month)}</div>
             `
 
             if (eventsMonthSorted[month].length > 0) {
                 for (let index = 0; index < this.maxEventsPerMonth -1 && index < eventsMonthSorted[month].length; index++) {
-                    const newEventElement = document.createElement('p')
+                    const newEventElement = document.createElement('div')
+                    newEventElement.style = `--mkColor: ${this._getColorFromPriority(eventsMonthSorted[month][index].priority)}`
+                    newEventElement.classList.add('mtBaseText')
                     newEventElement.textContent = eventsMonthSorted[month][index].title
 
                     //const id = eventsMonthSorted[month][index].id
@@ -234,6 +240,23 @@ class VuosiKalenteri {
         }
         
        eventsMonthSorted = null
+    }
+
+    _getColorFromPriority(priority){
+        switch (priority) {
+            case 1:
+                return 'red'
+            case 2:
+                return 'orange'
+            case 3:
+                return 'gold'
+            case 4:
+                return 'limegreen'
+            case 5:
+                return 'darkgreen'
+            default:
+                return 'grey'
+        }
     }
 
     _getKuukasiFromNumber(kuukausi){

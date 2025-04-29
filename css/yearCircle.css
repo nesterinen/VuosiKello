@@ -1,3 +1,8 @@
+.circleContainer {
+    padding-top: 0.4vh;
+    padding-right: 0.4vh;
+}
+
 /*https://stackoverflow.com/questions/12813573/position-icons-into-circle*/
 #MonthCircle {
     aspect-ratio: 1;
@@ -49,12 +54,30 @@
     color: limegreen;
 }
 
-#MonthCircle #MonthElement h4 {
+.mtBaseText {
+    font-size: 1.75vh;
+    display: list-item;
+    list-style-position: inside;
+    margin: 0;
+    user-select: none;
+}
+
+.mtBaseText::marker {
+    color: var(--mkColor);
+}
+
+.mtBaseText:hover {
+    color: black;
+}
+
+#MonthCircle #MonthElement #monthTitle {
+    color: black;
     font-size: 2vh;
     font-weight: bold;
     text-decoration: underline;
     padding: 0;
     margin: 0;
+    user-select: none;
 }
 
 #MonthCircle .CircleCenter {
@@ -62,10 +85,14 @@
     border-radius: 50%;
     place-self: center;
     grid-area: 1/ 1;
-    width: 26vh;
-    height: 26vh;
+    width: 30vh;
+    height: 30vh;
     text-align: center;
+
     align-content: center;
+    /*padding-top: 5vh;*/
+
+    line-height: 1;
 }
 
 .ycHeaderText {
@@ -77,6 +104,6 @@
 }
 
 .ycBaseText {
-    font-size: 2vh;
+    font-size: 1.5vh;
     color: grey;
 }

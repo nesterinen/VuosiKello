@@ -301,20 +301,19 @@ class VuosiTable {
                 <div class='baseText eventContent'>${yearEvent.content}</div>
             </div>
 
-            <div class='eventOtherInfo'>
-            </div>
-
             <div class='eventButtons'>
                 <button class='deleteButton baseButton baseRed'>poista</button>
             </div>
         `
 
         /*
+        <div class='eventOtherInfo'>
             <div class='baseText'>p: ${yearEvent.priority}</div>
             <div class='baseText'>v: ${yearEvent.reservor}</div>
             <div class='baseText'>r: ${yearEvent.group}</div>
         
             <button class='infoButton baseButton'>info</button>
+        </div>
         */
 
         const deleteButton = eventElement.querySelector('.deleteButton')

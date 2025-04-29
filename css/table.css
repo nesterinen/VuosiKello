@@ -1,7 +1,8 @@
 
 .tableContainer {
     width: 100vw;
-    min-width: 38em;
+    /*min-width: 38em;*/
+    min-width: min-content;
     /*max-width: max-content;*/
 
     flex-grow: 1;
@@ -81,7 +82,7 @@
     border: 1px solid grey;
 
     display: grid;
-    grid-template-columns: 15% 45% 20% 20%;
+    grid-template-columns: 15% 65% 20%;
 
     margin-bottom: 0.25em;
 }

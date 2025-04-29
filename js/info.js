@@ -17,13 +17,13 @@ class InfoElement {
 
     #errorLog = true
 
-    days = ['maanantai',
+    days = ['sunnuntai',
+            'maanantai',
             'tiistai',
             'keskiviikko',
             'torstai',
             'perjantai',
-            'lauantai',
-            'sunnuntai']
+            'lauantai']
 
     groups
 

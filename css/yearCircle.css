@@ -22,7 +22,7 @@
     border-radius: 50%;
 
     overflow:hidden;
-    
+
     text-align: center;
 
     /*align-content: center;*/
@@ -61,10 +61,11 @@
 
 .mtBaseText {
     font-size: 1.75vh;
-    display: list-item;
-    list-style-position: inside;
     margin: 0;
     user-select: none;
+    
+    list-style-position: inside;
+    display: list-item;
 }
 
 .mtBaseText::marker {

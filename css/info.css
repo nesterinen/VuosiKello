@@ -3,6 +3,7 @@
     margin-right: 0.25em;
     width: 21em;
     max-height: 96vh;
+    min-width: 19em;
 
     border-right: 1px solid black;
 }
@@ -44,7 +45,10 @@
 }
 
 .gsbSelections {
-    border: 1px solid grey;
+    border-left: 1px solid grey;
+    border-right: 1px solid grey;
+    border-bottom: 1px solid grey;
+
     margin-left: 0.25em;
     margin-right: 0.25em;
     display: none;

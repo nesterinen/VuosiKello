@@ -27,7 +27,7 @@ Misc:
     automatic backups?
 
 
-- groupfilter checkboxes
+- groupfilter checkboxes -done
 - click on yearCircle month opens info circle?
-- priority colors
+- priority colors -kinda done
 - deadline nearing colors

@@ -20,8 +20,13 @@
 #MonthCircle #MonthElement {
     border:1px solid grey;
     border-radius: 50%;
+
+    overflow:hidden;
+    
     text-align: center;
-    align-content: center;
+
+    /*align-content: center;*/
+    padding-top: 2vh;
 
     grid-area: 1/ 1;
     place-self: center;

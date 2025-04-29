@@ -111,6 +111,14 @@
     justify-content: center;
 }
 
+.withMarker {
+    display: list-item;
+}
+
+.withMarker::marker {
+    color: var(--mkColor);
+}
+
 /* old old
 table {
     display: flex;

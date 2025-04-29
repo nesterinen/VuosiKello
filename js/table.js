@@ -289,6 +289,7 @@ class VuosiTable {
         clockStart = clockStart.slice(0,5)
         clockEnd = clockEnd.slice(0,5)
 
+        const markerColor = `--mkColor: ${this._getColorFromPriority(yearEvent.priority)}`
         eventElement.innerHTML = `
             <div class='eventDateInfo'>
                 <div class='baseText'>${year}</div>
@@ -296,7 +297,7 @@ class VuosiTable {
             </div>
 
             <div class='eventMainInfo'>
-                <div class='baseTextBold'>${yearEvent.title}</div>
+                <div class='baseTextBold withMarker' style='${markerColor}'>${yearEvent.title}</div>
                 <div class='baseText eventContent'>${yearEvent.content}</div>
             </div>
 
@@ -389,6 +390,23 @@ class VuosiTable {
             }
 
             eventList.append(eventElement)
+        }
+    }
+
+    _getColorFromPriority(priority){
+        switch (priority) {
+            case 1:
+                return 'red'
+            case 2:
+                return 'orange'
+            case 3:
+                return 'gold'
+            case 4:
+                return 'limegreen'
+            case 5:
+                return 'darkgreen'
+            default:
+                return 'grey'
         }
     }
 }

@@ -219,7 +219,7 @@ class VuosiKalenteri {
             `
 
             if (eventsMonthSorted[month].length > 0) {
-                for (let index = 0; index < this.maxEventsPerMonth -1 && index < eventsMonthSorted[month].length; index++) {
+                for (let index = 0; index < this.maxEventsPerMonth && index < eventsMonthSorted[month].length; index++) {
                     const newEventElement = document.createElement('div')
                     newEventElement.style = `--mkColor: ${this._getColorFromPriority(eventsMonthSorted[month][index].priority)}`
                     newEventElement.classList.add('mtBaseText')

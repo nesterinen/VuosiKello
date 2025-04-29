@@ -150,7 +150,11 @@ class VuosiTable {
             }
 
             if(Array.isArray(group)){
-                this.groupFilter = group
+                if(group.length === 0) {
+                    this.groupFilter = null
+                } else {
+                    this.groupFilter = group
+                }
             }
         }
 
@@ -159,7 +163,7 @@ class VuosiTable {
         }
 
         this.updateTable()
-        this.#errorLogger('filter:', group, ', group(s) set.')
+        this.#errorLogger('filter:', this.groupFilter, ', group(s) set.')
         this.#scrollToTodayEvent()
     }
 

@@ -16,6 +16,10 @@
     
     display: flex;
     flex-direction: column;
+
+    overflow: hidden;
+
+    padding-bottom: 5em;
 }
 
 .generalInfo .groupSelect {
@@ -24,23 +28,32 @@
 }
 
 .groupSelectCheckBoxes {
-    outline: 1px dotted blue;
+    min-height: min-content;
+    max-height: calc(60% + 4em);
 }
 
 .gsbHeaderText {
-    color: black;
+    color: grey;
     font-weight: bold;
     font-size: 1.5em;
+    border: 1px solid grey;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+    user-select: none;
 }
 
 .gsbSelections {
-    display: block;
-    min-height: 10vh;
+    border: 1px solid grey;
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+    display: none;
     overflow-y: auto;
+    height: calc(100% - 4em);
 }
 
 .groupSelectCheckBoxes label {
     display: block;
+    user-select: none;
 }
 /* GENERAL INFO ###############################################end*/
 

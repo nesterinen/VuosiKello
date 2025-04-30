@@ -1,61 +1,3 @@
-/*
-document.addEventListener('DOMContentLoaded', async () => {
-    const vkElement = document.getElementById('VuosiKalenteri')
-    if (vkElement === null) return
-
-    const yearEvents = new YearEvents(generatedEvents)
-    
-    const YearCircle = new VuosiKalenteri(
-        vkElement, {
-            yearEvents,
-            monthClick: (month) => {
-                let pResult = confirm('Add test event?')
-                if(pResult) {
-                    yearEvents.addEvent({
-                        id: idGenerator(),
-                        date: new Date(new Date().setMonth(month)).toUTCString(),
-                        group: 'johto',
-                        title: 'TEST',
-                        content: 'TEST CONTENT BLA BLA BLA'
-                    })
-                }
-            },
-            eventClick: (id) => {
-                yearEvents.deleteEvent(id)
-            }
-        }
-    )
-
-    document.addEventListener(yearEvents.eventUpdateName, () => {
-        YearCircle.updateMonthElements()
-    })
-    
-    YearCircle.render()
-
-    YearCircle.setEventFilterByGroup('johto')
-
-    if (false) {
-        setTimeout(() => {
-            YearCircle.setEventFilterByGroup('johto')
-        }, 1000)
-    
-        setTimeout(() => {
-            yearEvents.addEvent({
-                id: 101,
-                date: '2025-01-19T16:48:18.060Z',
-                group: 'johto',
-                title: 'juhlat',
-                content: 'jotkut bileet jee jee'
-            })
-        }, 2000)
-
-        setTimeout(() => {
-            yearEvents.deleteEvent(19)
-        }, 3000)
-    }
-})
-*/
-
 // YearClass #########################################################################
 class VuosiKalenteri {
     element
@@ -70,6 +12,8 @@ class VuosiKalenteri {
     eventFilter = null
 
     #errorLog = true
+
+    selectedMonth = 5
 
     constructor(element, {yearEvents, monthClick, eventClick, eventFilter, centerClick}) {
         this.element = this.#CheckIfDomElement(element)
@@ -178,6 +122,21 @@ class VuosiKalenteri {
     }
 
     updateMonthElements(){
+
+        function createMonthElement(VuosiKalenteri, event){
+            const newEventElement = document.createElement('div')
+            newEventElement.style = `--mkColor: ${VuosiKalenteri._getColorFromPriority(event.priority)}`
+            newEventElement.classList.add('mtBaseText')
+            newEventElement.textContent = event.title
+
+            newEventElement.addEventListener('click', () => {
+                VuosiKalenteri.eventClick(event)
+                VuosiKalenteri.updateMonthElements()
+            })
+
+            return newEventElement
+        }
+
         //filter and sort by months, temporary array.
         let eventsMonthSorted = {0:[], 1:[], 2:[], 3:[], 4:[], 5:[], 6:[], 7:[], 8:[], 9:[], 10:[], 11:[], 12:[]}
         for (const yearEvent of this.YearEvents.events) {
@@ -237,19 +196,7 @@ class VuosiKalenteri {
                             continue
                         }
 
-                        const newEventElement = document.createElement('div')
-                        newEventElement.style = `--mkColor: ${this._getColorFromPriority(eventsMonthSorted[month][index].priority)}`
-                        newEventElement.classList.add('mtBaseText')
-                        newEventElement.textContent = eventsMonthSorted[month][index].title
-
-                        //const id = eventsMonthSorted[month][index].id
-                        const event = eventsMonthSorted[month][index]
-                        newEventElement.addEventListener('click', () => {
-                            //this.eventClick(this.getEvent(id))
-                            //this.eventClick(id)
-                            this.eventClick(event)
-                            this.updateMonthElements()
-                        })
+                        const newEventElement = createMonthElement(this, eventsMonthSorted[month][index])
 
                         this.monthElements[month].append(newEventElement)
                         elementsAdded++;
@@ -259,19 +206,8 @@ class VuosiKalenteri {
                 }
             
                 for (let index = 0; index < this.maxEventsPerMonth && index < eventsMonthSorted[month].length; index++) {
-                    const newEventElement = document.createElement('div')
-                    newEventElement.style = `--mkColor: ${this._getColorFromPriority(eventsMonthSorted[month][index].priority)}`
-                    newEventElement.classList.add('mtBaseText')
-                    newEventElement.textContent = eventsMonthSorted[month][index].title
-
-                    //const id = eventsMonthSorted[month][index].id
-                    const event = eventsMonthSorted[month][index]
-                    newEventElement.addEventListener('click', () => {
-                        //this.eventClick(this.getEvent(id))
-                        //this.eventClick(id)
-                        this.eventClick(event)
-                        this.updateMonthElements()
-                    })
+                    const newEventElement = createMonthElement(this, eventsMonthSorted[month][index])
+                    
 
                     this.monthElements[month].append(newEventElement)
                 }

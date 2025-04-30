@@ -5,7 +5,7 @@
     max-height: 96vh;
     min-width: 19em;
 
-    border-right: 1px solid black;
+    border: 1px solid black;
 }
 
 /* GENERAL INFO ##############################################start*/
@@ -21,6 +21,15 @@
     overflow: hidden;
 
     padding-bottom: 5em;
+}
+
+.generalInfo .infoHeader {
+    background-color: #5baa00;
+    color: white;
+    font-weight: bold;
+    font-size: 2em;
+
+    margin-bottom: 0.25em;
 }
 
 .generalInfo .groupSelect {
@@ -42,6 +51,9 @@
     margin-right: 0.2em;
     user-select: none;
     overflow: hidden;
+
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
 }
 
 .gsbSelections {
@@ -76,11 +88,12 @@
 
 .eiEventHeader {
     overflow: hidden;
+    background-color: #5baa00;
 }
 
 .eiHeaderText {
     font-size: 1.5em;
-    color: black;
+    color: white;
     font-weight: bold;
 }
 
@@ -92,7 +105,7 @@
 
 .eiHeaderText2Groups {
     font-size: 1em;
-    color: grey;
+    color: black;
     font-weight: bold;
 }
 
@@ -117,8 +130,12 @@
 }
 
 .eiTextArea {
+    color: black;
     resize: none;
     height: 100%;
+
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
 }
 
 .eiEventFooter {

@@ -44,7 +44,7 @@ class InfoElement {
     render(){
         this.element.innerHTML = `
             <div class='generalInfo'>
-                <h1>PKMTT</h1>
+                <div class='infoHeader'>PKMTT</div>
                 <div class='groupSelectCheckBoxes'></div>
             </div>
 
@@ -53,33 +53,17 @@ class InfoElement {
             </div>
         `
 
-        //<select class='groupSelect'></select>
-        /* // Group selector
-        const groupSelector = this.element.querySelector('.groupSelect')
-
-        const optionGroupAll = document.createElement('option')
-        optionGroupAll.appendChild(document.createTextNode('Kaikki'))
-        groupSelector.appendChild(optionGroupAll)
-
-        Object.keys(this.groups).map(group => {
-            const option = document.createElement('option')
-            option.appendChild(document.createTextNode(group))
-            groupSelector.appendChild(option)
-        })
-
-        groupSelector.addEventListener('change', (args) => {
-            //console.log('args', groupSelector.value, args.target.value)
-            this.selectGroup(args.target.value)
-        })
-        // Group selector end */
-
         // Group checkbox selector start
         let showDropDown = false
 
         const groupSelectCheckBoxes = this.element.querySelector('.groupSelectCheckBoxes')
         groupSelectCheckBoxes.innerHTML = `
             <div>
-                <div class='gsbHeaderText'>Kaikki</div>
+                <div class='gsbHeaderText'>
+                    <div>+</div>
+                    <div>Kaikki</div>
+                    <div>+</div>
+                </div>
             </div>
             <div class='gsbSelections'>
             </div>
@@ -110,7 +94,12 @@ class InfoElement {
             this.selectGroup(checkedGroups)
 
             if(checkedGroups.length === 0){
-                gsbHeader.textContent = 'Kaikki'
+                //gsbHeader.textContent = 'Kaikki'
+                gsbHeader.innerHTML = `
+                    <div>+</div>
+                    <div>Kaikki</div>
+                    <div>+</div>
+                `
             } else {
                 gsbHeader.textContent = checkedGroups
             }

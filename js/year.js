@@ -211,6 +211,13 @@ class VuosiKalenteri {
 
             eventsMonthSorted[yearEvent.start.getMonth()].push(yearEvent)
         }
+
+        // Sort by priority
+        /*
+        for(let month = 0; month <= 11; month++){
+            eventsMonthSorted[month].sort((a, b) => a.priority - b.priority)
+        }
+        */
         
         for(let month = 0; month <= 11; month++){
 
@@ -221,7 +228,10 @@ class VuosiKalenteri {
             if (eventsMonthSorted[month].length > 0) {
                 //BAD solution for filtering out older events to push current at the top
                 if(month === this.#dateNow.getMonth()){
+                    let elementsAdded = 0
                     for (let index = 0; index < eventsMonthSorted[month].length; index++) {
+                        if(elementsAdded > this.maxEventsPerMonth) continue
+
                         //console.log('now:', this.#dateNow.getTime() , 'event:', eventsMonthSorted[month][index].start.getTime())
                         if(eventsMonthSorted[month][index].start.getTime() - this.#dateNow.getTime() <= -86_400_000){
                             continue
@@ -242,6 +252,7 @@ class VuosiKalenteri {
                         })
 
                         this.monthElements[month].append(newEventElement)
+                        elementsAdded++;
                     }
 
                     continue

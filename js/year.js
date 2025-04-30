@@ -13,7 +13,7 @@ class VuosiKalenteri {
 
     #errorLog = true
 
-    selectedMonth = 5
+    selectedMonth = this.#dateNow.getMonth()
 
     constructor(element, {yearEvents, monthClick, eventClick, eventFilter, centerClick}) {
         this.element = this.#CheckIfDomElement(element)
@@ -92,6 +92,9 @@ class VuosiKalenteri {
         `
         center.addEventListener('click', () => {
             this.centerClick()
+
+            this.selectedMonth = null
+            this.updateMonthElements()
         })
 
         const circleElement = document.getElementById('MonthCircle')
@@ -113,6 +116,10 @@ class VuosiKalenteri {
                     // we dont want call if individual yearEvent was clicked instead
                     if(event.target.id === 'MonthElement' || event.target.id === 'monthTitle'){
                         this.monthClick(month)
+
+                        //this is done to recolor selected.
+                        this.selectedMonth = month
+                        this.updateMonthElements()
                     }
                 })
             }
@@ -180,9 +187,15 @@ class VuosiKalenteri {
         
         for(let month = 0; month <= 11; month++){
 
+            //const isSelected = month === this.selectedMonth ? true : false
             this.monthElements[month].innerHTML = `
                 <div id='monthTitle'>${this._getKuukasiFromNumber(month)}</div>
             `
+            if(month === this.selectedMonth){
+                this.monthElements[month].classList.add('selectedMonth')
+            } else {
+                this.monthElements[month].classList.remove('selectedMonth')
+            }
 
             if (eventsMonthSorted[month].length > 0) {
                 //BAD solution for filtering out older events to push current at the top

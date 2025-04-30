@@ -18,7 +18,7 @@
 }
 
 #MonthCircle #MonthElement {
-    border:1px solid grey;
+    border:1px solid black;
     border-radius: 50%;
 
     overflow:hidden;
@@ -44,19 +44,13 @@
       rotate(calc(-1*var(--ca)))
 }
 
+.selectedMonth {
+    background-color: #5baa00;
+    color: white;
+}
+
 #MonthCircle #MonthElement:hover {
-    border-color: black;
-}
-
-#MonthCircle #MonthElement p {
-    font-size: 2vh;
-    display: list-item;
-    list-style-position: inside;
-    margin: 0;
-}
-
-#MonthCircle #MonthElement p:hover {
-    color: limegreen;
+    border-color: grey;
 }
 
 .mtBaseText {
@@ -99,6 +93,8 @@
     /*padding-top: 5vh;*/
 
     background-color: #5baa00;
+
+    user-select: none;
 
     line-height: 1;
 }

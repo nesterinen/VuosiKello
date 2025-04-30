@@ -9,11 +9,11 @@
     flex-shrink: 1;
     flex-basis: 38em;
 
-    border-left: 1px solid black;
+    border: 1px solid black;
 }
 
 .vktContainer {
-    max-height: 96vh;
+    max-height: 95vh;
 
     margin-left: 0.25em;
 
@@ -75,7 +75,7 @@
 
 .eventTableHeader div {
     display: flex;
-    padding: 0.2em;
+    /*padding: 0.2em;*/
 }
 
 .eventElement {

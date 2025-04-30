@@ -219,6 +219,34 @@ class VuosiKalenteri {
             `
 
             if (eventsMonthSorted[month].length > 0) {
+                //BAD solution for filtering out older events to push current at the top
+                if(month === this.#dateNow.getMonth()){
+                    for (let index = 0; index < eventsMonthSorted[month].length; index++) {
+                        //console.log('now:', this.#dateNow.getTime() , 'event:', eventsMonthSorted[month][index].start.getTime())
+                        if(eventsMonthSorted[month][index].start.getTime() - this.#dateNow.getTime() <= -86_400_000){
+                            continue
+                        }
+
+                        const newEventElement = document.createElement('div')
+                        newEventElement.style = `--mkColor: ${this._getColorFromPriority(eventsMonthSorted[month][index].priority)}`
+                        newEventElement.classList.add('mtBaseText')
+                        newEventElement.textContent = eventsMonthSorted[month][index].title
+
+                        //const id = eventsMonthSorted[month][index].id
+                        const event = eventsMonthSorted[month][index]
+                        newEventElement.addEventListener('click', () => {
+                            //this.eventClick(this.getEvent(id))
+                            //this.eventClick(id)
+                            this.eventClick(event)
+                            this.updateMonthElements()
+                        })
+
+                        this.monthElements[month].append(newEventElement)
+                    }
+
+                    continue
+                }
+            
                 for (let index = 0; index < this.maxEventsPerMonth && index < eventsMonthSorted[month].length; index++) {
                     const newEventElement = document.createElement('div')
                     newEventElement.style = `--mkColor: ${this._getColorFromPriority(eventsMonthSorted[month][index].priority)}`

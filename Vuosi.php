@@ -31,8 +31,17 @@ function to_module($tag, $handle, $src): string{
 }
 
 function load_plugin(): void{
+    // DELETE LATER AFTER TESTDATA DEELETION
+    $options=array(
+        "ssl"=>array(
+            "verify_peer"=>false,
+            "verify_peer_name"=>false,
+        ),
+    );  
+
+
     global $organization_groups;
-    $data_string = file_get_contents(plugin_dir_url(__FILE__) . 'dev/test_data.json');
+    $data_string = file_get_contents(plugin_dir_url(__FILE__) . 'dev/test_data.json', false, stream_context_create($options));
     $test_data_json = json_decode((string)$data_string, true);
 
     $js_file_dir = plugin_dir_url(file: __FILE__) . 'js';

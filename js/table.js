@@ -195,7 +195,7 @@ class VuosiTable {
         header.classList.add('eventTableHeader')
         header.innerHTML = `
             <div>
-                <div class='baseTextBold'>kuukausi</div>
+                <div class='tableHeaderText'>Kuukausi:</div>
                 <select class='monthSelect'></select>
             </div>
         `
@@ -382,7 +382,7 @@ class VuosiTable {
 
             const eventElement = this.#eventDomElement(yearEvent)
             
-            if(this.firstEventToday === null & yearEvent.start >= this.dateToday){
+            if(this.firstEventToday === null & yearEvent.start.getMonth() === this.dateToday.getMonth()){
                 this.firstEventToday = {element: eventElement, data: yearEvent}
                 this.firstEventToday.element.style = 'border-top: 5px solid #d12c0a; border-bottom: 5px solid #d12c0a;'
             }

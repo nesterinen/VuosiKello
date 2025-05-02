@@ -52,6 +52,11 @@ class VuosiKalenteri {
         }
     }
 
+    setMonth(month){
+        this.selectedMonth = month
+        this.updateMonthElements()
+    }
+
     // assuming group is string array.
     setEventFilterByGroup(group) {
         if(!Array.isArray(group)){
@@ -144,9 +149,26 @@ class VuosiKalenteri {
             return newEventElement
         }
 
+        //sort by date
+        function sortEventsByPriorityThenDate(events){
+            const newEvents = events.toSorted((a, b) => {
+                if(a.priority > b.priority){
+                    return 1
+                } else if (a.priority < b.priority){
+                    return -1
+                }
+    
+                return a.start - b.start
+            })
+            
+            return newEvents
+        }
+
+        const newEventsArray = sortEventsByPriorityThenDate(this.YearEvents.events)
+
         //filter and sort by months, temporary array.
         let eventsMonthSorted = {0:[], 1:[], 2:[], 3:[], 4:[], 5:[], 6:[], 7:[], 8:[], 9:[], 10:[], 11:[], 12:[]}
-        for (const yearEvent of this.YearEvents.events) {
+        for (const yearEvent of newEventsArray) { //this.YearEvents.events
             // get only events from current year
             if(yearEvent.start.getFullYear() !== this.#dateNow.getFullYear()){
                 continue

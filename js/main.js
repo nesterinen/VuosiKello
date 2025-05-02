@@ -82,6 +82,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             },
             eventClick: (eventObj) => {
                 yearEvents.selectEvent(eventObj.data)
+            },
+            monthSelect: (month) => {
+                yearCircle.setMonth(month)
             }
         }
     )

@@ -28,12 +28,13 @@ class VuosiTable {
     firstEventToday = null//{element: null, data: null}
     dateToday = new Date()
 
-    constructor(element, {yearEvents, eventClick, deleteClick, groups}) {
+    constructor(element, {yearEvents, eventClick, deleteClick, monthSelect,groups}) {
         this.element = this.#CheckIfDomElement(element)
         this.YearEvents = yearEvents
 
         this.eventClick = eventClick && typeof eventClick == 'function' ? eventClick : this.#eventClickFunction
         this.deleteClick = deleteClick && typeof deleteClick == 'function' ? deleteClick : this.#deleteEventFunction
+        this.monthSelect = monthSelect && typeof monthSelect == 'function' ? monthSelect : this.#monthSelectEventFunction
 
         this.groups = groups ? groups : []
 
@@ -118,6 +119,10 @@ class VuosiTable {
         //this.selectEvent(data.id)
     }
 
+    #monthSelectEventFunction(params){
+        this.#errorLogger('monthSelectEventFunction', params)
+    }
+
     selectEvent(event){
         if(this.selectedMonth !== event.start.getMonth() && this.monthFilter === true) {
             this.setEventFilterByMonth(event.start.getMonth())
@@ -180,6 +185,7 @@ class VuosiTable {
             this.selectedMonth = month
         }
 
+        this.monthSelect(month)
         this.updateTable()
         this.#updateTableHeader(month)
         this.#errorLogger('filter:', month, ',month set.')

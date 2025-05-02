@@ -51,10 +51,7 @@ class YearEvents {
 
         // sort by date
         this.sortEventsByDate()
-        /*
-        this.events.sort((a, b) => {
-            return a.start - b.start
-        })*/
+        //this.sortEventsByPriorityThenDate()
     }
 
     #errorLogger(...params){
@@ -65,6 +62,19 @@ class YearEvents {
 
     sortEventsByDate(){
         this.events.sort((a, b) => {
+            return a.start - b.start
+        })
+    }
+
+    // does not play ball with table..
+    sortEventsByPriorityThenDate(){
+        this.events.sort((a, b) => {
+            if(a.priority > b.priority){
+                return 1
+            } else if (a.priority < b.priority){
+                return -1
+            }
+
             return a.start - b.start
         })
     }

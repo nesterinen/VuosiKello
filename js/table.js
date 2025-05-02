@@ -124,13 +124,18 @@ class VuosiTable {
         }
 
         if(this.selectedEvent) {
-            this.selectedEvent.style = ''
+            //this.selectedEvent.style = ''
+            this.selectedEvent.classList.remove('selectedTableEvent')
         }
+
         //this.selectedEvent = this.#getEventElement(id)
         this.selectedEvent = this.#getEventElement(event.id)
         if(this.selectedEvent === null) return
         this.#scrollToEventElement(this.selectedEvent)
-        this.selectedEvent.style = 'border-top: 5px solid Yellow; border-bottom: 5px solid Yellow;'
+
+        //this.selectedEvent.style = 'border-top: 5px solid Yellow; border-bottom: 5px solid Yellow;'
+        this.selectedEvent.classList.add('selectedTableEvent')
+
         //this.updateTable(id)
     }
 
@@ -379,14 +384,19 @@ class VuosiTable {
             
             if(this.firstEventToday === null & yearEvent.start >= this.dateToday){
                 this.firstEventToday = {element: eventElement, data: yearEvent}
-                this.firstEventToday.element.style = 'border-top: 5px solid Chartreuse; border-bottom: 5px solid Chartreuse;'
+                this.firstEventToday.element.style = 'border-top: 5px solid #d12c0a; border-bottom: 5px solid #d12c0a;'
             }
 
+            /* useless??
             if(selectId){
                 if(yearEvent.id === selectId){
-                    eventElement.style = 'border-top: 5px solid Yellow; border-bottom: 5px solid Yellow;'
+                    //eventElement.style = 'border-top: 5px solid Yellow; border-bottom: 5px solid Yellow;'
+                    eventElement.classList.add('selectedTableEvent')
+                } else {
+                    eventElement.classList.remove('selectedTableEvent')
                 }
             }
+            */
 
             eventList.append(eventElement)
         }

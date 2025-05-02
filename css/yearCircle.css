@@ -99,6 +99,10 @@
     line-height: 1;
 }
 
+#MonthCircle .CircleCenter:hover {
+    box-shadow: 2px 2px 2px black;
+}
+
 .ycHeaderText {
     font-size: 4vh;
     color: white;

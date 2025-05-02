@@ -68,9 +68,11 @@
     /*
     grid-template-columns: auto auto;
     */
-    border-bottom: 2px solid black;
+    border-bottom: 1px solid black;
     padding-bottom: 0.25em;
     padding-top: 0.25em;
+
+    margin-bottom: 1px;
 }
 
 .eventTableHeader div {
@@ -84,7 +86,16 @@
     display: grid;
     grid-template-columns: 15% 65% 20%;
 
-    margin-bottom: 0.25em;
+    margin-bottom: 0.3em;
+}
+
+.eventElement:hover {
+    box-shadow: inset 2px 2px 4px black;
+}
+
+.selectedTableEvent {
+    background-color: #5baa00;
+    color: white;
 }
 
 .eventMainInfo {
@@ -119,46 +130,3 @@
 .withMarker::marker {
     color: var(--mkColor);
 }
-
-/* old old
-table {
-    display: flex;
-    flex-direction: column;
-    overflow-x: scroll;
-    height: 400px;
-    width: 800px;
-}
-
-td {
-    text-align: center;
-    border: 1px solid red;
-    height: 100px;
-    width: 100px;
-    min-width: 100px;
-}
-
-th {
-    border: 1px solid blue;
-    min-width: 100px;
-}
-
-.monthHeader {
-    position: sticky;
-    background-color: white;
-
-    width: 100px;
-    min-width: 100px;
-    max-width: 100px;
-    left: 2px;
-}
-
-.groupHeader {
-    position: sticky;
-    background-color: white;
-
-    width: 150px;
-    min-width: 150px;
-    max-width: 150px;
-    left: 108px;
-}
-*/

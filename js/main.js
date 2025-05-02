@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         yearCircle.setEventFilterByGroup(args.detail.group)
     })
 
-    yearEvents.selectEventById(2132173363)
+    yearEvents.selectEventById(386669888)
 
     const testButton = mainElement.querySelector('.testButton')
     testButton.addEventListener('click', async () => {

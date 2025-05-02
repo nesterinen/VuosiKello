@@ -56,6 +56,10 @@
     grid-template-columns: 20% 60% 20%;
 }
 
+.gsbHeaderText:hover {
+    outline: 1px solid black;
+}
+
 .gsbSelections {
     border-left: 1px solid grey;
     border-right: 1px solid grey;

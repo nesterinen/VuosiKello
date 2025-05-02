@@ -78,7 +78,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             yearEvents,
             groups: php_args.groups,
             deleteClick: (id) => {
-                yearEvents.deleteEvent(id)
+                if(confirm('Poista tapahtuma?')){
+                    yearEvents.deleteEvent(id)
+                }
             },
             eventClick: (eventObj) => {
                 yearEvents.selectEvent(eventObj.data)

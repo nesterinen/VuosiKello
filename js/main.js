@@ -125,6 +125,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         if(dialogResult.series === false) {
+            console.log('result', dialogResult)
             const result = backendSimulationIndividual(dialogResult.data)
             yearEvents.addEvent(result)
             yearEvents.sortEventsByDate()
@@ -138,6 +139,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             vuosiTable.updateTable()
         }
     })
+    testButton.click()
 
     const downloadButton = mainElement.querySelector('.downloadButton')
     downloadButton.addEventListener('click', () => {

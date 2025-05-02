@@ -43,31 +43,6 @@ main {
 
 
 /*EventCreationDialog #############################*/
-.EventCreation {
-    display: flex;
-    padding: 0.2em;
-    padding-top: 1.7em;
-    line-height: 1.1; /*mystery padding removal..*/
-    border-radius: 5px;
-}
-
-.EventCreation .titleGroup {
-    display: grid;
-    grid-template-columns: 50% 50%;
-}
-
-
-.EventCreation .baseSettings {
-    /*outline: 1px solid blue;*/
-    border-top: 1px solid black;
-}
-
-.EventCreation .extraSettings {
-    /*outline: 1px solid red;*/
-    border-left: 1px dashed black;
-    border-top: 1px solid black;
-}
-
 .baseElement {
     margin: 0.2em !important;
 }
@@ -129,16 +104,5 @@ main {
 }
 .baseRed:hover {
     background-color: #ad2307;
-}
-
-.closeButtonX {
-    position: absolute;
-    margin-top: -2.4em;
-    width: 2em;
-    height: 2em;
-    border: 1px solid black;
-    transition: 0.3s;
-    border-radius: 5px;
-    right: 0.2em;
 }
 /*################################################*/

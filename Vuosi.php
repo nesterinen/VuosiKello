@@ -49,6 +49,7 @@ function load_plugin(): void{
     wp_enqueue_style(handle: 'wsp-table-style', src: plugin_dir_url(file: __FILE__) . 'css/table.css');
     wp_enqueue_style(handle: 'wsp-info-style', src: plugin_dir_url(file: __FILE__) . 'css/info.css');
     wp_enqueue_style(handle: 'wsp-yearCircle-style', src: plugin_dir_url(file: __FILE__) . 'css/yearCircle.css');
+    wp_enqueue_style(handle: 'wsp-dialogs-style', src: plugin_dir_url(file: __FILE__) . 'css/dialogs.css');
 
     wp_register_script(
         handle: 'year-dialogs',

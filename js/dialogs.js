@@ -4,72 +4,12 @@ datatype: {
     series_id: int | null
     priority: int
     reservor: str
-    group: str
+    group: str[]
     title: str
     content: str
     start: date
     end: date
 }
-*/
-
-/*
-document.addEventListener('DOMContentLoaded', async () => {
-    const mainElement = document.getElementById('VuosiKalenteri')
-    if (mainElement === null) return
-
-    let eventData = []
-
-    mainElement.innerHTML = `
-        <button class='testButton'>Test</button>
-    `
-
-    
-    function downloadLink(data){
-        const element = document.createElement('a')
-        element.textContent = 'lataa'
-        element.addEventListener('click', () => {
-            const jsString = JSON.stringify(data)
-            const file = new Blob([jsString], {type: 'application/json'})
-            const url = URL.createObjectURL(file)
-            element.href = url
-            element.download = "data.json"
-        })
-
-        return element
-    }
-    mainElement.appendChild(downloadLink(eventData))
-    
-
-    EventCreationDialog(php_args.groups).then(result => console.log(result))
-
-    
-    const testButton = mainElement.querySelector('.testButton')
-    testButton.addEventListener('click', async () => {
-
-        const dialogResult = await EventCreationDialog(php_args.groups).catch((e) => {
-            console.log(e)
-            return null
-        })
-
-        if (!dialogResult) {
-            console.log('done')
-            return
-        }
-
-        if(dialogResult.series === false) {
-            const result = backendSimulationIndividual(dialogResult.data)
-            eventData.push(result)
-            console.log('eventData', eventData)
-        } else {
-            const result = backendSimulationMultiple(dialogResult.data)
-            for(const event of result) {
-                eventData.push(event)
-            }
-            console.log('eventData', eventData)
-        }
-    })
-    
-})
 */
 
 function dateNoTimezone(date) {
@@ -102,8 +42,8 @@ async function EventCreationDialog(groups) {
         'viikottain',
         'parittomat viikot',
         'parilliset viikot',
-        'kuukauden ensimmäinen päivä',
-        'kuukauden viimeinen päivä'
+        //'kuukauden ensimmäinen päivä',
+        //'kuukauden viimeinen päivä'
     ]
 
     const priorities = [
@@ -298,7 +238,7 @@ async function EventCreationDialog(groups) {
                 endDateInput.style = 'outline: 2px dotted green;'
             } else {
                 endDateInput.disabled = true
-                endDateInput.style = ''
+                endDateInput.style = 'display: none;'
             }
         })
 

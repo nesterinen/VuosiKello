@@ -30,6 +30,10 @@ function to_module($tag, $handle, $src): string{
     return $tag;
 }
 
+// ajax, rest/crud api modifying db stuff for vuosikello
+include(plugin_dir_path(__FILE__) . 'php/Crud_Operations.php');
+
+
 function load_plugin(): void{
     // DELETE LATER AFTER TESTDATA DEELETION
     $options=array(
@@ -113,6 +117,7 @@ function load_plugin(): void{
         handle:'plugin-script',
         object_name: 'php_args',
         l10n: [
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
             'groups' => $organization_groups,
             'test_data' => $test_data_json
         ]

@@ -9,7 +9,7 @@ datatype: {
     series_id: int | null
     priority: int
     reservor: str
-    group: str
+    group: str[]
     title: str
     content: str
     start: date
@@ -17,9 +17,46 @@ datatype: {
 }
 */
 
+/*
+    id: int (PRIMARY KEY),
+    series_id: int | null (FOREIGN KEY),
+    priority: int,
+    reservor: varchar 255,
+    group: json (str[]),
+    title: varchar 255,
+    content: text,
+    start: datetime,
+    end: datetime
+*/
+
 document.addEventListener('DOMContentLoaded', async () => {
     const mainElement = document.getElementById('VuosiKalenteri')
     if (mainElement === null) return
+
+    /*
+    let dataFromDatabase = []
+    await jQuery.ajax({
+        type: "POST",
+        dataType: "json",
+        url: php_args.ajax_url,
+        data: {action: "vuosi_kello_get_all"},
+        success: (response) => {
+            console.log('response data:', response.data)
+            dataFromDatabase = response.data.map(obj => {
+                return {...obj, id: parseInt(obj.id)}
+            })
+        },
+        error: (jqXHR) => {
+            if(jqXHR.status&&jqXHR.status==200){
+                console.log('err', jqXHR);
+            } else {
+                console.log('errorResponse:', jqXHR.responseText)
+              }
+        }
+    }).catch((error) => {
+        alert(`Virhe: ${error.statusText} (${error.status})`)
+    })
+    */
 
     mainElement.innerHTML = `
         <div class='vuosiKalenteriContainer'>
@@ -42,6 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
     const yearEvents = new YearEvents(php_args.test_data) //testData
+    //const yearEvents = new YearEvents(dataFromDatabase)
 
     const infoContainer = mainElement.querySelector('.infoContainer')
     const infoElement = new InfoElement(
@@ -139,7 +177,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             vuosiTable.updateTable()
         }
     })
-    testButton.click()
+    //testButton.click()
 
     const downloadButton = mainElement.querySelector('.downloadButton')
     downloadButton.addEventListener('click', () => {

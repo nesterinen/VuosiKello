@@ -33,12 +33,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const mainElement = document.getElementById('VuosiKalenteri')
     if (mainElement === null) return
 
-    /*
     let dataFromDatabase = []
     await jQuery.ajax({
         type: "POST",
         dataType: "json",
-        url: php_args.ajax_url,
+        url: php_args_vuosi.ajax_url,
         data: {action: "vuosi_kello_get_all"},
         success: (response) => {
             console.log('response data:', response.data)
@@ -56,7 +55,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }).catch((error) => {
         alert(`Virhe: ${error.statusText} (${error.status})`)
     })
-    */
     
 
     mainElement.innerHTML = `
@@ -76,17 +74,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         <button class='testButton'>Luo</button>
         <button class='downloadButton'>Lataa</button>
+        <button class='testButton2'>Luo db</button>
     `
-    //<button class='testButton2'>Luo db</button>
+    //
 
 
-    const yearEvents = new YearEvents(php_args.test_data) //testData
-    //const yearEvents = new YearEvents(dataFromDatabase)
+    //const yearEvents = new YearEvents(php_args_vuosi.test_data) //testData
+    const yearEvents = new YearEvents(dataFromDatabase)
 
     const infoContainer = mainElement.querySelector('.infoContainer')
     const infoElement = new InfoElement(
         infoContainer,
-        php_args.groups,
+        php_args_vuosi.groups,
         {
             selectGroup: (group) => {
                 yearEvents.selectGroup(group)
@@ -116,11 +115,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         tableContainer,
         {
             yearEvents,
-            groups: php_args.groups,
+            groups: php_args_vuosi.groups,
             deleteClick: (id) => {
+                jQuery.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: php_args_vuosi.ajax_url,
+                    data: {
+                        action: "vuosi_kello_delete_one",
+                        id: id
+                    },
+                    success: (response) => {
+                        yearEvents.deleteEvent(id)
+                    },
+                    error: (jqXHR) => {
+                        if(jqXHR.status&&jqXHR.status==200){
+                            console.log('err', jqXHR);
+                        } else {
+                            console.log('errorResponse:', jqXHR.responseText)
+                          }
+                    }
+                })
+                /*
                 if(confirm('Poista tapahtuma?')){
                     yearEvents.deleteEvent(id)
                 }
+                    */
             },
             eventClick: (eventObj) => {
                 yearEvents.selectEvent(eventObj.data)
@@ -154,7 +174,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const testButton = mainElement.querySelector('.testButton')
     testButton.addEventListener('click', async () => {
-        const dialogResult = await EventCreationDialog(php_args.groups).catch((e) => {
+        const dialogResult = await EventCreationDialog(php_args_vuosi.groups).catch((e) => {
             console.log(e)
             return null
         })
@@ -183,7 +203,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const testButton2 = mainElement.querySelector('.testButton2')
     testButton2.addEventListener('click', async () => {
-        const dialogResult = await EventCreationDialog(php_args.groups).catch((e) => {
+        const dialogResult = await EventCreationDialog(php_args_vuosi.groups).catch((e) => {
             console.log(e)
             return null
         })
@@ -199,7 +219,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             await jQuery.ajax({
                 type: "POST",
                 dataType: "json",
-                url: php_args.ajax_url,
+                url: php_args_vuosi.ajax_url,
                 data: {
                     action: "vuosi_kello_post_one",
                     priority: dialogResult.data.priority,
@@ -211,7 +231,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                     end: dialogResult.data.end
                 },
                 success: (response) => {
-                    console.log('response data:', response.data)
+                    yearEvents.addEvent({
+                        id: response.data.id,
+                        priority: dialogResult.data.priority,
+                        reservor: dialogResult.data.reservor,
+                        group: dialogResult.data.group,
+                        title: dialogResult.data.title,
+                        content: dialogResult.data.content,
+                        start: dialogResult.data.start,
+                        end: dialogResult.data.end
+                    })
                 },
                 error: (jqXHR) => {
                     if(jqXHR.status&&jqXHR.status==200){

@@ -127,6 +127,8 @@ class YearEvents {
             reservor
         ))
 
+        this.sortEventsByDate()
+
         this.#errorLogger('event with id:', id, 'added.')
         document.dispatchEvent(new Event(this.eventUpdateName))
     }

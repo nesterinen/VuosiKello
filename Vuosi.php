@@ -115,7 +115,7 @@ function load_plugin(): void{
 
     wp_localize_script(
         handle:'plugin-script',
-        object_name: 'php_args',
+        object_name: 'php_args_vuosi',
         l10n: [
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'groups' => $organization_groups,

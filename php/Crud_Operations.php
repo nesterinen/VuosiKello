@@ -58,6 +58,31 @@ function vuosi_kello_post_one(): void {
         'end' => $_POST['end'],
     ]);
 
+    switch (true) {
+        case $result === false:
+            wp_send_json_error($result, 500);
+            break;
+        
+        case $result === 0:
+            wp_send_json_error($result, 400);
+            break;
+
+        case $result >= 1:
+            wp_send_json_success(array("id" => $wpdb->insert_id), 200);
+    }
+}
+
+add_action("wp_ajax_vuosi_kello_post_one", "vuosi_kello_post_one");
+add_action("wp_ajax_nopriv_vuosi_kello_post_one", "vuosi_kello_post_one");
+
+function vuosi_kello_delete_one(): void {
+    global $wpdb;
+    $table_name = 'wp_vuosi_kello';
+
+    $result = $wpdb->delete($table_name, [
+        'id' => $_POST['id']
+    ]);
+
     if($result !== false){
         wp_send_json_success($result, 200);
     } else {
@@ -65,5 +90,5 @@ function vuosi_kello_post_one(): void {
     }
 }
 
-add_action("wp_ajax_vuosi_kello_post_one", "vuosi_kello_post_one");
-add_action("wp_ajax_nopriv_vuosi_kello_post_one", "vuosi_kello_post_one");
+add_action("wp_ajax_vuosi_kello_delete_one", "vuosi_kello_delete_one");
+add_action("wp_ajax_nopriv_vuosi_kello_delete_one", "vuosi_kello_delete_one");

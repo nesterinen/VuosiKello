@@ -42,7 +42,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         success: (response) => {
             console.log('response data:', response.data)
             dataFromDatabase = response.data.map(obj => {
-                return {...obj, id: parseInt(obj.id)}
+                //return {...obj, id: parseInt(obj.id)}
+                return obj
             })
         },
         error: (jqXHR) => {
@@ -117,6 +118,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             yearEvents,
             groups: php_args_vuosi.groups,
             deleteClick: (id) => {
+                if(!confirm('Poista tapahtuma?')){
+                    return
+                }
+
                 jQuery.ajax({
                     type: "POST",
                     dataType: "json",
@@ -135,6 +140,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                             console.log('errorResponse:', jqXHR.responseText)
                           }
                     }
+                }).catch((error) => {
+                    alert(`Virhe: ${error.statusText} (${error.status})`)
                 })
                 /*
                 if(confirm('Poista tapahtuma?')){
@@ -214,12 +221,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         if(dialogResult.series === false) {
-            console.log('result', dialogResult.data)
-
+            //console.log('result', dialogResult.data)
             const {priority, reservor, group, title, content, start, end} = dialogResult.data
-            console.log('asdasdasd', priority, reservor, group, title, content, start, end)
-
-            await jQuery.ajax({
+            jQuery.ajax({
                 type: "POST",
                 dataType: "json",
                 url: php_args_vuosi.ajax_url,
@@ -240,6 +244,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         console.log('errorResponse:', jqXHR.responseText)
                       }
                 }
+            }).catch((error) => {
+                alert(`Virhe: ${error.statusText} (${error.status})`)
             })
 
         } else {

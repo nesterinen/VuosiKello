@@ -31,6 +31,8 @@ function vuosi_kello_get_all(): void {
     if($result !== false){
         foreach ($result as $index => $event) {
             $result[$index]->group = json_decode($event->group);
+            $result[$index]->id= (int)$event->id;
+            $result[$index]->priority = (int)$event->priority;
             //write_log(gettype($event->group));
             //write_log(json_decode($event->group));
         }

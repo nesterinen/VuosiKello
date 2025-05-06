@@ -221,7 +221,7 @@ class VuosiKalenteri {
 
             if (eventsMonthSorted[month].length > 0) {
                 //BAD solution for filtering out older events to push current at the top
-                if(month === this.#dateNow.getMonth()){
+                if(month === this.#dateNow.getMonth() && eventsMonthSorted[month].length > this.maxEventsPerMonth){
                     let elementsAdded = 0
                     for (let index = 0; index < eventsMonthSorted[month].length; index++) {
                         if(elementsAdded > this.maxEventsPerMonth) continue

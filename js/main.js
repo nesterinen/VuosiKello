@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const mainElement = document.getElementById('VuosiKalenteri')
     if (mainElement === null) return
 
-    
+    /*
     let dataFromDatabase = []
     await jQuery.ajax({
         type: "POST",
@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }).catch((error) => {
         alert(`Virhe: ${error.statusText} (${error.status})`)
     })
+    */
     
 
     mainElement.innerHTML = `
@@ -75,12 +76,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         <button class='testButton'>Luo</button>
         <button class='downloadButton'>Lataa</button>
-        <button class='testButton2'>Luo db</button>
     `
+    //<button class='testButton2'>Luo db</button>
 
 
-    //const yearEvents = new YearEvents(php_args.test_data) //testData
-    const yearEvents = new YearEvents(dataFromDatabase)
+    const yearEvents = new YearEvents(php_args.test_data) //testData
+    //const yearEvents = new YearEvents(dataFromDatabase)
 
     const infoContainer = mainElement.querySelector('.infoContainer')
     const infoElement = new InfoElement(

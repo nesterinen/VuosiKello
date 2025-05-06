@@ -250,7 +250,7 @@ async function EventCreationDialog(groups) {
             const startDate = dialog.querySelector('.dateInput').value
             const clock_start = dialog.querySelector('.startInput').value
             const clock_end = dialog.querySelector('.endInput').value
-            const group = groupSelector.value 
+            const group = [groupSelector.value]
             const priority = prioritySelector.options.selectedIndex + 1//prioritySelector.value
             const daysCheckBoxElement = dialog.getElementsByClassName('cbDay')
 

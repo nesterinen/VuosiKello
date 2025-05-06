@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const mainElement = document.getElementById('VuosiKalenteri')
     if (mainElement === null) return
 
-    /*
+    
     let dataFromDatabase = []
     await jQuery.ajax({
         type: "POST",
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }).catch((error) => {
         alert(`Virhe: ${error.statusText} (${error.status})`)
     })
-    */
+    
 
     mainElement.innerHTML = `
         <div class='vuosiKalenteriContainer'>
@@ -75,11 +75,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         <button class='testButton'>Luo</button>
         <button class='downloadButton'>Lataa</button>
+        <button class='testButton2'>Luo db</button>
     `
 
 
-    const yearEvents = new YearEvents(php_args.test_data) //testData
-    //const yearEvents = new YearEvents(dataFromDatabase)
+    //const yearEvents = new YearEvents(php_args.test_data) //testData
+    const yearEvents = new YearEvents(dataFromDatabase)
 
     const infoContainer = mainElement.querySelector('.infoContainer')
     const infoElement = new InfoElement(
@@ -178,6 +179,60 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     })
     //testButton.click()
+
+    const testButton2 = mainElement.querySelector('.testButton2')
+    testButton2.addEventListener('click', async () => {
+        const dialogResult = await EventCreationDialog(php_args.groups).catch((e) => {
+            console.log(e)
+            return null
+        })
+
+        if (!dialogResult) {
+            console.log('done')
+            return
+        }
+
+        if(dialogResult.series === false) {
+            console.log('result', dialogResult.data)
+
+            await jQuery.ajax({
+                type: "POST",
+                dataType: "json",
+                url: php_args.ajax_url,
+                data: {
+                    action: "vuosi_kello_post_one",
+                    priority: dialogResult.data.priority,
+                    reservor: dialogResult.data.reservor,
+                    group: dialogResult.data.group,
+                    title: dialogResult.data.title,
+                    content: dialogResult.data.content,
+                    start: dialogResult.data.start,
+                    end: dialogResult.data.end
+                },
+                success: (response) => {
+                    console.log('response data:', response.data)
+                },
+                error: (jqXHR) => {
+                    if(jqXHR.status&&jqXHR.status==200){
+                        console.log('err', jqXHR);
+                    } else {
+                        console.log('errorResponse:', jqXHR.responseText)
+                      }
+                }
+            })
+
+        } else {
+            console.log('series', dialogResult)
+            /*
+            const result = backendSimulationMultiple(dialogResult.data)
+            for(const event of result) {
+                yearEvents.addEvent(event)
+            }
+            yearEvents.sortEventsByDate()
+            vuosiTable.updateTable()
+            */
+        }
+    })
 
     const downloadButton = mainElement.querySelector('.downloadButton')
     downloadButton.addEventListener('click', () => {

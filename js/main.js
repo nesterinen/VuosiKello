@@ -216,30 +216,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         if(dialogResult.series === false) {
             console.log('result', dialogResult.data)
 
+            const {priority, reservor, group, title, content, start, end} = dialogResult.data
+            console.log('asdasdasd', priority, reservor, group, title, content, start, end)
+
             await jQuery.ajax({
                 type: "POST",
                 dataType: "json",
                 url: php_args_vuosi.ajax_url,
                 data: {
                     action: "vuosi_kello_post_one",
-                    priority: dialogResult.data.priority,
-                    reservor: dialogResult.data.reservor,
-                    group: dialogResult.data.group,
-                    title: dialogResult.data.title,
-                    content: dialogResult.data.content,
-                    start: dialogResult.data.start,
-                    end: dialogResult.data.end
+                    priority, reservor, group, title, content, start, end
                 },
                 success: (response) => {
                     yearEvents.addEvent({
                         id: response.data.id,
-                        priority: dialogResult.data.priority,
-                        reservor: dialogResult.data.reservor,
-                        group: dialogResult.data.group,
-                        title: dialogResult.data.title,
-                        content: dialogResult.data.content,
-                        start: dialogResult.data.start,
-                        end: dialogResult.data.end
+                        priority, reservor, group, title, content, start, end
                     })
                 },
                 error: (jqXHR) => {

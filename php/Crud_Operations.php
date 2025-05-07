@@ -31,8 +31,9 @@ function vuosi_kello_get_all(): void {
     if($result !== false){
         foreach ($result as $index => $event) {
             $result[$index]->group = json_decode($event->group);
-            $result[$index]->id= (int)$event->id;
+            $result[$index]->id = (int)$event->id;
             $result[$index]->priority = (int)$event->priority;
+            $result[$index]->series_id = (int)$event->series_id;
             //write_log(gettype($event->group));
             //write_log(json_decode($event->group));
         }
@@ -94,3 +95,92 @@ function vuosi_kello_delete_one(): void {
 
 add_action("wp_ajax_vuosi_kello_delete_one", "vuosi_kello_delete_one");
 add_action("wp_ajax_nopriv_vuosi_kello_delete_one", "vuosi_kello_delete_one");
+
+function vuosi_kello_post_series(): void {
+    global $wpdb;
+    $table_name = 'wp_vuosi_kello';
+    $series_t = $table_name . '_series';
+
+    
+    $time_str = current_time('mysql');
+    $series_result = $wpdb->query("INSERT INTO {$series_t} (time_stamp) VALUES ('{$time_str}');");
+
+    if($series_result === 0){
+        wp_send_json_error($series_result, 500);
+        return;
+    }
+
+    $series_id = $wpdb->insert_id;
+
+    $results = [];
+    
+    foreach ($_POST['arrayOfDates'] as $key => $times) {
+        $result = $wpdb->insert($table_name, [
+            'series_id' => $series_id,
+            'priority' => $_POST['priority'],
+            'reservor' => $_POST['reservor'],
+            'group' => json_encode($_POST['group']),
+            'title' => $_POST['title'],
+            'content' => $_POST['content'],
+            'start' => $times['start'],
+            'end' => $times['end'],
+        ]);
+
+        if($result >= 1){
+            $results[] = $wpdb->insert_id;
+        }
+    }
+    
+
+    $sent_amount = count($results);
+    $needed_amount = count($_POST['arrayOfDates']);
+    if($needed_amount == $sent_amount){
+        //write_log($results);
+        wp_send_json_success(["ids" => $results, "series_id" => $series_id], 200);
+    } else {
+       //write_log('error');
+        wp_send_json_error(["message"=>"sent: {$sent_amount}, needed: {$needed_amount}"], 400);
+    }
+
+
+
+    /* multiple inserts in one query, but because group array there are issues with ' " string escapes...
+    $values = [];
+    foreach ($_POST['arrayOfDates'] as $key => $times) {
+        $values[] = $wpdb->prepare(
+            '(%d,%d,%s,%s,%s,%s,%s,%s)',
+            $series_id,
+            $_POST['priority'],
+            $_POST['reservor'],
+            json_encode($_POST['group']),
+            $_POST['title'],
+            $_POST['content'],
+            $times['start'],
+            $times['end']
+        );
+    }
+
+    write_log($values);
+
+    $query = "INSERT INTO {$table_name} (series_id, priority, reservor, group, title, content, start, end) VALUES ";
+    $query .= implode(",\n", $values);
+
+    $result = $wpdb->query($query);
+
+    switch (true) {
+        case $result === false:
+            wp_send_json_error($result, 500);
+            break;
+        
+        case $result === 0:
+            wp_send_json_error($result, 400);
+            break;
+
+        case $result >= 1:
+            wp_send_json_success(array("result" => $result), 200);
+    }
+    */
+}
+
+add_action("wp_ajax_vuosi_kello_post_series", "vuosi_kello_post_series");
+add_action("wp_ajax_nopriv_vuosi_kello_post_series", "vuosi_kello_post_series");

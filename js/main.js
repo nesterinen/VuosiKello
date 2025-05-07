@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         yearCircle.setEventFilterByGroup(args.detail.group)
     })
 
-    yearEvents.selectEventById(386669888)
+    //yearEvents.selectEventById(386669888)
 
     const testButton = mainElement.querySelector('.testButton')
     testButton.addEventListener('click', async () => {
@@ -223,6 +223,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if(dialogResult.series === false) {
             //console.log('result', dialogResult.data)
             const {priority, reservor, group, title, content, start, end} = dialogResult.data
+            
             jQuery.ajax({
                 type: "POST",
                 dataType: "json",
@@ -236,6 +237,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         id: response.data.id,
                         priority, reservor, group, title, content, start, end
                     })
+                    yearEvents.selectEventById(response.data.id)
                 },
                 error: (jqXHR) => {
                     if(jqXHR.status&&jqXHR.status==200){
@@ -250,6 +252,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         } else {
             console.log('series', dialogResult)
+            const {arrayOfDates, priority, reservor, group, title, content, start, end} = dialogResult.data
+
+            jQuery.ajax({
+                type: "POST",
+                dataType: "json",
+                url: php_args_vuosi.ajax_url,
+                data: {
+                    action: "vuosi_kello_post_series",
+                    arrayOfDates, priority, reservor, group, title, content, start, end
+                },
+                success: (response) => {
+                    console.log('response', response)
+                },
+                error: (jqXHR) => {
+                    if(jqXHR.status&&jqXHR.status==200){
+                        console.log('err', jqXHR);
+                    } else {
+                        console.log('errorResponse:', jqXHR.responseText)
+                      }
+                }
+            })
             /*
             const result = backendSimulationMultiple(dialogResult.data)
             for(const event of result) {

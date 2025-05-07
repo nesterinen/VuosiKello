@@ -110,8 +110,8 @@ class VuosiTable {
         }
     }
 
-    #deleteEventFunction(id){
-        this.#errorLogger('deleteEventFunction:', id)
+    #deleteEventFunction(id, series_id){
+        this.#errorLogger('deleteEventFunction:', id, series_id)
     }
 
     #eventClickFunction({element, data}){
@@ -329,7 +329,7 @@ class VuosiTable {
 
         const deleteButton = eventElement.querySelector('.deleteButton')
         deleteButton.addEventListener('click', () => {
-            this.deleteClick(yearEvent.id)
+            this.deleteClick(yearEvent.id, yearEvent.series_id)
             //this.updateTable()
         })
 

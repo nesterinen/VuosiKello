@@ -33,7 +33,9 @@ function vuosi_kello_get_all(): void {
             $result[$index]->group = json_decode($event->group);
             $result[$index]->id = (int)$event->id;
             $result[$index]->priority = (int)$event->priority;
-            $result[$index]->series_id = (int)$event->series_id;
+            if(gettype($event->series_id) === 'integer'){
+                $result[$index]->series_id = (int)$event->series_id;
+            }
             //write_log(gettype($event->group));
             //write_log(json_decode($event->group));
         }
@@ -141,45 +143,6 @@ function vuosi_kello_post_series(): void {
        //write_log('error');
         wp_send_json_error(["message"=>"sent: {$sent_amount}, needed: {$needed_amount}"], 400);
     }
-
-
-
-    /* multiple inserts in one query, but because group array there are issues with ' " string escapes...
-    $values = [];
-    foreach ($_POST['arrayOfDates'] as $key => $times) {
-        $values[] = $wpdb->prepare(
-            '(%d,%d,%s,%s,%s,%s,%s,%s)',
-            $series_id,
-            $_POST['priority'],
-            $_POST['reservor'],
-            json_encode($_POST['group']),
-            $_POST['title'],
-            $_POST['content'],
-            $times['start'],
-            $times['end']
-        );
-    }
-
-    write_log($values);
-
-    $query = "INSERT INTO {$table_name} (series_id, priority, reservor, group, title, content, start, end) VALUES ";
-    $query .= implode(",\n", $values);
-
-    $result = $wpdb->query($query);
-
-    switch (true) {
-        case $result === false:
-            wp_send_json_error($result, 500);
-            break;
-        
-        case $result === 0:
-            wp_send_json_error($result, 400);
-            break;
-
-        case $result >= 1:
-            wp_send_json_success(array("result" => $result), 200);
-    }
-    */
 }
 
 add_action("wp_ajax_vuosi_kello_post_series", "vuosi_kello_post_series");

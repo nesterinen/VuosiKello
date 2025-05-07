@@ -117,7 +117,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         {
             yearEvents,
             groups: php_args_vuosi.groups,
-            deleteClick: (id) => {
+            deleteClick: (id, series_id) => {
+                console.log('asdsad', id, series_id)
+                /*
                 if(!confirm('Poista tapahtuma?')){
                     return
                 }
@@ -143,11 +145,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }).catch((error) => {
                     alert(`Virhe: ${error.statusText} (${error.status})`)
                 })
-                /*
-                if(confirm('Poista tapahtuma?')){
-                    yearEvents.deleteEvent(id)
-                }
-                    */
+                */
             },
             eventClick: (eventObj) => {
                 yearEvents.selectEvent(eventObj.data)

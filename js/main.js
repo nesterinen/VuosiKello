@@ -147,34 +147,29 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }).catch((error) => {
                         alert(`Virhe: ${error.statusText} (${error.status})`)
                     })
+                } else { // delete individual
+                    jQuery.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: php_args_vuosi.ajax_url,
+                        data: {
+                            action: "vuosi_kello_delete_one",
+                            id: id
+                        },
+                        success: (response) => {
+                            yearEvents.deleteEvent(id)
+                        },
+                        error: (jqXHR) => {
+                            if(jqXHR.status&&jqXHR.status==200){
+                                console.log('err', jqXHR);
+                            } else {
+                                console.log('errorResponse:', jqXHR.responseText)
+                              }
+                        }
+                    }).catch((error) => {
+                        alert(`Virhe: ${error.statusText} (${error.status})`)
+                    })
                 }
-                /*
-                if(!confirm('Poista tapahtuma?')){
-                    return
-                }
-
-                jQuery.ajax({
-                    type: "POST",
-                    dataType: "json",
-                    url: php_args_vuosi.ajax_url,
-                    data: {
-                        action: "vuosi_kello_delete_one",
-                        id: id
-                    },
-                    success: (response) => {
-                        yearEvents.deleteEvent(id)
-                    },
-                    error: (jqXHR) => {
-                        if(jqXHR.status&&jqXHR.status==200){
-                            console.log('err', jqXHR);
-                        } else {
-                            console.log('errorResponse:', jqXHR.responseText)
-                          }
-                    }
-                }).catch((error) => {
-                    alert(`Virhe: ${error.statusText} (${error.status})`)
-                })
-                */
             },
             eventClick: (eventObj) => {
                 yearEvents.selectEvent(eventObj.data)

@@ -363,3 +363,43 @@ async function EventCreationDialog(groups) {
         dialog.showModal()
     })
 }
+
+
+async function DeleteDialog(id, series_id) {
+    return new Promise((resolve, reject) => {
+        const dialog = document.createElement('dialog')
+        dialog.innerHTML = `
+                <p>Poista?</p>
+                <button class='deleteButton'>delete</button>
+                <button class='closeButton'>close</button>
+        `
+
+        const deleteButton = dialog.querySelector('.deleteButton')
+        deleteButton.addEventListener('click', () => {
+            dialog.remove()
+            resolve({id, series_id: null})
+        })
+
+        const closeButton = dialog.querySelector('.closeButton')
+        closeButton.addEventListener('click', () => {
+            dialog.remove()
+            reject('closed')
+        })
+
+        if(series_id){
+            const deleteSeriesButton = document.createElement('button')
+            deleteSeriesButton.textContent = 'delete series'
+            deleteSeriesButton.addEventListener('click', () => {
+                dialog.remove()
+                resolve({id, series_id})
+            })
+
+            dialog.appendChild(deleteSeriesButton)
+        }
+
+        console.log('ids', id, series_id)
+
+        document.body.appendChild(dialog)
+        dialog.showModal()
+    })
+}

@@ -33,11 +33,9 @@ function vuosi_kello_get_all(): void {
             $result[$index]->group = json_decode($event->group);
             $result[$index]->id = (int)$event->id;
             $result[$index]->priority = (int)$event->priority;
-            if(gettype($event->series_id) === 'integer'){
+            if(gettype($event->series_id) === 'string'){
                 $result[$index]->series_id = (int)$event->series_id;
             }
-            //write_log(gettype($event->group));
-            //write_log(json_decode($event->group));
         }
         wp_send_json_success($result, 200);
     } else {

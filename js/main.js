@@ -117,8 +117,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         {
             yearEvents,
             groups: php_args_vuosi.groups,
-            deleteClick: (id, series_id) => {
-                console.log('asdsad', id, series_id)
+            deleteClick: async (id, series_id) => {
+                const dialogResult = await DeleteDialog(id, series_id).catch((e) => {
+                    console.log('dialog', e)
+                    return null
+                })
+
+                if(!dialogResult) return
+                console.log('diares', dialogResult)
                 /*
                 if(!confirm('Poista tapahtuma?')){
                     return

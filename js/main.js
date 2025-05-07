@@ -290,7 +290,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     arrayOfDates, priority, reservor, group, title, content, start, end
                 },
                 success: (response) => {
-                    console.log('response', response)
+                    response.data.events.map((obj) => {
+                        yearEvents.addEvent(obj)
+                    })
                 },
                 error: (jqXHR) => {
                     if(jqXHR.status&&jqXHR.status==200){

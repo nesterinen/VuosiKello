@@ -115,19 +115,23 @@ function vuosi_kello_post_series(): void {
     $results = [];
     
     foreach ($_POST['arrayOfDates'] as $key => $times) {
-        $result = $wpdb->insert($table_name, [
-            'series_id' => $series_id,
-            'priority' => $_POST['priority'],
+        $data = [
+            'series_id' => (int)$series_id,
+            'priority' => (int)$_POST['priority'],
             'reservor' => $_POST['reservor'],
             'group' => json_encode($_POST['group']),
             'title' => $_POST['title'],
             'content' => $_POST['content'],
             'start' => $times['start'],
             'end' => $times['end'],
-        ]);
+        ];
+
+        $result = $wpdb->insert($table_name, $data);
 
         if($result >= 1){
-            $results[] = $wpdb->insert_id;
+            $data['id'] = $wpdb->insert_id;
+            $data['group'] = $_POST['group'];
+            $results[] = $data;
         }
     }
     
@@ -136,7 +140,7 @@ function vuosi_kello_post_series(): void {
     $needed_amount = count($_POST['arrayOfDates']);
     if($needed_amount == $sent_amount){
         //write_log($results);
-        wp_send_json_success(["ids" => $results, "series_id" => $series_id], 200);
+        wp_send_json_success(["events" => $results, "series_id" => $series_id], 200);
     } else {
        //write_log('error');
         wp_send_json_error(["message"=>"sent: {$sent_amount}, needed: {$needed_amount}"], 400);

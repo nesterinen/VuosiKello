@@ -142,6 +142,28 @@ function vuosi_kello_post_series(): void {
         wp_send_json_error(["message"=>"sent: {$sent_amount}, needed: {$needed_amount}"], 400);
     }
 }
-
 add_action("wp_ajax_vuosi_kello_post_series", "vuosi_kello_post_series");
 add_action("wp_ajax_nopriv_vuosi_kello_post_series", "vuosi_kello_post_series");
+
+function vuosi_kello_delete_by_series(): void {
+    global $wpdb;
+    $table_name = 'wp_vuosi_kello';
+    $series_t = $table_name . '_series';
+    
+    $result = $wpdb->delete($series_t, ['id' => $_POST["series_id"]]);
+
+    switch (true) {
+        case $result === false:
+            wp_send_json_error($result, 500);
+            break;
+        
+        case $result === 0:
+            wp_send_json_error($result, 400);
+            break;
+
+        case $result >= 1:
+            wp_send_json_success(array("message" => "wpdb delete completed successfully"), 200);
+    }
+}
+add_action("wp_ajax_vuosi_kello_delete_by_series", "vuosi_kello_delete_by_series");
+add_action("wp_ajax_nopriv_vuosi_kello_delete_by_series", "vuosi_kello_delete_by_series");

@@ -124,7 +124,30 @@ document.addEventListener('DOMContentLoaded', async () => {
                 })
 
                 if(!dialogResult) return
-                console.log('diares', dialogResult)
+                
+                if(dialogResult.series_id){
+                    jQuery.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: php_args_vuosi.ajax_url,
+                        data: {
+                            action: "vuosi_kello_delete_by_series",
+                            series_id
+                        },
+                        success: (response) => {
+                            console.log('DONE! deleteing series', response)
+                        },
+                        error: (jqXHR) => {
+                            if(jqXHR.status&&jqXHR.status==200){
+                                console.log('err', jqXHR);
+                            } else {
+                                console.log('errorResponse:', jqXHR.responseText)
+                              }
+                        }
+                    }).catch((error) => {
+                        alert(`Virhe: ${error.statusText} (${error.status})`)
+                    })
+                }
                 /*
                 if(!confirm('Poista tapahtuma?')){
                     return

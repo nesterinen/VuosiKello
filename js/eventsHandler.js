@@ -66,6 +66,13 @@ class YearEvents {
         })
     }
 
+    sortEventsByDateAndCallEvent(){
+        this.events.sort((a, b) => {
+            return a.start - b.start
+        })
+        document.dispatchEvent(new Event(this.eventUpdateName))
+    }
+
     // does not play ball with table..
     sortEventsByPriorityThenDate(){
         this.events.sort((a, b) => {
@@ -123,7 +130,7 @@ class YearEvents {
         }
     }
 
-    addEvent({id, series_id,  priority, start, end, group, title, content, reservor}) {
+    addEvent({id, series_id,  priority, start, end, group, title, content, reservor}, sortAfter=true) {
         if(typeof id !== 'number' || id % 1 !== 0) {
             throw new Error('id is not a integer')
             //id = parseInt(id)
@@ -145,10 +152,12 @@ class YearEvents {
             reservor
         ))
 
-        this.sortEventsByDate()
+        if(sortAfter) {
+            this.sortEventsByDate()
+            document.dispatchEvent(new Event(this.eventUpdateName))
+        }
 
         this.#errorLogger('event with id:', id, 'added.')
-        document.dispatchEvent(new Event(this.eventUpdateName))
     }
 
     selectEventById(id){

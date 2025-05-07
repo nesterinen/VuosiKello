@@ -185,6 +185,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     vuosiTable.render()
 
     document.addEventListener(yearEvents.eventUpdateName, () => {
+        //vuosiTable.firstEventToday = null
         vuosiTable.updateTable()
         yearCircle.updateMonthElements()
     })
@@ -286,8 +287,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 },
                 success: (response) => {
                     response.data.events.map((obj) => {
-                        yearEvents.addEvent(obj)
+                        yearEvents.addEvent(obj, false)
                     })
+                    yearEvents.sortEventsByDateAndCallEvent()
                 },
                 error: (jqXHR) => {
                     if(jqXHR.status&&jqXHR.status==200){

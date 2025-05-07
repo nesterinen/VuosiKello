@@ -105,6 +105,24 @@ class YearEvents {
 
     }
 
+    deleteEventBySeries(series_id){
+        if(typeof series_id !== 'number' || series_id % 1 !== 0) {
+            throw new Error('id is not a integer')
+        }
+
+        const filteredEvents = this.events.filter(yearEvent =>
+            yearEvent.series_id !== series_id
+        )
+
+        if(filteredEvents.length !== this.events.length){
+            this.events = filteredEvents
+            this.#errorLogger('events with series_id:', series_id, 'deleted')
+            document.dispatchEvent(new Event(this.eventUpdateName))
+        } else {
+            this.#errorLogger('no event with series_id:', series_id, 'found when deleting')
+        }
+    }
+
     addEvent({id, series_id,  priority, start, end, group, title, content, reservor}) {
         if(typeof id !== 'number' || id % 1 !== 0) {
             throw new Error('id is not a integer')

@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             series_id
                         },
                         success: (response) => {
-                            console.log('DONE! deleteing series', response)
+                            yearEvents.deleteEventBySeries(series_id)
                         },
                         error: (jqXHR) => {
                             if(jqXHR.status&&jqXHR.status==200){

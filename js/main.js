@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             yearEvents,
             groups: php_args_vuosi.groups,
             deleteClick: async (id, series_id) => {
-                const dialogResult = await DeleteDialog(id, series_id).catch((e) => {
+                const dialogResult = await DeleteDialog(yearEvents.getEvent(id), id, series_id).catch((e) => {
                     console.log('dialog', e)
                     return null
                 })
@@ -324,4 +324,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         link.click()
         link.remove()
     })
+
+    yearEvents.selectEventById(22)
+
+    DeleteDialog(yearEvents.getEvent(22) ,1, null)
 })

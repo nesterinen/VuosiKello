@@ -38,3 +38,10 @@ function backendSimulationMultiple(eventObject){
     }
     return eventObjectsArray
 }
+
+function dateToString(dateObj){
+    let [date, time] = dateObj.toISOString().split('T')
+    date = date.split('-').reverse().join('.')
+    time = time.split(':').slice(0, 2).join(':')
+    return [date, time]        
+}

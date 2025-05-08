@@ -365,13 +365,64 @@ async function EventCreationDialog(groups) {
 }
 
 
-async function DeleteDialog(id, series_id) {
+async function DeleteDialog(event, id, series_id) {
+    days = ['sunnuntai',
+        'maanantai',
+        'tiistai',
+        'keskiviikko',
+        'torstai',
+        'perjantai',
+        'lauantai']
+    
     return new Promise((resolve, reject) => {
+        /*
+        const [startDate, startTime] = this.#dateToString(event.start)
+        const [, endTime] = this.#dateToString(event.end)
+        const weekDay = this.days[event.start.getDay()]
+        */
+
+        const [startDate, startTime] = dateToString(event.start)
+        const [, endTime] = dateToString(event.end)
+        const weekDay = days[event.start.getDay()]
+
+        const spacedGroups = event.group.toString().replaceAll(',', ', ')
+
         const dialog = document.createElement('dialog')
+        dialog.classList.add('DeleteDialog')
         dialog.innerHTML = `
-                <p>Poista?</p>
-                <button class='deleteButton'>delete</button>
-                <button class='closeButton'>close</button>
+            <div class='ddHeader'>
+                <div class='ddHtab'></div>
+                <div class='ddHred'>&#x2715;</div>
+            </div>
+
+            <div class='ddInfoMain'>
+                <div class='ddMainText'>${event.title}</div>
+
+                <div class='ddIgp'>
+                    <div class='ddGroups ddBaseText'>${spacedGroups}</div>
+                    <div class='ddBaseText'>prioriteetti: ${event.priority}</div>
+                </div>
+
+                <div class='ddDateTime'>
+                    <div class='ddBaseText'>${weekDay}</div>
+                    <div class='ddBaseText'>${startDate}</div>
+                    <div class='ddBaseText'>${startTime} - ${endTime}</div>
+                </div>
+            </div>
+
+            <div>
+                <textarea class='ddTextArea' spellcheck="false">${event.content}</textarea>
+            </div>
+
+            <div class='ddEventFooter'>
+                <div class='ddBaseText'>${event.reservor}</div>
+                <div class='ddEventIds'>
+                    <div class='ddIdText'>id:${event.id}</div>
+                    <div class='ddIdText'>sarja:${event.series_id ? event.series_id : '-'}</div>
+                </div>
+            </div>
+
+            <button class='deleteButton baseButton baseRed'>poista</button>
         `
 
         const deleteButton = dialog.querySelector('.deleteButton')
@@ -380,7 +431,7 @@ async function DeleteDialog(id, series_id) {
             resolve({id, series_id: null})
         })
 
-        const closeButton = dialog.querySelector('.closeButton')
+        const closeButton = dialog.querySelector('.ddHred')
         closeButton.addEventListener('click', () => {
             dialog.remove()
             reject('closed')
@@ -388,7 +439,8 @@ async function DeleteDialog(id, series_id) {
 
         if(series_id){
             const deleteSeriesButton = document.createElement('button')
-            deleteSeriesButton.textContent = 'delete series'
+            deleteSeriesButton.classList.add('baseButton', 'baseRed')
+            deleteSeriesButton.textContent = 'poista sarja'
             deleteSeriesButton.addEventListener('click', () => {
                 dialog.remove()
                 resolve({id, series_id})
@@ -396,8 +448,6 @@ async function DeleteDialog(id, series_id) {
 
             dialog.appendChild(deleteSeriesButton)
         }
-
-        console.log('ids', id, series_id)
 
         document.body.appendChild(dialog)
         dialog.showModal()

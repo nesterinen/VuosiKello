@@ -131,7 +131,7 @@ async function EventCreationDialog(groups) {
                 
                 <div class='baseElement'>
                     <div class='baseText'>ryhmä</div>
-                    <select class='baseSelect groupSelect'></select>
+                    <div class='groupCheckSelector'></div>
                 </div>
 
             </div>
@@ -210,12 +210,68 @@ async function EventCreationDialog(groups) {
         endDateInput.disabled = true
         endDateInput.style = 'display: none;'
 
-        const groupSelector = dialog.querySelector('.groupSelect')
-        Object.keys(groups).map(group => {
-            const option = document.createElement('option')
-            option.appendChild(document.createTextNode(group))
-            groupSelector.appendChild(option)
+        // group check box selector ##############################
+        let showDropDown = false
+
+        const groupSelector = dialog.querySelector('.groupCheckSelector')
+        groupSelector.innerHTML = `
+            <div>
+                <div class='gcsHeaderText'>
+                    <div>+</div>
+                    <div>Kaikki</div>
+                    <div>+</div>
+                </div>
+            </div>
+            <div class='gcsSelections'>
+            </div>
+        `
+
+        const gcsHeader = groupSelector.querySelector('.gcsHeaderText')
+        gcsHeader.addEventListener('click', () => {
+            showDropDown = !showDropDown
+            if(showDropDown){
+                groupSelections.style = 'display: block;'
+            } else {
+                groupSelections.style = 'display: none;'
+            }
         })
+
+        const groupSelections = groupSelector.querySelector('.gcsSelections')
+        Object.keys(groups).map(group => {
+            const selectBoxDiv = document.createElement('div')
+            selectBoxDiv.innerHTML = `
+                <label for="ec#${group}">
+                <input type="checkbox" id="ec#${group}" />${group}</label>
+            `
+
+            groupSelections.appendChild(selectBoxDiv)
+        })
+
+        groupSelections.addEventListener('change', (e) => {
+            //console.log(e.target.id, e.target.checked)
+            const allCheckBoxElements = groupSelections.querySelectorAll('input')
+            const checkedGroups = []
+            for (const checkBoxElement of allCheckBoxElements) {
+                //console.log('cb', checkBoxElement.id, checkBoxElement.checked)
+                if(checkBoxElement.checked){
+                    checkedGroups.push(checkBoxElement.id.replace('ec#', ''))
+                }
+            }
+            
+            if(checkedGroups.length === 0){
+                //gsbHeader.textContent = 'Kaikki'
+                gcsHeader.innerHTML = `
+                    <div>+</div>
+                    <div>Kaikki</div>
+                    <div>+</div>
+                `
+            } else {
+                gcsHeader.textContent = checkedGroups
+            }
+        })
+
+        // group check box selector END ##############################
+
 
         const prioritySelector = dialog.querySelector('.prioritySelect')
         for (const p of priorities) {

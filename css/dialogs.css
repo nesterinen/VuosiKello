@@ -41,6 +41,30 @@
     grid-template-columns: 50% 50%;
 }
 
+.groupCheckSelector .gcsHeaderText {
+    text-align: center;
+
+    color: grey;
+    font-weight: bold;
+    font-size: 1.3em;
+    border: 1px solid grey;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+    user-select: none;
+    overflow: hidden;
+
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+}
+
+.groupCheckSelector .gcsSelections {
+    position: absolute;
+    background-color: white;
+    border: 1px solid black;
+    display: none;
+}
+
+
 .EventCreation .buttonContainer {
     display: grid;
     grid-template-columns: 50% 50%;

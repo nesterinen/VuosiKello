@@ -35,7 +35,7 @@ function getWeek(date){
 }
 
 async function EventCreationDialog(groups) {
-    let extraIsVisible = true
+    let extraIsVisible = false
     //const seriesTypes = ['weekly', 'oddWeeks', 'evenWeeks', 'lastDayOfMonth', 'firstDayOfMonth']
     const seriesTypes = [
         'ei sarjaa',
@@ -110,9 +110,16 @@ async function EventCreationDialog(groups) {
     return new Promise((resolve, reject) => {
         const dialog = document.createElement('dialog')
         dialog.classList.add('EventCreation')
-        dialog.innerHTML = `
-        <button class='closeButtonX baseRed'>X</button>
 
+        //<button class='closeButtonX baseRed'>X</button>
+
+        dialog.innerHTML = `
+        <div class='ecHeader'>
+                <div class='ecHtab'></div>
+                <div class='ecHred'>&#x2715;</div>
+        </div>
+
+        <div class='ecContainer'>
         <div class='baseSettings'>
 
             <div class='titleGroup'>
@@ -132,7 +139,7 @@ async function EventCreationDialog(groups) {
             
             <div class='baseElement'>
                 <div class='baseText'>sisältö</div>
-                <textarea rows='10' cols='50' class='baseTextArea contentInput'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
+                <textarea rows='10' cols='50' class='baseTextArea contentInput' spellcheck='false'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
             </div>
 
             <div class='baseElement dateTimeElement'>
@@ -151,7 +158,6 @@ async function EventCreationDialog(groups) {
             </div>
             
             <div class='buttonContainer'>
-                <button class='closeButton baseButton' style='display:none;'>close</button>
                 <button class='createButton baseButton baseGreen'>luo tapahtuma</button>
                 <button class='extraButton baseButton'>lisä asetukset</button>
             </div>
@@ -197,10 +203,12 @@ async function EventCreationDialog(groups) {
             </div>
 
         </div>
+        </div>
         `
 
         const endDateInput = dialog.querySelector('.endDateInput')
-        //endDateInput.disabled = true  //false on production!
+        endDateInput.disabled = true
+        endDateInput.style = 'display: none;'
 
         const groupSelector = dialog.querySelector('.groupSelect')
         Object.keys(groups).map(group => {
@@ -318,20 +326,23 @@ async function EventCreationDialog(groups) {
             return
         })
 
+        /*
         const closeButton = dialog.querySelector('.closeButton')
         closeButton.addEventListener('click', () => {
             dialog.remove()
             reject('Dialog closed.')
         })
+        */
 
-        const closeButtonX = dialog.querySelector('.closeButtonX')
+        //const closeButtonX = dialog.querySelector('.closeButtonX') //ecHred
+        const closeButtonX = dialog.querySelector('.ecHred')
         closeButtonX.addEventListener('click', () => {
             dialog.remove()
             reject('Dialog closed.')
         })
 
         const extraSettings = dialog.querySelector('.extraSettings')
-        extraSettings.style = '' // REMOOOOOOOVEEE LAATTTEEER ######################
+        //extraSettings.style = '' // REMOOOOOOOVEEE LAATTTEEER ######################
 
         const extraButton = dialog.querySelector('.extraButton')
         extraButton.addEventListener('click', () => {
@@ -411,7 +422,7 @@ async function DeleteDialog(event, id, series_id) {
             </div>
 
             <div>
-                <textarea class='ddTextArea' spellcheck="false">${event.content}</textarea>
+                <textarea class='ddTextArea' spellcheck='false'>${event.content}</textarea>
             </div>
 
             <div class='ddEventFooter'>

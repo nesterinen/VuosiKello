@@ -310,6 +310,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     })
 
+    testButton2.click()
+
     const downloadButton = mainElement.querySelector('.downloadButton')
     downloadButton.addEventListener('click', () => {
         const asdasd = JSON.stringify(yearEvents.events, null, " ")
@@ -325,7 +327,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         link.remove()
     })
 
-    yearEvents.selectEventById(22)
-
-    DeleteDialog(yearEvents.getEvent(22) ,1, null)
+    //yearEvents.selectEventById(22)
+    //DeleteDialog(yearEvents.getEvent(22) ,1, null)
 })

@@ -93,18 +93,6 @@
     border-left: 1px solid grey;
 }
 
-.closeButtonX {
-    position: absolute;
-    margin-top: -2.4em;
-    width: 2em;
-    height: 2em;
-    border: 1px solid black;
-    transition: 0.3s;
-    border-radius: 5px;
-    right: 0.2em;
-}
-
-
 /* DELETE DIALOG ########################################################### */
 .DeleteDialog {
     padding: 0;

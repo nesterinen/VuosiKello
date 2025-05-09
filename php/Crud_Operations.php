@@ -144,6 +144,15 @@ function vuosi_kello_post_series(): void {
         return;
     }
 
+    if($_POST['arrayOfDates'] === null) {
+        wp_send_json_error('series has no dates', 400);
+        return;
+    } else if (count($_POST['arrayOfDates']) === 0) {
+        wp_send_json_error('series has no dates', 400);
+        return;
+    }
+
+
     global $wpdb;
     $table_name = 'wp_vuosi_kello';
     $series_t = $table_name . '_series';

@@ -107,6 +107,16 @@ async function EventCreationDialog(groups) {
             return arrayOfDates
     }
 
+    function validateAndColor(element, isInvalid){
+        if(isInvalid){
+            element.style = 'outline: 2px solid red; z-index: 1;'
+        } else {
+            element.style = 'outline: none;'
+        }
+
+        return isInvalid
+    }
+
     return new Promise((resolve, reject) => {
         const dialog = document.createElement('dialog')
         dialog.classList.add('EventCreation')
@@ -318,7 +328,8 @@ async function EventCreationDialog(groups) {
         seriesTypeSelector.addEventListener('change', () => {
             if(seriesTypeSelector.options.selectedIndex !== 0) {
                 endDateInput.disabled = false
-                endDateInput.style = 'outline: 2px dotted green;'
+                /*endDateInput.style = 'outline: 2px dotted green;'*/
+                endDateInput.style = ''
             } else {
                 endDateInput.disabled = true
                 endDateInput.style = 'display: none;'
@@ -331,11 +342,34 @@ async function EventCreationDialog(groups) {
             const content = dialog.querySelector('.contentInput').value
             const reservor = dialog.querySelector('.reserverInput').value
             const startDate = dialog.querySelector('.dateInput').value
+            const endDate = dialog.querySelector('.endDateInput').value
             const clock_start = dialog.querySelector('.startInput').value
             const clock_end = dialog.querySelector('.endInput').value
             //const group = selectedGroupsArray
             const priority = prioritySelector.options.selectedIndex + 1//prioritySelector.value
             const daysCheckBoxElement = dialog.getElementsByClassName('cbDay')
+            
+            let checked = 0
+            for (const checkbox of daysCheckBoxElement) {
+                if(checkbox.checked) checked++;
+            }
+
+            // outline elements with invalid value
+            const validations = [
+                validateAndColor(dialog.querySelector('.titleInput'), title.length === 0),
+                validateAndColor(dialog.querySelector('.reserverInput'), reservor.length === 0),
+                validateAndColor(dialog.querySelector('.endInput'), clock_start >= clock_end),
+                validateAndColor(dialog.querySelector('.daySelect'), checked === 0 && seriesTypeSelector.options.selectedIndex > 0),
+                validateAndColor(dialog.querySelector('.dateInput'), startDate >= endDate && seriesTypeSelector.options.selectedIndex > 0),
+                validateAndColor(dialog.querySelector('.groupCheckSelector'), selectedGroupsArray.length === 0)
+            
+            ]
+            // if any invalid value return
+            for (const invalid of validations){
+                if(invalid === true){
+                    return
+                }
+            }
 
             const returnObject = {
                 title,
@@ -394,6 +428,10 @@ async function EventCreationDialog(groups) {
             }
 
             // add validation! TODO!!!!!!!!!!!!!!!!
+            if(returnObject.arrayOfDates.length === 0){
+                reject('no days selected for series')
+                return
+            }
 
             dialog.remove()
             //resolve({data:'bla bla ', series: false})

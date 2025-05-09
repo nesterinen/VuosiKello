@@ -16,6 +16,18 @@ if ( ! defined( 'ABSPATH' ) ) {
     end: datetime
 */
 
+function vuosi_kello_event_validation($event) {
+    if($_POST['group'] == null){
+        return 'invalid group (null)';
+    }
+
+    if(count($_POST['group']) === 0){
+        return 'invalid group (0)';
+    }
+
+    return null;
+}
+
 // table name = wp_vuosi_kello
 function vuosi_kello_get_all(): void {
     global $wpdb;
@@ -47,6 +59,14 @@ add_action("wp_ajax_nopriv_vuosi_kello_get_all", "vuosi_kello_get_all");
 
 
 function vuosi_kello_post_one(): void {
+    $validation_result = vuosi_kello_event_validation($_POST);
+    if($validation_result !== null){
+        wp_send_json_error($validation_result, 400);
+        return;
+    }
+
+    write_log('FUCKED');
+
     global $wpdb;
     $table_name = 'wp_vuosi_kello';
 
@@ -97,6 +117,16 @@ add_action("wp_ajax_vuosi_kello_delete_one", "vuosi_kello_delete_one");
 add_action("wp_ajax_nopriv_vuosi_kello_delete_one", "vuosi_kello_delete_one");
 
 function vuosi_kello_post_series(): void {
+    if($_POST['group'] == null){
+        wp_send_json_error('group null', 400);
+        return;
+    }
+
+    if(count($_POST['group']) === 0){
+        wp_send_json_error('group missing', 400);
+        return;
+    }
+
     global $wpdb;
     $table_name = 'wp_vuosi_kello';
     $series_t = $table_name . '_series';

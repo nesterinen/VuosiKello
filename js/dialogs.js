@@ -111,7 +111,13 @@ async function EventCreationDialog(groups) {
         const dialog = document.createElement('dialog')
         dialog.classList.add('EventCreation')
 
-        //<button class='closeButtonX baseRed'>X</button>
+        const dateNow = new Date()
+        const dateNextMonth = new Date(new Date().setMonth(dateNow.getMonth() + 1))
+
+        const dnStr = dateNow.toISOString().split('T')[0]
+        const dnmStr = dateNextMonth.toISOString().split('T')[0]
+
+        let selectedGroupsArray = []
 
         dialog.innerHTML = `
         <div class='ecHeader'>
@@ -126,7 +132,7 @@ async function EventCreationDialog(groups) {
 
                 <div class='baseElement'>
                     <div class='baseText'>otsikko</div>
-                    <input class='baseInput titleInput' value='Laborum'/>
+                    <input class='baseInput titleInput'/>
                 </div>
                 
                 <div class='baseElement'>
@@ -139,22 +145,22 @@ async function EventCreationDialog(groups) {
             
             <div class='baseElement'>
                 <div class='baseText'>sisältö</div>
-                <textarea rows='10' cols='50' class='baseTextArea contentInput' spellcheck='false'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
+                <textarea rows='10' cols='50' class='baseTextArea contentInput' spellcheck='false'></textarea>
             </div>
 
             <div class='baseElement dateTimeElement'>
                 <div class='baseText'>päivämäärä</div>
                 <div class='baseText'>alku</div>
                 <div class='baseText'>loppu</div>
-                <input type='date' value='2025-04-13' class='dateInput'/>
+                <input type='date' value=${dnStr} class='dateInput'/>
                 <input type='time' value='10:00' class='startInput'/>
                 <input type='time' value='12:00' class='endInput'/>
-                <input type='date' value='2025-05-13' class='endDateInput'/>
+                <input type='date' value=${dnmStr} class='endDateInput'/>
             </div>
 
             <div class='baseElement'>
                 <div class='baseText'>varaaja</div>
-                <input value='Rackham' class='reserverInput'/>
+                <input class='reserverInput'/>
             </div>
             
             <div class='buttonContainer'>
@@ -180,7 +186,7 @@ async function EventCreationDialog(groups) {
                 <div class='baseText'>sarjan päivät</div>
                 <div class='daySelect'>
                     <div>
-                        <input type='checkbox' id='cbMa' class='cbDay' checked/>
+                        <input type='checkbox' id='cbMa' class='cbDay'/>
                         <label for='cbMa'>ma</label>
                     </div>
                     <div>
@@ -188,7 +194,7 @@ async function EventCreationDialog(groups) {
                         <label for='cbTi'>ti</label>
                     </div>
                     <div>
-                        <input type='checkbox' id='cbKe' class='cbDay' checked/>
+                        <input type='checkbox' id='cbKe' class='cbDay'/>
                         <label for='cbKe'>ke</label>
                     </div>
                     <div>
@@ -196,7 +202,7 @@ async function EventCreationDialog(groups) {
                         <label for='cbTo'>to</label>
                     </div>
                     <div>
-                        <input type='checkbox' id='cbPe' class='cbDay' checked/>
+                        <input type='checkbox' id='cbPe' class='cbDay'/>
                         <label for='cbPe'>pe</label>
                     </div>
                 </div>
@@ -218,7 +224,7 @@ async function EventCreationDialog(groups) {
             <div>
                 <div class='gcsHeaderText'>
                     <div>+</div>
-                    <div>Kaikki</div>
+                    <div>Valitse</div>
                     <div>+</div>
                 </div>
             </div>
@@ -257,16 +263,29 @@ async function EventCreationDialog(groups) {
                     checkedGroups.push(checkBoxElement.id.replace('ec#', ''))
                 }
             }
+
+            selectedGroupsArray = checkedGroups
             
             if(checkedGroups.length === 0){
                 //gsbHeader.textContent = 'Kaikki'
                 gcsHeader.innerHTML = `
                     <div>+</div>
-                    <div>Kaikki</div>
+                    <div>Valitse</div>
                     <div>+</div>
                 `
+            } else if (checkedGroups.length === 1){
+                gcsHeader.innerHTML = `
+                    <div></div>
+                    <div>${checkedGroups[0]}</div>
+                    <div></div>
+                `
             } else {
-                gcsHeader.textContent = checkedGroups
+                //gcsHeader.textContent = checkedGroups
+                gcsHeader.innerHTML = `
+                    <div></div>
+                    <div>Ryhmiä: ${checkedGroups.length}</div>
+                    <div></div>
+                `
             }
         })
 
@@ -314,7 +333,7 @@ async function EventCreationDialog(groups) {
             const startDate = dialog.querySelector('.dateInput').value
             const clock_start = dialog.querySelector('.startInput').value
             const clock_end = dialog.querySelector('.endInput').value
-            const group = [groupSelector.value]
+            //const group = selectedGroupsArray
             const priority = prioritySelector.options.selectedIndex + 1//prioritySelector.value
             const daysCheckBoxElement = dialog.getElementsByClassName('cbDay')
 
@@ -325,7 +344,7 @@ async function EventCreationDialog(groups) {
                 reservor,
                 start: dateNoTimezone(new Date(`${startDate}T${clock_start}`)),
                 end: dateNoTimezone(new Date(`${startDate}T${clock_end}`)),
-                group,
+                group: selectedGroupsArray,
                 arrayOfDates: null
             }
 

@@ -243,6 +243,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             return
         }
 
+        console.log('diares', dialogResult)
+
         if(dialogResult.series === false) {
             //console.log('result', dialogResult.data)
             const {priority, reservor, group, title, content, start, end} = dialogResult.data
@@ -270,7 +272,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                       }
                 }
             }).catch((error) => {
-                alert(`Virhe: ${error.statusText} (${error.status})`)
+                alert(`${error.statusText} (${error.status}) ${error.responseJSON.data}`)
             })
 
         } else {
@@ -298,15 +300,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                         console.log('errorResponse:', jqXHR.responseText)
                       }
                 }
+            }).catch((error) => {
+                alert(`${error.statusText} (${error.status}) ${error.responseJSON.data}`)
             })
-            /*
-            const result = backendSimulationMultiple(dialogResult.data)
-            for(const event of result) {
-                yearEvents.addEvent(event)
-            }
-            yearEvents.sortEventsByDate()
-            vuosiTable.updateTable()
-            */
         }
     })
 

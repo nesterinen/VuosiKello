@@ -16,12 +16,35 @@ if ( ! defined( 'ABSPATH' ) ) {
     end: datetime
 */
 
-function vuosi_kello_event_validation($event) {
-    if($_POST['group'] == null){
+function vuosi_kello_event_validation($event, $checkDates=true): string | null {
+    if($checkDates){
+        if($event['start'] == null || $event['end'] == null) {
+            return 'start | end missing';
+        }
+        $startDate = date($event['start']);
+        $endDate = date($event['end']);
+        if($startDate >= $endDate) {
+            return 'end date is earlier then stop date';
+        }
+    }
+
+    if(strlen($event['reservor']) <= 0 || strlen($event['reservor']) >= 255 ) {
+        return 'invalid reservor length <=0 or >=255';
+    }
+    
+    if(strlen($event['title']) <= 0 || strlen($event['title']) >= 255 ) {
+        return 'invalid title length <=0 or >=255';
+    }
+
+    if($event['priority'] < 0 || $event['priority'] > 5) {
+        return 'invalid priority';
+    }
+
+    if($event['group'] == null){
         return 'invalid group (null)';
     }
 
-    if(count($_POST['group']) === 0){
+    if(count($event['group']) === 0){
         return 'invalid group (0)';
     }
 
@@ -64,8 +87,6 @@ function vuosi_kello_post_one(): void {
         wp_send_json_error($validation_result, 400);
         return;
     }
-
-    write_log('FUCKED');
 
     global $wpdb;
     $table_name = 'wp_vuosi_kello';
@@ -117,13 +138,9 @@ add_action("wp_ajax_vuosi_kello_delete_one", "vuosi_kello_delete_one");
 add_action("wp_ajax_nopriv_vuosi_kello_delete_one", "vuosi_kello_delete_one");
 
 function vuosi_kello_post_series(): void {
-    if($_POST['group'] == null){
-        wp_send_json_error('group null', 400);
-        return;
-    }
-
-    if(count($_POST['group']) === 0){
-        wp_send_json_error('group missing', 400);
+    $validation_result = vuosi_kello_event_validation($_POST, false);
+    if($validation_result !== null){
+        wp_send_json_error($validation_result, 400);
         return;
     }
 

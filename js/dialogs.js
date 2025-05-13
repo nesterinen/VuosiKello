@@ -12,9 +12,11 @@ datatype: {
 }
 */
 
+/*
 function dateNoTimezone(date) {
     return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
 }
+*/
 
 function dateToHourMin(date) {
     const timeString = date.split("T")[1].split(".")[0].split(":")
@@ -98,8 +100,8 @@ async function EventCreationDialog(groups) {
                     newDateEnd.setHours(parseInt(eHours))
                     newDateEnd.setMinutes(parseInt(eMins))
                     arrayOfDates.push({
-                        start: dateNoTimezone(newDate),
-                        end: dateNoTimezone(newDateEnd)
+                        start: newDate.toISOString(), // dateNoTimezone(newDate),
+                        end: newDateEnd.toISOString() //dateNoTimezone(newDateEnd)
                     })
                 }
             }
@@ -380,8 +382,8 @@ async function EventCreationDialog(groups) {
                 content,
                 priority,
                 reservor,
-                start: dateNoTimezone(new Date(`${startDate}T${clock_start}`)),
-                end: dateNoTimezone(new Date(`${startDate}T${clock_end}`)),
+                start: new Date(`${startDate}T${clock_start}`).toISOString(), //dateNoTimezone(new Date(`${startDate}T${clock_start}`)),
+                end: new Date(`${startDate}T${clock_end}`).toISOString(), //dateNoTimezone(new Date(`${startDate}T${clock_end}`)),
                 group: selectedGroupsArray,
                 arrayOfDates: null
             }

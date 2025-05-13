@@ -20,11 +20,17 @@ class YearEvents {
     eventUpdateName = 'vuosiKalenteriUpdate'
     eventSelectName = 'vuosiKalenteriEventSelect'
     groupSelectName = 'vuosiKalenteriGroupSelect'
+
+    #dateToday = new Date()
     
     constructor(eventsJsonArray) {
         if(Array.isArray(eventsJsonArray) === false) throw new Error('eventsJsonArray not an array')
         this.events = []
         this.#Initialize(eventsJsonArray)
+    }
+
+    #addTimeZone(dateString){
+        return new Date(new Date(dateString) - this.#dateToday.getTimezoneOffset()*60_000)
     }
 
     #Initialize(eventsJsonArray){
@@ -35,8 +41,8 @@ class YearEvents {
                         obj.id,
                         obj.series_id,
                         obj.priority,
-                        new Date(obj.start),
-                        new Date(obj.end),
+                        this.#addTimeZone(obj.start), //new Date(obj.start),
+                        this.#addTimeZone(obj.end), //new Date(obj.end),
                         obj.group, 
                         obj.title, 
                         obj.content,
@@ -144,8 +150,8 @@ class YearEvents {
             id,
             series_id,
             priority,
-            new Date(start),
-            new Date(end),
+            new Date(start),//this.#addTimeZone(start.slice(0,-1)),
+            new Date(end),//this.#addTimeZone(end.slice(0,-1)),
             group, 
             title, 
             content,

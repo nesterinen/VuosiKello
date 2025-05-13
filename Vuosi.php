@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: VuosiPROTO
- * Description: Prototyping
- * Version: 0.1
+ * Description: Organisaation tapahtumien yleiskatsaus vuosikello muodossa.
+ * Version: 0.8
  * Author: Aleksei Nesterinen
  * Author URI: missing..
 */
@@ -35,18 +35,7 @@ include(plugin_dir_path(__FILE__) . 'php/Crud_Operations.php');
 
 
 function load_plugin(): void{
-    // DELETE LATER AFTER TESTDATA DEELETION
-    $options=array(
-        "ssl"=>array(
-            "verify_peer"=>false,
-            "verify_peer_name"=>false,
-        ),
-    );  
-
-
     global $organization_groups;
-    $data_string = file_get_contents(plugin_dir_url(__FILE__) . 'dev/test_data.json', false, stream_context_create($options));
-    $test_data_json = json_decode((string)$data_string, true);
 
     $js_file_dir = plugin_dir_url(file: __FILE__) . 'js';
     wp_enqueue_style(handle: 'wsp-styles', src: plugin_dir_url(file: __FILE__) . 'css/main.css');
@@ -119,7 +108,6 @@ function load_plugin(): void{
         l10n: [
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'groups' => $organization_groups,
-            'test_data' => $test_data_json
         ]
     );
 }

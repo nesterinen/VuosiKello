@@ -388,7 +388,8 @@ class VuosiTable {
 
             const eventElement = this.#eventDomElement(yearEvent)
             
-            if(this.firstEventToday === null & yearEvent.start.getMonth() === this.dateToday.getMonth()){
+            //if(this.firstEventToday === null & yearEvent.start.getMonth() === this.dateToday.getMonth()){
+            if(this.firstEventToday === null & yearEvent.start >= this.dateToday){
                 this.firstEventToday = {element: eventElement, data: yearEvent}
                 this.firstEventToday.element.style = 'border-top: 5px solid #d12c0a; border-bottom: 5px solid #d12c0a;'
             }

@@ -3,14 +3,12 @@ datatype: {
     series_id: int | null
     priority: int
     reservor: str
-    group: str
+    group: str -> str[]
     title: str
     content: str
     start: date
     end: date
 }
-
-UI: Year calendar on the left, Event list on the right.
 
 UX Functionality, CRUD.
     -> Create individuals, and series..
@@ -28,6 +26,20 @@ Misc:
 
 
 - groupfilter checkboxes -done
-- click on yearCircle month opens info circle?
+- click on yearCircle month opens info circle? -todo?
 - priority colors -kinda done
-- deadline nearing colors
+- deadline nearing colors -table selects upcoming.
+
+
+infoContainer:
+    - todo
+
+yearCircle:
+    - events are sorted by date then by priority, but there needs to be a third step to push upcoming events to the top??
+
+yearTable:
+    - todos
+
+dialogs:
+    creation:
+        -checkbox drop down needs to be unselected when clicking anything else.

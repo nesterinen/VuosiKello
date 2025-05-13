@@ -4,20 +4,6 @@ import VuosiTable from table.js
 */
 
 /*
-datatype: {
-    id: int
-    series_id: int | null
-    priority: int
-    reservor: str
-    group: str[]
-    title: str
-    content: str
-    start: date
-    end: date
-}
-*/
-
-/*
     id: int (PRIMARY KEY),
     series_id: int | null (FOREIGN KEY),
     priority: int,
@@ -73,9 +59,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
         </div>
 
-        <button class='testButton'>Luo</button>
+        <button class='testButton2'>Luo</button>
         <button class='downloadButton'>Lataa</button>
-        <button class='testButton2'>Luo db</button>
     `
     //
 
@@ -201,35 +186,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     })
 
     //yearEvents.selectEventById(386669888)
-
-    const testButton = mainElement.querySelector('.testButton')
-    testButton.addEventListener('click', async () => {
-        const dialogResult = await EventCreationDialog(php_args_vuosi.groups).catch((e) => {
-            console.log(e)
-            return null
-        })
-
-        if (!dialogResult) {
-            console.log('done')
-            return
-        }
-
-        if(dialogResult.series === false) {
-            console.log('result', dialogResult)
-            const result = backendSimulationIndividual(dialogResult.data)
-            yearEvents.addEvent(result)
-            yearEvents.sortEventsByDate()
-            vuosiTable.updateTable()
-        } else {
-            const result = backendSimulationMultiple(dialogResult.data)
-            for(const event of result) {
-                yearEvents.addEvent(event)
-            }
-            yearEvents.sortEventsByDate()
-            vuosiTable.updateTable()
-        }
-    })
-    //testButton.click()
 
     const testButton2 = mainElement.querySelector('.testButton2')
     testButton2.addEventListener('click', async () => {

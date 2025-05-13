@@ -30,16 +30,23 @@ Misc:
 - priority colors -kinda done
 - deadline nearing colors -table selects upcoming.
 
-
 infoContainer:
     - todo
 
 yearCircle:
+    - something interesting to the center?
     - events are sorted by date then by priority, but there needs to be a third step to push upcoming events to the top??
 
 yearTable:
     - todos
 
 dialogs:
+    loading??:
+        -dialog when loading something? should this even be dialog?
+
     creation:
         -checkbox drop down needs to be unselected when clicking anything else.
+
+
+CRUDS:
+    - better validation?

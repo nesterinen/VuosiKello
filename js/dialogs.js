@@ -243,12 +243,27 @@ async function EventCreationDialog(groups) {
         `
 
         const gcsHeader = groupSelector.querySelector('.gcsHeaderText')
+        let abortter = new AbortController() // abortter is used to kill document event listener
         gcsHeader.addEventListener('click', () => {
             showDropDown = !showDropDown
+
             if(showDropDown){
-                groupSelections.style = 'display: block;'
+                groupSelections.style = `display: block; width: ${gcsHeader.clientWidth}px;`
+                //groupSelections.style = 'display: block;'
+
+                //close group checkbox dropdown if clicking outside of it, like normal dropdown.
+                document.addEventListener('click', event => {
+                    if(!groupSelections.contains(event.target) && event.target.parentNode != gcsHeader) {
+                        gcsHeader.click() // this will get us to the else{} part
+                    }
+                }, {
+                    signal: abortter.signal
+                })
             } else {
                 groupSelections.style = 'display: none;'
+
+                abortter.abort('selector closed.')
+                abortter = new AbortController() // abort() changes controller permanently, so we create new one.
             }
         })
 

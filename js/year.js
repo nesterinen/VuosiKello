@@ -199,17 +199,8 @@ class VuosiKalenteri {
 
             eventsMonthSorted[yearEvent.start.getMonth()].push(yearEvent)
         }
-
-        // Sort by priority
-        /*
-        for(let month = 0; month <= 11; month++){
-            eventsMonthSorted[month].sort((a, b) => a.priority - b.priority)
-        }
-        */
         
         for(let month = 0; month <= 11; month++){
-
-            //const isSelected = month === this.selectedMonth ? true : false
             this.monthElements[month].innerHTML = `
                 <div id='monthTitle'>${this._getKuukasiFromNumber(month)}</div>
             `
@@ -226,7 +217,6 @@ class VuosiKalenteri {
                     for (let index = 0; index < eventsMonthSorted[month].length; index++) {
                         if(elementsAdded > this.maxEventsPerMonth) continue
 
-                        //console.log('now:', this.#dateNow.getTime() , 'event:', eventsMonthSorted[month][index].start.getTime())
                         if(eventsMonthSorted[month][index].start.getTime() - this.#dateNow.getTime() <= -86_400_000){
                             continue
                         }

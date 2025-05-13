@@ -226,7 +226,7 @@ async function EventCreationDialog(groups) {
         endDateInput.disabled = true
         endDateInput.style = 'display: none;'
 
-        // group check box selector ##############################
+        // group check box selector START #############################################################
         let showDropDown = false
 
         const groupSelector = dialog.querySelector('.groupCheckSelector')
@@ -264,11 +264,9 @@ async function EventCreationDialog(groups) {
         })
 
         groupSelections.addEventListener('change', (e) => {
-            //console.log(e.target.id, e.target.checked)
             const allCheckBoxElements = groupSelections.querySelectorAll('input')
             const checkedGroups = []
             for (const checkBoxElement of allCheckBoxElements) {
-                //console.log('cb', checkBoxElement.id, checkBoxElement.checked)
                 if(checkBoxElement.checked){
                     checkedGroups.push(checkBoxElement.id.replace('ec#', ''))
                 }
@@ -277,7 +275,6 @@ async function EventCreationDialog(groups) {
             selectedGroupsArray = checkedGroups
             
             if(checkedGroups.length === 0){
-                //gsbHeader.textContent = 'Kaikki'
                 gcsHeader.innerHTML = `
                     <div>+</div>
                     <div>Valitse</div>
@@ -290,7 +287,6 @@ async function EventCreationDialog(groups) {
                     <div></div>
                 `
             } else {
-                //gcsHeader.textContent = checkedGroups
                 gcsHeader.innerHTML = `
                     <div></div>
                     <div>Ryhmiä: ${checkedGroups.length}</div>
@@ -299,7 +295,7 @@ async function EventCreationDialog(groups) {
             }
         })
 
-        // group check box selector END ##############################
+        // group check box selector END ###################################################
 
 
         const prioritySelector = dialog.querySelector('.prioritySelect')
@@ -310,14 +306,6 @@ async function EventCreationDialog(groups) {
         }
         prioritySelector.value = priorities[4]
 
-        /*
-        for (let priority = 1; priority <= 5; priority++){
-            const option = document.createElement('option')
-            option.appendChild(document.createTextNode(priority))
-            prioritySelector.appendChild(option)
-        }
-        prioritySelector.value = '5'
-        */
 
         const seriesTypeSelector = dialog.querySelector('.seriesType')
         for (const type of seriesTypes) {
@@ -336,6 +324,7 @@ async function EventCreationDialog(groups) {
             }
         })
 
+
         const createButton = dialog.querySelector('.createButton')
         createButton.addEventListener('click', () => {
             const title = dialog.querySelector('.titleInput').value
@@ -346,7 +335,7 @@ async function EventCreationDialog(groups) {
             const clock_start = dialog.querySelector('.startInput').value
             const clock_end = dialog.querySelector('.endInput').value
             //const group = selectedGroupsArray
-            const priority = prioritySelector.options.selectedIndex + 1//prioritySelector.value
+            const priority = prioritySelector.options.selectedIndex + 1
             const daysCheckBoxElement = dialog.getElementsByClassName('cbDay')
             
             let checked = 0
@@ -427,25 +416,15 @@ async function EventCreationDialog(groups) {
                     break
             }
 
-            // add validation! TODO!!!!!!!!!!!!!!!!
             if(returnObject.arrayOfDates.length === 0){
                 reject('no days selected for series')
                 return
             }
 
             dialog.remove()
-            //resolve({data:'bla bla ', series: false})
             resolve({data: returnObject, series: true})
             return
         })
-
-        /*
-        const closeButton = dialog.querySelector('.closeButton')
-        closeButton.addEventListener('click', () => {
-            dialog.remove()
-            reject('Dialog closed.')
-        })
-        */
 
         //const closeButtonX = dialog.querySelector('.closeButtonX') //ecHred
         const closeButtonX = dialog.querySelector('.ecHred')
@@ -455,7 +434,6 @@ async function EventCreationDialog(groups) {
         })
 
         const extraSettings = dialog.querySelector('.extraSettings')
-        //extraSettings.style = '' // REMOOOOOOOVEEE LAATTTEEER ######################
 
         const extraButton = dialog.querySelector('.extraButton')
         extraButton.addEventListener('click', () => {
@@ -469,16 +447,8 @@ async function EventCreationDialog(groups) {
 
         /*
         jQuery(($) => {
-            $("h1.jtest").html("wtf")
-        })
-        */
-
-        /*
-        jQuery(($) => {
             $("button.testButton").on('click', () => {
                 console.log(seriesTypeSelector.value)
-                console.log(seriesTypeSelector.options.selectedIndex)
-                console.log('fromArray:', seriesTypes[seriesTypeSelector.options.selectedIndex])
             })
         })
         */
@@ -499,12 +469,6 @@ async function DeleteDialog(event, id, series_id) {
         'lauantai']
     
     return new Promise((resolve, reject) => {
-        /*
-        const [startDate, startTime] = this.#dateToString(event.start)
-        const [, endTime] = this.#dateToString(event.end)
-        const weekDay = this.days[event.start.getDay()]
-        */
-
         const [startDate, startTime] = dateToString(event.start)
         const [, endTime] = dateToString(event.end)
         const weekDay = days[event.start.getDay()]

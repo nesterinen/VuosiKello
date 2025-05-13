@@ -25,7 +25,7 @@ class VuosiTable {
     eventUpdateName = 'vuosiKalenteriUpdate'
 
     selectedEvent = null
-    firstEventToday = null//{element: null, data: null}
+    firstEventToday = null //{element: null, data: null}
     dateToday = new Date()
 
     constructor(element, {yearEvents, eventClick, deleteClick, monthSelect,groups}) {
@@ -133,15 +133,11 @@ class VuosiTable {
             this.selectedEvent.classList.remove('selectedTableEvent')
         }
 
-        //this.selectedEvent = this.#getEventElement(id)
         this.selectedEvent = this.#getEventElement(event.id)
         if(this.selectedEvent === null) return
         this.#scrollToEventElement(this.selectedEvent)
 
-        //this.selectedEvent.style = 'border-top: 5px solid Yellow; border-bottom: 5px solid Yellow;'
         this.selectedEvent.classList.add('selectedTableEvent')
-
-        //this.updateTable(id)
     }
 
     #errorLogger(...params){
@@ -150,7 +146,7 @@ class VuosiTable {
         }
     }
 
-    // group used to be string, now its array.
+    // group used to be string, now its array...
     setEventFilterByGroup(group) {
         if(!group){
             this.groupFilter = null
@@ -206,36 +202,6 @@ class VuosiTable {
             </div>
         `
 
-        /*
-        <div>
-            <div class='baseTextBold'>ryhmä</div>
-            <select class='groupSelect'></select>
-        </div>
-        */
-
-        /*Group Selector ############################################
-        const groupSelector = header.querySelector('.groupSelect')
-
-        const optionGroupAll = document.createElement('option')
-        optionGroupAll.appendChild(document.createTextNode('Kaikki'))
-        groupSelector.appendChild(optionGroupAll)
-
-        Object.keys(this.groups).map(group => {
-            const option = document.createElement('option')
-            option.appendChild(document.createTextNode(group))
-            groupSelector.appendChild(option)
-        })
-
-        groupSelector.addEventListener('change', () => {
-            if(groupSelector.value !== 'Kaikki'){
-                this.setEventFilterByGroup(groupSelector.value)
-            } else {
-                this.setEventFilterByGroup(null)
-            }
-        })
-        Group Selector end ########################################*/
-
-
         /*Month Selector ############################################*/
         const monthSelector = header.querySelector('.monthSelect')
 
@@ -261,7 +227,7 @@ class VuosiTable {
             }
         })
         /*Month Selector end ########################################*/
-        //return header
+
         parentElement.appendChild(header)
     }
 
@@ -276,9 +242,6 @@ class VuosiTable {
                 </div>
             </div>
         `
-
-        //this.element.querySelector(".eventTableHeader").appendChild(this.#buttonGenerator())
-        //this.element.querySelector(".eventTableHeaderContainer").appendChild(this.updateTableHeader())
 
         this.#updateTableHeader()
         this.updateTable()
@@ -317,28 +280,10 @@ class VuosiTable {
             </div>
         `
 
-        /*
-        <div class='eventOtherInfo'>
-            <div class='baseText'>p: ${yearEvent.priority}</div>
-            <div class='baseText'>v: ${yearEvent.reservor}</div>
-            <div class='baseText'>r: ${yearEvent.group}</div>
-        
-            <button class='infoButton baseButton'>info</button>
-        </div>
-        */
-
         const deleteButton = eventElement.querySelector('.deleteButton')
         deleteButton.addEventListener('click', () => {
             this.deleteClick(yearEvent.id, yearEvent.series_id)
-            //this.updateTable()
         })
-
-        /*
-        const infoButton = eventElement.querySelector('.infoButton')
-        infoButton.addEventListener('click', () => {
-            this.#errorLogger('infoButton:', year, clockStart, clockEnd)
-        })
-        */
 
         eventElement.addEventListener('click', (e) => {
             if(e.target instanceof HTMLButtonElement) return
@@ -355,9 +300,7 @@ class VuosiTable {
         this.firstEventToday = null
 
         for (const yearEvent of this.YearEvents.events) {
-
-            
-            // filter style if event.group is array... workaround because it used to only be string..
+            // filter style if event.group is array... workaround because it used to be string..
             if(this.groupFilter) {
                 if(Array.isArray(yearEvent.group)){
                     let groupMatches = false
@@ -393,18 +336,7 @@ class VuosiTable {
                 this.firstEventToday = {element: eventElement, data: yearEvent}
                 this.firstEventToday.element.style = 'border-top: 5px solid #d12c0a; border-bottom: 5px solid #d12c0a;'
             }
-
-            /* useless??
-            if(selectId){
-                if(yearEvent.id === selectId){
-                    //eventElement.style = 'border-top: 5px solid Yellow; border-bottom: 5px solid Yellow;'
-                    eventElement.classList.add('selectedTableEvent')
-                } else {
-                    eventElement.classList.remove('selectedTableEvent')
-                }
-            }
-            */
-
+            
             eventList.append(eventElement)
         }
     }

@@ -53,7 +53,7 @@ class InfoElement {
             </div>
         `
 
-        // Group checkbox selector start
+        // Group checkbox selector start ##############################################################
         let showDropDown = false
 
         const groupSelectCheckBoxes = this.element.querySelector('.groupSelectCheckBoxes')
@@ -81,11 +81,9 @@ class InfoElement {
         })
 
         groupSelections.addEventListener('change', (e) => {
-            //console.log(e.target.id, e.target.checked)
             const allCheckBoxElements = groupSelections.querySelectorAll('input')
             const checkedGroups = []
             for (const checkBoxElement of allCheckBoxElements) {
-                //console.log('cb', checkBoxElement.id, checkBoxElement.checked)
                 if(checkBoxElement.checked){
                     checkedGroups.push(checkBoxElement.id)
                 }
@@ -94,7 +92,6 @@ class InfoElement {
             this.selectGroup(checkedGroups)
 
             if(checkedGroups.length === 0){
-                //gsbHeader.textContent = 'Kaikki'
                 gsbHeader.innerHTML = `
                     <div>+</div>
                     <div>Kaikki</div>
@@ -114,7 +111,7 @@ class InfoElement {
                 groupSelections.style = 'display: none;'
             }
         })
-        // Group checkbox selector end
+        // Group checkbox selector end #########################################################################
     }
 
     #groupFilterFunction(group){

@@ -62,10 +62,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         <button class='testButton2'>Luo</button>
         <button class='downloadButton'>Lataa</button>
     `
-    //
 
 
-    //const yearEvents = new YearEvents(php_args_vuosi.test_data) //testData
     const yearEvents = new YearEvents(dataFromDatabase)
 
     const infoContainer = mainElement.querySelector('.infoContainer')
@@ -170,7 +168,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     vuosiTable.render()
 
     document.addEventListener(yearEvents.eventUpdateName, () => {
-        //vuosiTable.firstEventToday = null
         vuosiTable.updateTable()
         yearCircle.updateMonthElements()
     })
@@ -185,7 +182,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         yearCircle.setEventFilterByGroup(args.detail.group)
     })
 
-    //yearEvents.selectEventById(386669888)
 
     const testButton2 = mainElement.querySelector('.testButton2')
     testButton2.addEventListener('click', async () => {
@@ -202,7 +198,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('diares', dialogResult)
 
         if(dialogResult.series === false) {
-            //console.log('result', dialogResult.data)
             const {priority, reservor, group, title, content, start, end} = dialogResult.data
             
             jQuery.ajax({
@@ -262,7 +257,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     })
 
-    //testButton2.click()
 
     const downloadButton = mainElement.querySelector('.downloadButton')
     downloadButton.addEventListener('click', () => {
@@ -278,7 +272,4 @@ document.addEventListener('DOMContentLoaded', async () => {
         link.click()
         link.remove()
     })
-
-    //yearEvents.selectEventById(22)
-    //DeleteDialog(yearEvents.getEvent(22) ,1, null)
 })

@@ -30,6 +30,19 @@ Misc:
 - priority colors -kinda done
 - deadline nearing colors -table selects upcoming.
 
+#PALAVERI->
+WORDPRESS:
+    - admin settings for adding/deleting groups
+    - backups for db
+
+VUOSIKALENTERI:
+    - outlook ics, printing csv
+    - dialog option for series on specific day every month
+    - default priority 5->3
+    - <- VUODET -> selector
+
+#PALAVERI<-
+
 infoContainer:
     - todo
 

@@ -16,7 +16,7 @@ import VuosiTable from table.js
 */
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const mainElement = document.getElementById('VuosiKalenteri')
+    const mainElement = document.getElementById(php_args_vuosi.element_name)
     if (mainElement === null) return
 
     let dataFromDatabase = []

@@ -1,15 +1,28 @@
 <?php
 /**
- * Plugin Name: VuosiPROTO
+ * Plugin Name: VuosiKello
  * Description: Organisaation tapahtumien yleiskatsaus vuosikello muodossa.
  * Version: 0.8
  * Author: Aleksei Nesterinen
- * Author URI: missing..
+ * Author URI: none
+* Plugin URI: none
 */
 
 if (!defined(constant_name: 'ABSPATH')) {
     exit;
 }
+
+global $vuosi_kello_page_name;
+$vuosi_kello_page_name = 'VuosiKello';
+
+global $vuosi_kello_table_name;
+$vuosi_kello_table_name = 'vuosi_kello';
+
+global $vuosi_kello_series_table_name;
+$vuosi_kello_series_table_name = 'vuosi_kello_series';
+
+global $vuosi_kello_div_id;
+$vuosi_kello_div_id = 'VuosiKelloElement';
 
 global $organization_groups;
 $organization_groups = [
@@ -21,7 +34,21 @@ $organization_groups = [
     'Kouhu' => '#5baa00'
 ];
 
+function get_vuosi_kello_table(): string{
+    global $wpdb;
+    global $vuosi_kello_table_name;
+    
+    return $wpdb->prefix . $vuosi_kello_table_name;
+}
 
+function get_vuosi_kello_series_table(): string{
+    global $wpdb;
+    global $vuosi_kello_series_table_name;
+    
+    return $wpdb->prefix . $vuosi_kello_series_table_name;
+}
+
+/*
 function to_module($tag, $handle, $src): string{
     if ( 'plugin-script' === $handle ) {
         $tag = '<script type="module" src="' . esc_url( url: $src ) . '" id="scripts" ></script>';
@@ -29,12 +56,56 @@ function to_module($tag, $handle, $src): string{
     write_log($tag);
     return $tag;
 }
+*/
+
+function vuosi_kello_plugin_activation(): void {
+    global $wpdb;
+    $charset_collate = $wpdb->get_charset_collate();
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+    $series_table_name = get_vuosi_kello_series_table();
+    $query1 = "CREATE TABLE IF NOT EXISTS $series_table_name (
+        id int NOT NULL AUTO_INCREMENT,
+        time_stamp datetime NOT NULL,
+        PRIMARY KEY (id)
+    ) $charset_collate;";
+
+    dbDelta($query1);
+
+
+    $main_table_name = get_vuosi_kello_table();
+    $query2 = "CREATE TABLE IF NOT EXISTS $main_table_name(
+        id int NOT NULL AUTO_INCREMENT,
+        series_id int,
+        priority tinyint,
+        reservor varchar(255),
+        groups_json JSON NOT NULL,
+        title varchar(255) NOT NULL,
+        content text,
+        start datetime NOT NULL,
+        end datetime NOT NULL,
+        PRIMARY KEY (id),
+        FOREIGN KEY (series_id)
+        REFERENCES $series_table_name (id)
+        ON DELETE CASCADE
+    ); $charset_collate";
+
+    dbDelta($query2);
+}
+register_activation_hook(__FILE__, 'vuosi_kello_plugin_activation');
+
 
 // ajax, rest/crud api modifying db stuff for vuosikello
 include(plugin_dir_path(__FILE__) . 'php/Crud_Operations.php');
-
-
 function load_plugin(): void{
+    $version = '0.8';
+
+    global $vuosi_kello_page_name;
+    if(!is_page($vuosi_kello_page_name)){
+        return;
+    }
+
+    global $vuosi_kello_div_id;
     global $organization_groups;
 
     $js_file_dir = plugin_dir_url(file: __FILE__) . 'js';
@@ -48,42 +119,42 @@ function load_plugin(): void{
         handle: 'year-dialogs',
         src: "{$js_file_dir}/dialogs.js",
         deps: [],
-        ver: null
+        ver: $version
     );
 
     wp_register_script(
         handle: 'year-table',
         src: "{$js_file_dir}/table.js",
         deps: [],
-        ver: null
+        ver: $version
     );
 
     wp_register_script(
         handle: 'year-events-handler',
         src: "{$js_file_dir}/eventsHandler.js",
         deps: [],
-        ver: null
+        ver: $version
     );
 
     wp_enqueue_script(
         handle:'year-circle',
         src: "{$js_file_dir}/year.js",
         deps: [],
-        ver: null
+        ver: $version
     );
     
     wp_enqueue_script(
         handle:'year-utils',
         src: "{$js_file_dir}/utils.js",
         deps: [],
-        ver: null
+        ver: $version
     );
 
     wp_enqueue_script(
         handle:'year-info',
         src: "{$js_file_dir}/info.js",
         deps: [],
-        ver: null
+        ver: $version
     );
 
     wp_enqueue_script(
@@ -98,7 +169,7 @@ function load_plugin(): void{
             'year-utils',
             'year-info'
         ],
-        ver: null
+        ver: $version
     );
     
 
@@ -108,6 +179,7 @@ function load_plugin(): void{
         l10n: [
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'groups' => $organization_groups,
+            'element_name' => $vuosi_kello_div_id,
         ]
     );
 }

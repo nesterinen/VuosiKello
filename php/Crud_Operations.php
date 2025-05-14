@@ -54,7 +54,7 @@ function vuosi_kello_event_validation($event, $checkDates=true): string | null {
 // table name = wp_vuosi_kello
 function vuosi_kello_get_all(): void {
     global $wpdb;
-    $table_name = 'wp_vuosi_kello';
+    $table_name = get_vuosi_kello_table();
 
     // dont fetch reservations that are more than 2 months old, fetching the whole table is not good for longetivity.
     //$time = strtotime("-2 month", time());
@@ -65,7 +65,7 @@ function vuosi_kello_get_all(): void {
 
     if($result !== false){
         foreach ($result as $index => $event) {
-            $result[$index]->group = json_decode($event->group);
+            $result[$index]->group = json_decode($event->groups_json);
             $result[$index]->id = (int)$event->id;
             $result[$index]->priority = (int)$event->priority;
             if(gettype($event->series_id) === 'string'){
@@ -89,13 +89,13 @@ function vuosi_kello_post_one(): void {
     }
 
     global $wpdb;
-    $table_name = 'wp_vuosi_kello';
+    $table_name = get_vuosi_kello_table();
 
     $result = $wpdb->insert($table_name, [
         'series_id' => null,
         'priority' => $_POST['priority'],
         'reservor' => $_POST['reservor'],
-        'group' => json_encode($_POST['group']),
+        'groups_json' => json_encode($_POST['group']),
         'title' => $_POST['title'],
         'content' => $_POST['content'],
         'start' => $_POST['start'],
@@ -121,7 +121,7 @@ add_action("wp_ajax_nopriv_vuosi_kello_post_one", "vuosi_kello_post_one");
 
 function vuosi_kello_delete_one(): void {
     global $wpdb;
-    $table_name = 'wp_vuosi_kello';
+    $table_name = get_vuosi_kello_table();
 
     $result = $wpdb->delete($table_name, [
         'id' => $_POST['id']
@@ -154,8 +154,8 @@ function vuosi_kello_post_series(): void {
 
 
     global $wpdb;
-    $table_name = 'wp_vuosi_kello';
-    $series_t = $table_name . '_series';
+    $table_name = get_vuosi_kello_table();
+    $series_t = get_vuosi_kello_series_table();
 
     
     $time_str = current_time('mysql');
@@ -175,7 +175,7 @@ function vuosi_kello_post_series(): void {
             'series_id' => (int)$series_id,
             'priority' => (int)$_POST['priority'],
             'reservor' => $_POST['reservor'],
-            'group' => json_encode($_POST['group']),
+            'groups_json' => json_encode($_POST['group']),
             'title' => $_POST['title'],
             'content' => $_POST['content'],
             'start' => $times['start'],
@@ -186,7 +186,7 @@ function vuosi_kello_post_series(): void {
 
         if($result >= 1){
             $data['id'] = $wpdb->insert_id;
-            $data['group'] = $_POST['group'];
+            $data['groups_json'] = $_POST['group'];
             $results[] = $data;
         }
     }
@@ -207,8 +207,7 @@ add_action("wp_ajax_nopriv_vuosi_kello_post_series", "vuosi_kello_post_series");
 
 function vuosi_kello_delete_by_series(): void {
     global $wpdb;
-    $table_name = 'wp_vuosi_kello';
-    $series_t = $table_name . '_series';
+    $series_t = get_vuosi_kello_series_table();
     
     $result = $wpdb->delete($series_t, ['id' => $_POST["series_id"]]);
 

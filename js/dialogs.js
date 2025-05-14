@@ -51,7 +51,7 @@ async function EventCreationDialog(groups) {
     const priorities = [
         '1 - suurin',
         '2 - suuri',
-        '3 - keskikokoinen',
+        '3 - vakio',
         '4 - matala',
         '5 - matalin'
     ]

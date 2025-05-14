@@ -321,7 +321,7 @@ async function EventCreationDialog(groups) {
             option.appendChild(document.createTextNode(p))
             prioritySelector.appendChild(option)
         }
-        prioritySelector.value = priorities[4]
+        prioritySelector.value = priorities[2]
 
 
         const seriesTypeSelector = dialog.querySelector('.seriesType')

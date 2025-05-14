@@ -186,7 +186,7 @@ function vuosi_kello_post_series(): void {
 
         if($result >= 1){
             $data['id'] = $wpdb->insert_id;
-            $data['groups_json'] = $_POST['group'];
+            $data['group'] = $_POST['group'];
             $results[] = $data;
         }
     }

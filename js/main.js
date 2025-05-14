@@ -8,7 +8,7 @@ import VuosiTable from table.js
     series_id: int | null (FOREIGN KEY),
     priority: int,
     reservor: varchar 255,
-    group: json (str[]),
+    groups_json: json (str[]),
     title: varchar 255,
     content: text,
     start: datetime,
@@ -209,6 +209,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     priority, reservor, group, title, content, start, end
                 },
                 success: (response) => {
+                    console.log('response', response)
                     yearEvents.addEvent({
                         id: response.data.id,
                         priority, reservor, group, title, content, start, end

@@ -60,6 +60,8 @@
     
     list-style-position: inside;
     display: list-item;
+
+    white-space: nowrap;
 }
 
 .mtBaseText::marker {

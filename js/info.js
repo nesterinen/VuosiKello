@@ -152,7 +152,7 @@ class InfoElement {
             </div>
 
             <div>
-                <textarea class='eiTextArea'>${event.content}</textarea>
+                <textarea class='eiTextArea' readonly>${event.content}</textarea>
             </div>
             
             <div class='eiEventFooter'>

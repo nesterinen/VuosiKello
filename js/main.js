@@ -256,7 +256,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             })
         }
     })
-    testButton2.click()
 
     const downloadButton = mainElement.querySelector('.downloadButton')
     downloadButton.addEventListener('click', () => {

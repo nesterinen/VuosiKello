@@ -516,7 +516,7 @@ async function DeleteDialog(event, id, series_id) {
             </div>
 
             <div>
-                <textarea class='ddTextArea' spellcheck='false'>${event.content}</textarea>
+                <textarea class='ddTextArea' spellcheck='false' readonly>${event.content}</textarea>
             </div>
 
             <div class='ddEventFooter'>

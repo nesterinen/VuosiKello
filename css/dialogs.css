@@ -136,6 +136,7 @@
     text-align: center;
     margin-bottom: 0.5em;
     border-bottom: 1px solid grey;
+    overflow: hidden;
 }
 
 .ddInfoMain .ddDateTime {
@@ -176,8 +177,6 @@
 
     border-top: 1px solid grey;
     border-bottom: 1px solid grey;
-
-    pointer-events: none;
 }
 
 .ddEventFooter {

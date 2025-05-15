@@ -37,8 +37,8 @@ WORDPRESS:
 
 VUOSIKALENTERI:
     - outlook ics, printing csv
-    - dialog option for series on specific day every month
-    - default priority 5->3
+    #- dialog option for series on specific day every month #DONE
+    #- default priority 5->3 #DONE
     - <- VUODET -> selector
 
 #PALAVERI<-

@@ -19,12 +19,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const mainElement = document.getElementById(php_args_vuosi.element_name)
     if (mainElement === null) return
 
+    let selectedYear = 2025
+
     let dataFromDatabase = []
     await jQuery.ajax({
         type: "POST",
         dataType: "json",
         url: php_args_vuosi.ajax_url,
-        data: {action: "vuosi_kello_get_all"},
+        data: {action: "vuosi_kello_get_all", year: selectedYear},
         success: (response) => {
             console.log('response data:', response.data)
             dataFromDatabase = response.data.map(obj => {

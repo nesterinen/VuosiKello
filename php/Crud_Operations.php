@@ -55,12 +55,19 @@ function vuosi_kello_event_validation($event, $checkDates=true): string | null {
 function vuosi_kello_get_all(): void {
     global $wpdb;
     $table_name = get_vuosi_kello_table();
+    
+    $extra_query = '';
+    if (array_key_exists('year', $_POST)){
+        if(intval($_POST['year']) > 0){
+            $extra_query = ' WHERE YEAR(start) = ' . $_POST['year'];
+        }
+    }
 
     // dont fetch reservations that are more than 2 months old, fetching the whole table is not good for longetivity.
     //$time = strtotime("-2 month", time());
     //$year_ago = date("Y-m-d", $time);
 
-    $result = $wpdb->get_results("SELECT * FROM {$table_name}");
+    $result = $wpdb->get_results("SELECT * FROM {$table_name}" . $extra_query);
     //write_log($result);
 
     if($result !== false){

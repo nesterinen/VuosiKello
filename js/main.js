@@ -182,6 +182,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         yearCircle.setEventFilterByGroup(args.detail.group)
     })
 
+    yearEvents.selectEvent(vuosiTable.firstEventToday.data)
+    //console.log('first', vuosiTable.firstEventToday)
+
 
     const testButton2 = mainElement.querySelector('.testButton2')
     testButton2.addEventListener('click', async () => {
@@ -228,7 +231,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             })
 
         } else {
-            console.log('series', dialogResult)
             const {arrayOfDates, priority, reservor, group, title, content, start, end} = dialogResult.data
 
             jQuery.ajax({

@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log('res', dialogResult)
         }
     })
-    testingButton.click()
+    //testingButton.click()
 
     mainElement.scrollIntoView()
 })

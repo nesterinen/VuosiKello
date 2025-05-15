@@ -44,6 +44,7 @@ async function EventCreationDialog(groups) {
         'viikottain',
         'parittomat viikot',
         'parilliset viikot',
+        'päivän numero',
         //'kuukauden ensimmäinen päivä',
         //'kuukauden viimeinen päivä'
     ]
@@ -55,6 +56,40 @@ async function EventCreationDialog(groups) {
         '4 - matala',
         '5 - matalin'
     ]
+
+    function monthlyDay(
+        dateDayNumber,
+        dateStart,
+        dateEnd,
+        clockStart,
+        clockEnd,){
+            const startDateText = `${dateStart}T${clockStart}:00`
+            const dateStartObject = new Date(startDateText)
+
+            const endDateText = `${dateEnd}T${clockEnd}:00`
+            const dateEndObject = new Date(endDateText)
+
+            const diffTime = dateStartObject  - dateEndObject
+            const diffDays = Math.floor(-diffTime / (1000 * 60 * 60 * 24))
+
+            const arrayOfDates = []
+            for (let i = 0; i <= diffDays; i++){
+                const newDate = addDays(dateStartObject , i)
+                
+                if(newDate.getDate() === dateDayNumber){
+                    const newDateEnd = new Date(newDate)
+                    const [eHours, eMins] = clockEnd.split(':')
+                    newDateEnd.setHours(parseInt(eHours))
+                    newDateEnd.setMinutes(parseInt(eMins))
+                    arrayOfDates.push({
+                        start: newDate.toISOString(), // dateNoTimezone(newDate),
+                        end: newDateEnd.toISOString() //dateNoTimezone(newDateEnd)
+                    })
+                }
+            }
+
+            return arrayOfDates
+    }
 
     function weeklySeries(
         dateStart,
@@ -111,9 +146,11 @@ async function EventCreationDialog(groups) {
 
     function validateAndColor(element, isInvalid){
         if(isInvalid){
-            element.style = 'outline: 2px solid red; z-index: 1;'
+            //element.style = 'outline: 2px solid red; z-index: 1;'
+            element.classList.add('invalidValue')
         } else {
-            element.style = 'outline: none;'
+            //element.style = 'outline: none;'
+            element.classList.remove('invalidValue')
         }
 
         return isInvalid
@@ -182,7 +219,7 @@ async function EventCreationDialog(groups) {
 
         </div>
 
-        <div class='extraSettings'  style='display:none;'>
+        <div class='extraSettings' style='display:none;'>
 
             <div class='baseElement'>
                 <div class='baseText'>prioriteetti</div>
@@ -194,7 +231,7 @@ async function EventCreationDialog(groups) {
                 <select class='seriesType'></select>
             </div>
 
-            <div class='baseElement'>
+            <div class='baseElement weekDaySelection' style='display:none;'>
                 <div class='baseText'>sarjan päivät</div>
                 <div class='daySelect'>
                     <div>
@@ -218,6 +255,11 @@ async function EventCreationDialog(groups) {
                         <label for='cbPe'>pe</label>
                     </div>
                 </div>
+            </div>
+
+            <div class='baseElement dateDaySelection' style='display:none;'>
+                <div class='baseText'>päivän numero</div>
+                <input type='number' class='dateDayInput'/>
             </div>
 
         </div>
@@ -339,8 +381,28 @@ async function EventCreationDialog(groups) {
                 endDateInput.disabled = true
                 endDateInput.style = 'display: none;'
             }
+
+            if(seriesTypeSelector.options.selectedIndex > 0 && seriesTypeSelector.options.selectedIndex <= 3){
+                weekDaySelectionContainer.style = 'display: block;'
+            } else {
+                weekDaySelectionContainer.style = 'display: none;'
+            }
+
+            if(seriesTypeSelector.options.selectedIndex === 4){
+                dateDaySelectionContainer.style = 'display: block;'
+            } else {
+                dateDaySelectionContainer.style = 'display: none;'
+            }
         })
 
+        // allow only integers
+        const dateDayInput = dialog.querySelector('.dateDayInput')
+        dateDayInput.addEventListener('input', (e) => {
+            dateDayInput.value = dateDayInput.value.replace('^[0-9]*$', '')
+        })
+
+        const weekDaySelectionContainer = dialog.querySelector('.weekDaySelection')
+        const dateDaySelectionContainer = dialog.querySelector('.dateDaySelection')
 
         const createButton = dialog.querySelector('.createButton')
         createButton.addEventListener('click', () => {
@@ -365,9 +427,10 @@ async function EventCreationDialog(groups) {
                 validateAndColor(dialog.querySelector('.titleInput'), title.length === 0),
                 validateAndColor(dialog.querySelector('.reserverInput'), reservor.length === 0),
                 validateAndColor(dialog.querySelector('.endInput'), clock_start >= clock_end),
-                validateAndColor(dialog.querySelector('.daySelect'), checked === 0 && seriesTypeSelector.options.selectedIndex > 0),
+                validateAndColor(dialog.querySelector('.daySelect'), checked === 0 && seriesTypeSelector.options.selectedIndex > 0 && seriesTypeSelector.options.selectedIndex <= 3),
                 validateAndColor(dialog.querySelector('.dateInput'), startDate >= endDate && seriesTypeSelector.options.selectedIndex > 0),
-                validateAndColor(dialog.querySelector('.groupCheckSelector'), selectedGroupsArray.length === 0)
+                validateAndColor(dialog.querySelector('.groupCheckSelector'), selectedGroupsArray.length === 0),
+                validateAndColor(dateDayInput, seriesTypeSelector.options.selectedIndex === 4 && (parseInt(dateDayInput.value) < 1 || parseInt(dateDayInput.value) > 31))
             
             ]
             // if any invalid value return
@@ -424,8 +487,14 @@ async function EventCreationDialog(groups) {
                         'even')
                     break
 
-                case 4: /*month frist*/
-                    console.log('todo')
+                case 4: /*day date of month*/
+                    returnObject.arrayOfDates = monthlyDay(
+                        parseInt(dateDayInput.value),
+                        startDate,
+                        endDateInput.value,
+                        clock_start,
+                        clock_end
+                    )
                     break
 
                 case 2: /*month last*/
@@ -461,6 +530,8 @@ async function EventCreationDialog(groups) {
                 extraSettings.style = 'display: none;'
             }
         })
+
+        extraButton.click()
 
         /*
         jQuery(($) => {

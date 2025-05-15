@@ -113,6 +113,7 @@
     padding-right: 0.1em;
     padding-bottom: 0.1em;
     overflow: hidden;
+    min-width: 20em;
 }
 
 .eventContent {
@@ -123,6 +124,7 @@
 .eventDateInfo {
     text-align: center;
     margin: auto;
+    min-width: 3.5em;
 }
 
 .eventOtherInfo {

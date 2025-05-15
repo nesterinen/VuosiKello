@@ -6,4 +6,4 @@ console.log('dat', datstr)
 
 const date = new Date()
 
-console.log('date', date.getDate())
+console.log('date', date instanceof Date)

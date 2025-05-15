@@ -81,6 +81,12 @@ class VuosiKalenteri {
         return date.toISOString().split('T')[0].split('-').reverse().join('.')
     }
 
+    setDate(newDate){
+        if(newDate instanceof Date){
+            this.#dateNow = newDate
+        }
+    }
+
     // Visual side ###################
     render() {
         this.element.innerHTML = `

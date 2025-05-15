@@ -22,6 +22,41 @@ document.addEventListener('DOMContentLoaded', async () => {
     let selectedYear = 2025
 
     let dataFromDatabase = []
+
+    async function fetchAll(year=null) {
+        return new Promise((resolve, reject) => {
+            jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: php_args_vuosi.ajax_url,
+            data: {action: "vuosi_kello_get_all", year: year},
+                success: (response) => {
+                    resolve(response.data)
+                },
+                error: (jqXHR) => {
+                    if(jqXHR.status&&jqXHR.status==200){
+                        //console.log('err', jqXHR);
+                        reject(`jqXHR_: ${jqXHR}`)
+                    } else {
+                        //console.log('errorResponse:', jqXHR.responseText)
+                        reject(`jqXHR: ${jqXHR.responseText}`)
+                    }
+                }
+            }).catch((error) => {
+                reject(`Virhe: ${error.statusText} (${error.status})`)
+            })
+        })
+    }
+
+    await fetchAll(selectedYear)
+        .then(result => {
+            dataFromDatabase = result
+        })
+        .catch(err => {
+            alert(err)
+        })
+
+    /*
     await jQuery.ajax({
         type: "POST",
         dataType: "json",
@@ -44,6 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }).catch((error) => {
         alert(`Virhe: ${error.statusText} (${error.status})`)
     })
+    */
     
 
     mainElement.innerHTML = `
@@ -63,7 +99,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         <button class='testButton2'>Luo</button>
         <button class='downloadButton'>Lataa</button>
-        <button class='testButton3'>test</button>
+        <button class='prevB'>prev</button>
+        <button class='nextB'>next</button>
     `
 
 
@@ -185,7 +222,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         yearCircle.setEventFilterByGroup(args.detail.group)
     })
 
-    yearEvents.selectEvent(vuosiTable.firstEventToday.data)
+    if(vuosiTable.firstEventToday){
+        yearEvents.selectEvent(vuosiTable.firstEventToday.data)
+    }
 
     const testButton2 = mainElement.querySelector('.testButton2')
     testButton2.addEventListener('click', async () => {
@@ -276,23 +315,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         link.remove()
     })
 
-    const testingButton = mainElement.querySelector('.testButton3')
-    testingButton.addEventListener('click', async () => {
-        const dialogResult = await EventCreationDialog(php_args_vuosi.groups).catch((e) => {
-            console.log(e)
-            return null
-        })
-
-        if (!dialogResult) {
-            console.log('done')
-            return
-        }
-
-        if(dialogResult.series){
-            console.log('res', dialogResult)
-        }
+    const prevButton = mainElement.querySelector('.prevB')
+    prevButton.addEventListener('click', () => {
+        console.log('prev')
     })
-    //testingButton.click()
+
+    const nextButton = mainElement.querySelector('.nextB')
+    nextButton.addEventListener('click', () => {
+        console.log('next')
+    })
+
+    function setYearCalendarYear(year){
+        console.log('pass')
+    }
+
 
     mainElement.scrollIntoView()
 })

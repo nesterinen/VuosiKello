@@ -26,14 +26,18 @@ class YearEvents {
     constructor(eventsJsonArray) {
         if(Array.isArray(eventsJsonArray) === false) throw new Error('eventsJsonArray not an array')
         this.events = []
-        this.#Initialize(eventsJsonArray)
+        this.Initialize(eventsJsonArray)
     }
 
     #addTimeZone(dateString){
         return new Date(new Date(dateString) - this.#dateToday.getTimezoneOffset()*60_000)
     }
 
-    #Initialize(eventsJsonArray){
+    Initialize(eventsJsonArray, reInitialize=false){
+        if(reInitialize){
+            this.events = []
+        }
+
         for (const obj of eventsJsonArray) {
             if('id' in obj && 'start' in obj && 'group' in obj && 'title' in obj && 'content' in obj){
                 this.events.push(

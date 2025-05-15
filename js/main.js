@@ -183,8 +183,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     })
 
     yearEvents.selectEvent(vuosiTable.firstEventToday.data)
-    //console.log('first', vuosiTable.firstEventToday)
-
 
     const testButton2 = mainElement.querySelector('.testButton2')
     testButton2.addEventListener('click', async () => {
@@ -274,4 +272,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         link.click()
         link.remove()
     })
+
+    /*
+    setTimeout(() => {
+        window.scrollTo(0, mainElement.getBoundingClientRect().y - 30)
+        console.log('yCoord', mainElement.getBoundingClientRect())
+    }, 250)
+    */
+    mainElement.scrollIntoView()
 })

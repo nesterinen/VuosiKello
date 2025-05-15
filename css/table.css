@@ -114,6 +114,7 @@
     padding-bottom: 0.1em;
     overflow: hidden;
     min-width: 20em;
+    padding-left: 1em;
 }
 
 .eventContent {

@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         <button class='testButton2'>Luo</button>
         <button class='downloadButton'>Lataa</button>
+        <button class='testButton3'>test</button>
     `
 
 
@@ -273,11 +274,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         link.remove()
     })
 
-    /*
-    setTimeout(() => {
-        window.scrollTo(0, mainElement.getBoundingClientRect().y - 30)
-        console.log('yCoord', mainElement.getBoundingClientRect())
-    }, 250)
-    */
+    const testingButton = mainElement.querySelector('.testButton3')
+    testingButton.addEventListener('click', async () => {
+        const dialogResult = await EventCreationDialog(php_args_vuosi.groups).catch((e) => {
+            console.log(e)
+            return null
+        })
+
+        if (!dialogResult) {
+            console.log('done')
+            return
+        }
+
+        if(dialogResult.series){
+            console.log('res', dialogResult)
+        }
+    })
+    testingButton.click()
+
     mainElement.scrollIntoView()
 })

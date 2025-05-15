@@ -13,7 +13,7 @@ class YearEvent {
 }
 
 class YearEvents {
-    events
+    events = []
 
     #errorLog = true
 
@@ -23,10 +23,12 @@ class YearEvents {
 
     #dateToday = new Date()
     
-    constructor(eventsJsonArray) {
-        if(Array.isArray(eventsJsonArray) === false) throw new Error('eventsJsonArray not an array')
-        this.events = []
-        this.Initialize(eventsJsonArray)
+    constructor(eventsJsonArray=null) {
+        if(eventsJsonArray){
+            if(Array.isArray(eventsJsonArray) === false) throw new Error('eventsJsonArray not an array')
+            this.events = []
+            this.Initialize(eventsJsonArray)
+        }
     }
 
     #addTimeZone(dateString){
@@ -62,6 +64,9 @@ class YearEvents {
         // sort by date
         this.sortEventsByDate()
         //this.sortEventsByPriorityThenDate()
+        if(reInitialize){
+            document.dispatchEvent(new Event(this.eventUpdateName))
+        }
     }
 
     #errorLogger(...params){

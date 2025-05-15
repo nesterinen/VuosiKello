@@ -19,9 +19,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const mainElement = document.getElementById(php_args_vuosi.element_name)
     if (mainElement === null) return
 
-    let selectedYear = 2025
+    let selectedYear = new Date().getFullYear()
 
-    let dataFromDatabase = []
+    //let dataFromDatabase = []
 
     async function fetchAll(year=null) {
         return new Promise((resolve, reject) => {
@@ -47,14 +47,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             })
         })
     }
-
-    await fetchAll(selectedYear)
-        .then(result => {
-            dataFromDatabase = result
-        })
-        .catch(err => {
-            alert(err)
-        })
 
     /*
     await jQuery.ajax({
@@ -104,7 +96,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     `
 
 
-    const yearEvents = new YearEvents(dataFromDatabase)
+    //const yearEvents = new YearEvents(dataFromDatabase)
+    const yearEvents = new YearEvents()
+
+    await fetchAll(selectedYear)
+        .then(result => {
+            yearEvents.Initialize(result)
+        })
+        .catch(err => {
+            alert(err)
+        })
 
     const infoContainer = mainElement.querySelector('.infoContainer')
     const infoElement = new InfoElement(
@@ -322,13 +323,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const nextButton = mainElement.querySelector('.nextB')
     nextButton.addEventListener('click', () => {
-        console.log('next')
+        selectedYear += 1
+        fetchAll(selectedYear)
+            .then(results => {
+                yearEvents.Initialize(results, true)
+                yearCircle.setDate(new Date(Date.UTC(selectedYear)))
+                yearCircle.updateMonthElements()
+            })
+            .catch(err => console.log('err', err))
     })
-
-    function setYearCalendarYear(year){
-        console.log('pass')
-    }
-
 
     mainElement.scrollIntoView()
 })

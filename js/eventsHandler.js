@@ -204,4 +204,8 @@ class YearEvents {
         this.#errorLogger('group', group, 'selected')
         document.dispatchEvent(new CustomEvent(this.groupSelectName, {detail:{group:group}}))
     }
+
+    updateEvent(){
+        document.dispatchEvent(new Event(this.eventUpdateName))
+    }
 }

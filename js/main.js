@@ -21,8 +21,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let selectedYear = new Date().getFullYear()
 
-    //let dataFromDatabase = []
-
     async function fetchAll(year=null) {
         return new Promise((resolve, reject) => {
             jQuery.ajax({
@@ -48,32 +46,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         })
     }
 
-    /*
-    await jQuery.ajax({
-        type: "POST",
-        dataType: "json",
-        url: php_args_vuosi.ajax_url,
-        data: {action: "vuosi_kello_get_all", year: selectedYear},
-        success: (response) => {
-            console.log('response data:', response.data)
-            dataFromDatabase = response.data.map(obj => {
-                //return {...obj, id: parseInt(obj.id)}
-                return obj
-            })
-        },
-        error: (jqXHR) => {
-            if(jqXHR.status&&jqXHR.status==200){
-                console.log('err', jqXHR);
-            } else {
-                console.log('errorResponse:', jqXHR.responseText)
-              }
-        }
-    }).catch((error) => {
-        alert(`Virhe: ${error.statusText} (${error.status})`)
-    })
-    */
-    
-
     mainElement.innerHTML = `
         <div class='vuosiKalenteriContainer'>
             <div class='infoContainer'>
@@ -91,17 +63,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         <button class='testButton2'>Luo</button>
         <button class='downloadButton'>Lataa</button>
-        <button class='prevB'>prev</button>
-        <button class='nextB'>next</button>
     `
 
 
-    //const yearEvents = new YearEvents(dataFromDatabase)
     const yearEvents = new YearEvents()
 
-    await fetchAll(selectedYear)
+    fetchAll(selectedYear)
         .then(result => {
             yearEvents.Initialize(result)
+            yearEvents.updateEvent()
         })
         .catch(err => {
             alert(err)
@@ -339,34 +309,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         link.href = window.URL.createObjectURL(fileToSave)
         link.click()
         link.remove()
-    })
-
-    const prevButton = mainElement.querySelector('.prevB')
-    prevButton.addEventListener('click', () => {
-        selectedYear -= 1
-        prevButtonButton.disabled = true
-        fetchAll(selectedYear)
-            .then(results => {
-                yearEvents.Initialize(results, true)
-                yearCircle.setDate(new Date(Date.UTC(selectedYear)))
-                yearCircle.update()
-            })
-            .catch(err => console.log('err', err))
-            .finally(() => prevButton.disabled = false)
-    })
-
-    const nextButton = mainElement.querySelector('.nextB')
-    nextButton.addEventListener('click', () => {
-        selectedYear += 1
-        nextButton.disabled = true
-        fetchAll(selectedYear)
-            .then(results => {
-                yearEvents.Initialize(results, true)
-                yearCircle.setDate(new Date(Date.UTC(selectedYear)))
-                yearCircle.update()
-            })
-            .catch(err => console.log('err', err))
-            .finally(() => nextButton.disabled = false)
     })
 
     mainElement.scrollIntoView()

@@ -113,6 +113,23 @@ class VuosiKalenteri {
             <div class='ycBaseText'>${this.dateString(this.#dateNow)}</div>
         `
         */
+
+        center.innerHTML = `
+            <button class='ycPrevButton'>&#11164;</button>
+            <div class='ycHeaderText'>...</div>
+            <button class='ycNextButton'>&#11166;</button>
+        `
+
+        const prevButtonElement = center.querySelector('.ycPrevButton')
+        prevButtonElement.addEventListener('click', () => {
+            this.prevButton(prevButtonElement)
+        })
+
+        const nextButtonElement = center.querySelector('.ycNextButton')
+        nextButtonElement.addEventListener('click', () => {
+            this.nextButton(nextButtonElement)
+        })
+
         this.updateCenterElement()
         center.addEventListener('click', event => {
             // if clicking buttons inside cCenter dont do else.
@@ -156,6 +173,7 @@ class VuosiKalenteri {
     }
 
     updateCenterElement(){
+        this.element.querySelector('.CircleCenter').querySelector('.ycHeaderText').textContent = this.#dateNow.getFullYear()
         /*
         this.element.querySelector('.CircleCenter').innerHTML = `
             <div class='ycHeaderText'>${this.#dateNow.getFullYear()}</div>
@@ -163,6 +181,7 @@ class VuosiKalenteri {
         `
         */
 
+        /*
         const center = this.element.querySelector('.CircleCenter')
         center.innerHTML = `
             <button class='ycPrevButton'>&#11164;</button>
@@ -179,6 +198,7 @@ class VuosiKalenteri {
         nextButtonElement.addEventListener('click', () => {
             this.nextButton(nextButtonElement)
         })
+        */
     }
 
     updateMonthElements(){

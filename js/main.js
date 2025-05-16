@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         yearCircle.update()
                     })
                     .catch(err => console.log('err', err))
-                    //.finally(() => buttonElement.disabled = false)
+                    .finally(() => buttonElement.disabled = false)
             }
         }
     )

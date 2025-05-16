@@ -280,7 +280,7 @@ class VuosiTable {
             </div>
 
             <div class='eventButtons'>
-                <button class='deleteButton baseButton baseRed'>poista</button>
+                <button class='deleteButton baseButton tableButton'>&#9881;</button>
             </div>
         `
 

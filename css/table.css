@@ -101,7 +101,7 @@
 }
 
 .eventElement:hover {
-    box-shadow: inset 2px 2px 4px black;
+    box-shadow: inset 2px 2px 3px black;
 }
 
 .selectedTableEvent {
@@ -144,4 +144,8 @@
 
 .withMarker::marker {
     color: var(--mkColor);
+}
+
+.tableButton {
+    width: 100%;
 }

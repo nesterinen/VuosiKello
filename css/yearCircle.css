@@ -124,6 +124,10 @@
     background-color: black;
 }
 
+.CircleCenter .ycHeaderText:hover {
+    color: black;
+}
+
 /*
 #MonthCircle .CircleCenter:hover {
     box-shadow: 2px 2px 2px black;

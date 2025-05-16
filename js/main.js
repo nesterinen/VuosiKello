@@ -72,6 +72,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         .then(result => {
             yearEvents.Initialize(result)
             yearEvents.updateEvent()
+            if(vuosiTable.firstEventToday){
+                yearEvents.selectEvent(vuosiTable.firstEventToday.data)
+            }
         })
         .catch(err => {
             alert(err)
@@ -115,7 +118,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     .finally(() => buttonElement.disabled = false)
             },
             nextButton: (buttonElement) => {
-                console.log('btn', buttonElement)
                 selectedYear += 1
                 buttonElement.disabled = true
                 fetchAll(selectedYear)
@@ -218,10 +220,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         yearCircle.setEventFilterByGroup(args.detail.group)
     })
 
-    if(vuosiTable.firstEventToday){
-        yearEvents.selectEvent(vuosiTable.firstEventToday.data)
-    }
-
     const testButton2 = mainElement.querySelector('.testButton2')
     testButton2.addEventListener('click', async () => {
         const dialogResult = await EventCreationDialog(php_args_vuosi.groups).catch((e) => {
@@ -233,8 +231,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log('done')
             return
         }
-
-        console.log('diares', dialogResult)
 
         if(dialogResult.series === false) {
             const {priority, reservor, group, title, content, start, end} = dialogResult.data

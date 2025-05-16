@@ -39,7 +39,7 @@ VUOSIKALENTERI:
     - outlook ics, printing csv
     #- dialog option for series on specific day every month #DONE
     #- default priority 5->3 #DONE
-    - <- VUODET -> selector
+    #- <- VUODET -> selector #DONE
 
 #PALAVERI<-
 

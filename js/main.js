@@ -131,6 +131,31 @@ document.addEventListener('DOMContentLoaded', async () => {
             },
             centerClick: () => {
                 vuosiTable.setEventFilterByMonth(null)
+            },
+            prevButton: (buttonElement) => {
+                selectedYear -= 1
+                buttonElement.disabled = true
+                fetchAll(selectedYear)
+                    .then(results => {
+                        yearEvents.Initialize(results, true)
+                        yearCircle.setDate(new Date(Date.UTC(selectedYear)))
+                        yearCircle.update()
+                    })
+                    .catch(err => console.log('err', err))
+                    .finally(() => buttonElement.disabled = false)
+            },
+            nextButton: (buttonElement) => {
+                console.log('btn', buttonElement)
+                selectedYear += 1
+                buttonElement.disabled = true
+                fetchAll(selectedYear)
+                    .then(results => {
+                        yearEvents.Initialize(results, true)
+                        yearCircle.setDate(new Date(Date.UTC(selectedYear)))
+                        yearCircle.update()
+                    })
+                    .catch(err => console.log('err', err))
+                    //.finally(() => buttonElement.disabled = false)
             }
         }
     )
@@ -318,19 +343,30 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const prevButton = mainElement.querySelector('.prevB')
     prevButton.addEventListener('click', () => {
-        console.log('prev')
+        selectedYear -= 1
+        prevButtonButton.disabled = true
+        fetchAll(selectedYear)
+            .then(results => {
+                yearEvents.Initialize(results, true)
+                yearCircle.setDate(new Date(Date.UTC(selectedYear)))
+                yearCircle.update()
+            })
+            .catch(err => console.log('err', err))
+            .finally(() => prevButton.disabled = false)
     })
 
     const nextButton = mainElement.querySelector('.nextB')
     nextButton.addEventListener('click', () => {
         selectedYear += 1
+        nextButton.disabled = true
         fetchAll(selectedYear)
             .then(results => {
                 yearEvents.Initialize(results, true)
                 yearCircle.setDate(new Date(Date.UTC(selectedYear)))
-                yearCircle.updateMonthElements()
+                yearCircle.update()
             })
             .catch(err => console.log('err', err))
+            .finally(() => nextButton.disabled = false)
     })
 
     mainElement.scrollIntoView()

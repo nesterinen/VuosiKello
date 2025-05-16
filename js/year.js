@@ -15,7 +15,7 @@ class VuosiKalenteri {
 
     selectedMonth = this.#dateNow.getMonth()
 
-    constructor(element, {yearEvents, monthClick, eventClick, eventFilter, centerClick}) {
+    constructor(element, {yearEvents, monthClick, eventClick, eventFilter, centerClick, nextButton, prevButton}) {
         this.element = this.#CheckIfDomElement(element)
         this.YearEvents = yearEvents
         this.monthElements = []
@@ -23,6 +23,8 @@ class VuosiKalenteri {
         this.monthClick = monthClick && typeof monthClick == 'function' ? monthClick : this.#monthClickFunction
         this.eventClick = eventClick && typeof eventClick == 'function' ? eventClick : this.#eventClickFunction
         this.centerClick = eventClick && typeof centerClick == 'function' ? centerClick : this.#centerClickFunction
+        this.nextButton = nextButton && typeof nextButton == 'function' ? nextButton : this.#nextButtonFunction
+        this.prevButton = prevButton && typeof prevButton == 'function' ? prevButton : this.#previousButtonFunction
         this.eventFilter = eventFilter ? eventFilter : null
     }
 
@@ -55,6 +57,14 @@ class VuosiKalenteri {
     setMonth(month){
         this.selectedMonth = month
         this.updateMonthElements()
+    }
+
+    #nextButtonFunction(buttonElement){
+        this.#errorLogger('Clicked next button:', buttonElement)
+    }
+
+    #previousButtonFunction(buttonElement){
+        this.#errorLogger('Clicked previous button.', buttonElement)
     }
 
     // assuming group is string array.
@@ -97,11 +107,17 @@ class VuosiKalenteri {
         `
 
         const center = this.element.querySelector('.CircleCenter')
+        /*
         center.innerHTML = `
             <div class='ycHeaderText'>${this.#dateNow.getFullYear()}</div>
             <div class='ycBaseText'>${this.dateString(this.#dateNow)}</div>
         `
-        center.addEventListener('click', () => {
+        */
+        this.updateCenterElement()
+        center.addEventListener('click', event => {
+            // if clicking buttons inside cCenter dont do else.
+            if (event.target instanceof HTMLButtonElement) return;
+
             this.centerClick()
 
             this.selectedMonth = null
@@ -139,8 +155,33 @@ class VuosiKalenteri {
         }
     }
 
-    updateMonthElements(){
+    updateCenterElement(){
+        /*
+        this.element.querySelector('.CircleCenter').innerHTML = `
+            <div class='ycHeaderText'>${this.#dateNow.getFullYear()}</div>
+            <div class='ycBaseText'>${this.dateString(this.#dateNow)}</div>
+        `
+        */
 
+        const center = this.element.querySelector('.CircleCenter')
+        center.innerHTML = `
+            <button class='ycPrevButton'>&#11164;</button>
+            <div class='ycHeaderText'>${this.#dateNow.getFullYear()}</div>
+            <button class='ycNextButton'>&#11166;</button>
+        `
+
+        const prevButtonElement = center.querySelector('.ycPrevButton')
+        prevButtonElement.addEventListener('click', () => {
+            this.prevButton(prevButtonElement)
+        })
+
+        const nextButtonElement = center.querySelector('.ycNextButton')
+        nextButtonElement.addEventListener('click', () => {
+            this.nextButton(nextButtonElement)
+        })
+    }
+
+    updateMonthElements(){
         function createMonthElement(VuosiKalenteri, event){
             const newEventElement = document.createElement('div')
             newEventElement.style = `--mkColor: ${VuosiKalenteri._getColorFromPriority(event.priority)}`
@@ -246,6 +287,11 @@ class VuosiKalenteri {
         }
         
        eventsMonthSorted = null
+    }
+
+    update(){
+        this.updateCenterElement()
+        this.updateMonthElements()
     }
 
     _getColorFromPriority(priority){

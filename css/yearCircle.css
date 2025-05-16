@@ -99,11 +99,30 @@
     user-select: none;
 
     line-height: 1;
+
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+    padding-left: 2em;
+    padding-right: 2em;
 }
 
+.CircleCenter button {
+    border: 1px solid white;
+    border-radius: 0.25em;
+    background: transparent;
+    color: white;
+}
+
+.CircleCenter button:hover {
+    border-color: black;
+    color: black;
+}
+
+/*
 #MonthCircle .CircleCenter:hover {
     box-shadow: 2px 2px 2px black;
 }
+*/
 
 .ycHeaderText {
     font-size: 4vh;

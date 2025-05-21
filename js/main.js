@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const mainElement = document.getElementById(php_args_vuosi.element_name)
     if (mainElement === null) return
 
+    console.log('php_arg', php_args_vuosi.default_groups)
+
     let selectedYear = new Date().getFullYear()
 
     async function fetchAll(year=null) {
@@ -83,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const infoContainer = mainElement.querySelector('.infoContainer')
     const infoElement = new InfoElement(
         infoContainer,
-        php_args_vuosi.groups,
+        php_args_vuosi.default_groups,
         {
             selectGroup: (group) => {
                 yearEvents.selectGroup(group)

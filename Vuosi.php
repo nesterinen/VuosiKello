@@ -123,6 +123,7 @@ function load_plugin(): void{
 
     global $vuosi_kello_div_id;
     global $organization_groups;
+    global $vuosi_kello_default_groups;
 
     $js_file_dir = plugin_dir_url(file: __FILE__) . 'js';
     wp_enqueue_style(handle: 'wsp-styles', src: plugin_dir_url(file: __FILE__) . 'css/main.css');
@@ -196,6 +197,7 @@ function load_plugin(): void{
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'groups' => $organization_groups,
             'element_name' => $vuosi_kello_div_id,
+            'default_groups' => $vuosi_kello_default_groups
         ]
     );
 }

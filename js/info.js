@@ -72,7 +72,8 @@ class InfoElement {
         `
 
         const groupSelections = groupSelectCheckBoxes.querySelector('.gsbSelections')
-        Object.keys(this.groups).map(group => {
+
+        function addSelection(group){
             const selectBoxDiv = document.createElement('div')
             selectBoxDiv.innerHTML = `
                 <label for="${group}">
@@ -80,7 +81,18 @@ class InfoElement {
             `
 
             groupSelections.appendChild(selectBoxDiv)
-        })
+        }
+
+        // groups used to be {group: color, group2: color2...} is now ['group1', 'group3', ...]
+        if(this.groups instanceof Array){
+            this.groups.map(group => {
+                addSelection(group)
+            })
+        } else {
+            Object.keys(this.groups).map(group => {
+                addSelection(group)
+            })
+        }
 
         groupSelections.addEventListener('change', (e) => {
             const allCheckBoxElements = groupSelections.querySelectorAll('input')

@@ -14,7 +14,6 @@ datatype: {
 class VuosiTable {
     element
     YearEvents
-    groups
 
     selectedMonth = 0
     monthFilter = false
@@ -28,16 +27,13 @@ class VuosiTable {
     firstEventToday = null //{element: null, data: null}
     dateToday = new Date()
 
-    constructor(element, {yearEvents, eventClick, deleteClick, monthSelect,groups}) {
+    constructor(element, {yearEvents, eventClick, deleteClick, monthSelect}) {
         this.element = this.#CheckIfDomElement(element)
         this.YearEvents = yearEvents
 
         this.eventClick = eventClick && typeof eventClick == 'function' ? eventClick : this.#eventClickFunction
         this.deleteClick = deleteClick && typeof deleteClick == 'function' ? deleteClick : this.#deleteEventFunction
         this.monthSelect = monthSelect && typeof monthSelect == 'function' ? monthSelect : this.#monthSelectEventFunction
-
-        this.groups = groups ? groups : []
-
     }
 
     #scrollToTodayEvent(){

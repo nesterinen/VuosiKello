@@ -139,7 +139,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         tableContainer,
         {
             yearEvents,
-            groups: php_args_vuosi.groups,
             deleteClick: async (id, series_id) => {
                 const dialogResult = await DeleteDialog(yearEvents.getEvent(id), id, series_id).catch((e) => {
                     console.log('dialog', e)

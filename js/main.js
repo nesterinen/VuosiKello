@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         <button class='testButton2'>Luo</button>
         <button class='downloadButton'>JSON</button>
+        <button class='csvDownloadButton'>CSV</button>
     `
 
 
@@ -307,6 +308,76 @@ document.addEventListener('DOMContentLoaded', async () => {
         link.click()
         link.remove()
     })
+
+    function csvGenerator(items){
+        // https://stackoverflow.com/questions/44396943/generate-a-csv-file-from-a-javascript-array-of-objects
+        let csv = ''
+
+        // Loop the array of objects
+        for(let row = 0; row < items.length; row++){
+            let keysAmount = Object.keys(items[row]).length
+            let keysCounter = 0
+
+            // If this is the first row, generate the headings
+            if(row === 0){
+
+            // Loop each property of the object
+            for(let key in items[row]){
+                // This is to not add a comma at the last cell
+                // The '\r\n' adds a new line
+                csv += key + (keysCounter+1 < keysAmount ? ',' : '\r\n' )
+                keysCounter++
+            }
+            } else {
+                for(let key in items[row]){
+                    if(key === 'id'){
+                        if(items[row][key] === 114){
+                            console.log('item', items[row]['start'].toUTCString())
+                        }
+                    }
+
+                    if(key === 'group'){
+                        csv += items[row][key][0] + (keysCounter+1 < keysAmount ? ',' : '\r\n' )
+                        keysCounter++
+                        continue
+                    }
+
+                    if(key === 'start' || key === 'end'){
+                        //csv += items[row][key].toUTCString() + (keysCounter+1 < keysAmount ? ',' : '\r\n' )
+                        csv += items[row][key] + (keysCounter+1 < keysAmount ? ',' : '\r\n' )
+                        keysCounter++
+                        continue
+                    }
+
+                    csv += items[row][key] + (keysCounter+1 < keysAmount ? ',' : '\r\n' )
+                    keysCounter++
+                }
+            }
+
+            keysCounter = 0
+        }
+
+        return csv
+    }
+
+    const csvDownloadButton = mainElement.querySelector('.csvDownloadButton')
+    csvDownloadButton.addEventListener('click', () => {
+        const csvData = csvGenerator(yearEvents.events)
+        console.log('csv:', csvData)
+        
+        /*
+        const link = document.createElement('a')
+        link.id = 'download-csv'
+        link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvData));
+        //link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(csvData));
+        link.setAttribute('download', 'Tapahtumat13.csv');
+        link.click()
+        link.remove()
+        */
+        
+    })
+
+    //csvDownloadButton.click()
 
     mainElement.scrollIntoView()
 })

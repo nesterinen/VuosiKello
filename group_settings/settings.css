@@ -1,0 +1,39 @@
+#vuosi_settings_container {
+    border: 1px solid black;
+    text-align: center;
+
+    justify-content: center;
+    align-content: center;
+
+    padding: 1em;
+}
+
+#vuosi_settings_container .groupCreatorContainer {
+    margin: 0.5em auto;
+    width: 30vw;
+    border: 1px solid black;
+    padding-bottom: 0.5em;
+}
+
+#vuosi_settings_container .groupsContainer {
+    margin: 0.5em auto;
+    width: 30vw;
+    border: 1px solid black;
+    padding-bottom: 0.5em;
+}
+
+.groupsContainer .sectionElement {
+    outline: 1px solid grey;
+    margin: 0.25em;
+    padding: 0.1em;
+
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+#vuosi_settings_container .otherContainer {
+    margin: 0.5em auto;
+    width: 30vw;
+    border: 1px solid black;
+    padding-bottom: 0.5em;
+}

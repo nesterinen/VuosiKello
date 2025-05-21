@@ -24,6 +24,19 @@ $vuosi_kello_series_table_name = 'vuosi_kello_series';
 global $vuosi_kello_div_id;
 $vuosi_kello_div_id = 'VuosiKelloElement';
 
+global $vuosi_kello_group_table_name;
+$vuosi_kello_group_table_name = 'vuosi_kello_groups';
+
+global $vuosi_kello_default_groups;
+$vuosi_kello_default_groups = [
+    'Hallinto',
+    'Esihenkilöt',
+    'Henkilöstö',
+    'Wörkkis',
+    'Asumispalvelut',
+    'Kouhu'
+];
+
 global $organization_groups;
 $organization_groups = [
     'Hallinto' => '#5baa00',
@@ -33,6 +46,9 @@ $organization_groups = [
     'Asumispalvelut' => '#5baa00',
     'Kouhu' => '#5baa00'
 ];
+
+//group settings admin page, group table initializations & etc..
+include(plugin_dir_path(__FILE__) . 'group_settings/settings.php');
 
 function get_vuosi_kello_table(): string{
     global $wpdb;

@@ -330,11 +330,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             } else {
                 for(let key in items[row]){
+                    /*
                     if(key === 'id'){
                         if(items[row][key] === 114){
                             console.log('item', items[row]['start'].toUTCString())
                         }
                     }
+                    */
 
                     if(key === 'group'){
                         csv += items[row][key][0] + (keysCounter+1 < keysAmount ? ',' : '\r\n' )

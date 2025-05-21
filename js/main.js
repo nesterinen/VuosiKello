@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const mainElement = document.getElementById(php_args_vuosi.element_name)
     if (mainElement === null) return
 
-    console.log('php_arg', php_args_vuosi.default_groups)
+    const organizationGroups = php_args_vuosi.actual_groups.length > 0 ? php_args_vuosi.actual_groups : php_args_vuosi.default_groups
 
     let selectedYear = new Date().getFullYear()
 
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const infoContainer = mainElement.querySelector('.infoContainer')
     const infoElement = new InfoElement(
         infoContainer,
-        php_args_vuosi.default_groups,
+        organizationGroups,
         {
             selectGroup: (group) => {
                 yearEvents.selectGroup(group)
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const testButton2 = mainElement.querySelector('.testButton2')
     testButton2.addEventListener('click', async () => {
-        const dialogResult = await EventCreationDialog(php_args_vuosi.default_groups).catch((e) => {
+        const dialogResult = await EventCreationDialog(organizationGroups).catch((e) => {
             console.log(e)
             return null
         })

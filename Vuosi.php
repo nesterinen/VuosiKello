@@ -37,16 +37,6 @@ $vuosi_kello_default_groups = [
     'Kouhu'
 ];
 
-global $organization_groups;
-$organization_groups = [
-    'Hallinto' => '#5baa00',
-    'Esihenkilöt' => '#5baa00',
-    'Henkilöstö' => '#5baa00',
-    'Wörkkis' => '#5baa00',
-    'Asumispalvelut' => '#5baa00',
-    'Kouhu' => '#5baa00'
-];
-
 //group settings admin page, group table initializations & etc..
 include(plugin_dir_path(__FILE__) . 'group_settings/settings.php');
 
@@ -122,8 +112,9 @@ function load_plugin(): void{
     }
 
     global $vuosi_kello_div_id;
-    global $organization_groups;
+
     global $vuosi_kello_default_groups;
+    $actual_groups = vuosi_kello_get_groups_array();
 
     $js_file_dir = plugin_dir_url(file: __FILE__) . 'js';
     wp_enqueue_style(handle: 'wsp-styles', src: plugin_dir_url(file: __FILE__) . 'css/main.css');
@@ -195,8 +186,8 @@ function load_plugin(): void{
         object_name: 'php_args_vuosi',
         l10n: [
             'ajax_url' => admin_url( 'admin-ajax.php' ),
-            'groups' => $organization_groups,
             'element_name' => $vuosi_kello_div_id,
+            'actual_groups' => $actual_groups,
             'default_groups' => $vuosi_kello_default_groups
         ]
     );

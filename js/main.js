@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const testButton2 = mainElement.querySelector('.testButton2')
     testButton2.addEventListener('click', async () => {
-        const dialogResult = await EventCreationDialog(php_args_vuosi.groups).catch((e) => {
+        const dialogResult = await EventCreationDialog(php_args_vuosi.default_groups).catch((e) => {
             console.log(e)
             return null
         })

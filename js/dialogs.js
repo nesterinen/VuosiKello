@@ -312,7 +312,8 @@ async function EventCreationDialog(groups) {
         })
 
         const groupSelections = groupSelector.querySelector('.gcsSelections')
-        Object.keys(groups).map(group => {
+
+        function addSelection(group){
             const selectBoxDiv = document.createElement('div')
             selectBoxDiv.innerHTML = `
                 <label for="ec#${group}">
@@ -320,7 +321,18 @@ async function EventCreationDialog(groups) {
             `
 
             groupSelections.appendChild(selectBoxDiv)
-        })
+        }
+
+        // groups used to be {group: color, group2: color2...} is now ['group1', 'group3', ...]
+        if(groups instanceof Array){
+            groups.map(group => {
+                addSelection(group)
+            })
+        } else {
+            Object.keys(groups).map(group => {
+                addSelection(group)
+            })
+        }
 
         groupSelections.addEventListener('change', (e) => {
             const allCheckBoxElements = groupSelections.querySelectorAll('input')

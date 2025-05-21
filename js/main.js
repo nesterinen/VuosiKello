@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
 
         <button class='testButton2'>Luo</button>
-        <button class='downloadButton'>Lataa</button>
+        <button class='downloadButton'>JSON</button>
     `
 
 

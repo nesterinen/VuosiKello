@@ -32,14 +32,15 @@ Misc:
 
 #PALAVERI->
 WORDPRESS:
-    - admin settings for adding/deleting groups
+    #- admin settings for adding/deleting groups #DONE
     - backups for db
 
 VUOSIKALENTERI:
     - outlook ics, printing csv
     #- dialog option for series on specific day every month #DONE
     #- default priority 5->3 #DONE
-    #- <- VUODET -> selector #DONE
+    #- <- VUODET -> selector #
+    - way filter when group no longer exists...
 
 #PALAVERI<-
 
@@ -47,7 +48,7 @@ infoContainer:
     - todo
 
 yearCircle:
-    - something interesting to the center?
+    #- something interesting to the center? #done?? <-prev year next->
     - events are sorted by date then by priority, but there needs to be a third step to push upcoming events to the top??
 
 yearTable:
@@ -58,7 +59,7 @@ dialogs:
         -dialog when loading something? should this even be dialog?
 
     creation:
-        -checkbox drop down needs to be unselected when clicking anything else.
+        #-checkbox drop down needs to be unselected when clicking anything else. #done
 
 
 CRUDS:

@@ -365,17 +365,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     const csvDownloadButton = mainElement.querySelector('.csvDownloadButton')
     csvDownloadButton.addEventListener('click', () => {
         const csvData = csvGenerator(yearEvents.events)
-        console.log('csv:', csvData)
+
+        //https://stackoverflow.com/questions/42462764/javascript-export-csv-encoding-utf-8-issue
+
+        // if seperator is added byteOrderMark does not work....
+        const byteOrderMark = "\uFEFF"
+        const seperator = "sep=,\r\n"
         
-        /*
         const link = document.createElement('a')
         link.id = 'download-csv'
-        link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvData));
+        link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(byteOrderMark + seperator + csvData));
         //link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(csvData));
-        link.setAttribute('download', 'Tapahtumat13.csv');
+        link.setAttribute('download', 'tapahtumat2.csv');
         link.click()
         link.remove()
-        */
+        
         
     })
 

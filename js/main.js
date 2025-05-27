@@ -296,6 +296,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const downloadButton = mainElement.querySelector('.downloadButton')
     downloadButton.addEventListener('click', () => {
+        if(yearEvents.events.length === 0){
+            alert('Ei ladattavia tapahtumia.')
+            return
+        }
+        
         const asdasd = JSON.stringify(yearEvents.events, null, " ")
 
         let fileToSave = new Blob([asdasd] ,{
@@ -303,7 +308,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         })
 
         const link = document.createElement("a")
-        link.download = 'data.json'
+        link.download = `Tapahtumat-${selectedYear}.json`
         link.href = window.URL.createObjectURL(fileToSave)
         link.click()
         link.remove()
@@ -318,103 +323,84 @@ document.addEventListener('DOMContentLoaded', async () => {
         \t is a symbol for tab
         \r is for 'return'
         */
-        // Loop the array of objects
+
+        //generate headings
+        let keysAmount = Object.keys(items[0]).length
+        let keysCounter = 0
+
+        for(let key in items[0]){
+            // This is to not add a comma at the last cell
+            // The '\r\n' adds a new line
+            let translatedKey = ''
+
+            switch (key) {
+                case 'id':
+                    translatedKey = 'Tunnus'; break;
+                case 'series_id':
+                    translatedKey = 'Sarjatunnus'; break;
+                case 'priority':
+                    translatedKey = 'Prioriteetti'; break;
+                case 'start':
+                    //translatedKey = 'Alku päivämäärä'; break;
+                    translatedKey = 'päivämäärä'; break;
+                case 'end':
+                    //translatedKey = 'Loppu päivämäärä'; break;
+                    translatedKey = 'kello'; break;
+                case 'group':
+                    translatedKey = 'Ryhmät'; break;
+                case 'title':
+                    translatedKey = 'Otsikko'; break;
+                case 'content':
+                    translatedKey = 'Sisältö'; break;
+                case 'reservor':
+                    translatedKey = 'Varaaja'; break;
+                default:
+                    translatedKey = key;
+            }
+
+            csv += translatedKey + (keysCounter+1 < keysAmount ? seperator : delimiter )
+            //csv += key + (keysCounter+1 < keysAmount ? ',' : '\r\n' )
+            keysCounter++
+        }
+
+        keysCounter = 0
+
+        //rest of the data
         for(let row = 0; row < items.length; row++){
-            let keysAmount = Object.keys(items[row]).length
-            let keysCounter = 0
-
-            // If this is the first row, generate the headings
-            if(row === 0){
-
-            // Loop each property of the object
             for(let key in items[row]){
-                // This is to not add a comma at the last cell
-                // The '\r\n' adds a new line
-                let translatedKey = ''
-
-                switch (key) {
-                    case 'id':
-                        translatedKey = 'Tunnus'; break;
-                    case 'series_id':
-                        translatedKey = 'Sarjatunnus'; break;
-                    case 'priority':
-                        translatedKey = 'Prioriteetti'; break;
-                    case 'start':
-                        //translatedKey = 'Alku päivämäärä'; break;
-                        translatedKey = 'päivämäärä'; break;
-                    case 'end':
-                        //translatedKey = 'Loppu päivämäärä'; break;
-                        translatedKey = 'kello'; break;
-                    case 'group':
-                        translatedKey = 'Ryhmät'; break;
-                    case 'title':
-                        translatedKey = 'Otsikko'; break;
-                    case 'content':
-                        translatedKey = 'Sisältö'; break;
-                    case 'reservor':
-                        translatedKey = 'Varaaja'; break;
-                    default:
-                        translatedKey = key;
+                if (key === 'series_id'){
+                    if(items[row][key] === null){
+                        csv += '' + (keysCounter+1 < keysAmount ? seperator : delimiter )
+                        keysCounter++
+                        continue
+                    }
                 }
 
-                csv += translatedKey + (keysCounter+1 < keysAmount ? seperator : delimiter )
-                //csv += key + (keysCounter+1 < keysAmount ? ',' : '\r\n' )
+                if(key === 'group'){
+                    if(seperator !== ','){
+                        csv += items[row][key] + (keysCounter+1 < keysAmount ? seperator : delimiter)
+                    } else {
+                        csv += items[row][key].toString().replaceAll(',', ' ') + (keysCounter+1 < keysAmount ? seperator : delimiter )
+                    }
+                    keysCounter++
+                    continue
+                }
+
+                if(key === 'start'){
+                    csv += items[row][key].toLocaleDateString('fi-FI') + (keysCounter+1 < keysAmount ? seperator : delimiter )
+                    keysCounter++
+                    continue
+                }
+
+                if(key === 'end'){
+                    csv += `${items[row]['start'].toLocaleTimeString('fi-FI').slice(0, -3)} - ${items[row]['end'].toLocaleTimeString('fi-FI').slice(0, -3)}`  + (keysCounter+1 < keysAmount ? seperator : delimiter)
+                    keysCounter++
+                    continue
+                }
+
+                csv += items[row][key] + (keysCounter+1 < keysAmount ? seperator : delimiter )
                 keysCounter++
             }
-            } else {
-                for(let key in items[row]){
-                    if (key === 'series_id'){
-                        if(items[row][key] === null){
-                            csv += '' + (keysCounter+1 < keysAmount ? seperator : delimiter )
-                            keysCounter++
-                            continue
-                        }
-                    }
-
-                    if(key === 'group'){
-                        if(seperator !== ','){
-                            csv += items[row][key] + (keysCounter+1 < keysAmount ? seperator : delimiter)
-                        } else {
-                            csv += items[row][key].toString().replaceAll(',', ' ') + (keysCounter+1 < keysAmount ? seperator : delimiter )
-                        }
-                        keysCounter++
-                        continue
-                    }
-
-                    if(key === 'start'){
-                        csv += items[row][key].toLocaleDateString('fi-FI') + (keysCounter+1 < keysAmount ? seperator : delimiter )
-                        keysCounter++
-                        continue
-                    }
-
-                    if(key === 'end'){
-                        csv += `${items[row]['start'].toLocaleTimeString('fi-FI').slice(0, -3)} - ${items[row]['end'].toLocaleTimeString('fi-FI').slice(0, -3)}`  + (keysCounter+1 < keysAmount ? seperator : delimiter)
-                        keysCounter++
-                        continue
-                    }
-
-                    /*
-                    if(key === 'start' || key === 'end'){
-                        csv += items[row][key].toLocaleString('fi-FI', {timeZone: 'UTC'}) + (keysCounter+1 < keysAmount ? seperator : delimiter )
-                        keysCounter++
-                        continue
-                    }
-                    */
-
-                    /*
-                    if(key === 'start' || key === 'end'){
-                        //csv += items[row][key].toUTCString() + (keysCounter+1 < keysAmount ? ',' : '\r\n' )
-                        csv += items[row][key] + (keysCounter+1 < keysAmount ? seperator : delimiter )
-                        keysCounter++
-                        continue
-                    }
-                    */
-
-                    csv += items[row][key] + (keysCounter+1 < keysAmount ? seperator : delimiter )
-                    keysCounter++
-                }
-            }
-
             keysCounter = 0
         }
 
@@ -423,6 +409,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const csvDownloadButton = mainElement.querySelector('.csvDownloadButton')
     csvDownloadButton.addEventListener('click', () => {
+        if(yearEvents.events.length === 0){
+            alert('Ei ladattavia tapahtumia.')
+            return
+        }
+
         const csvData = csvGenerator(yearEvents.events, ';')
 
         const byteOrderMark = "\uFEFF"

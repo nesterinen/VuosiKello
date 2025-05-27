@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <button class='testButton2'>Luo</button>
         <button class='downloadButton'>JSON</button>
         <button class='csvDownloadButton'>CSV</button>
+        <button class='icsDownloadButton'>ICS</button>
     `
 
 
@@ -300,7 +301,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             alert('Ei ladattavia tapahtumia.')
             return
         }
-        
+
         const asdasd = JSON.stringify(yearEvents.events, null, " ")
 
         let fileToSave = new Blob([asdasd] ,{
@@ -427,6 +428,45 @@ document.addEventListener('DOMContentLoaded', async () => {
         link.click()
         link.remove()
         
+    })
+
+    const icsDownloadButton = mainElement.querySelector('.icsDownloadButton')
+    icsDownloadButton.addEventListener('click', () => {
+        if(yearEvents.events.length === 0){
+            alert('Ei ladattavia tapahtumia.')
+            return
+        }
+
+        const data = 
+             'BEGIN:VCALENDAR\n'
+            +'VERSION:2.0\n'
+            +'PRODID:Calendar\n'
+            +'CALSCALE:GREGORIAN\n'
+            +'METHOD:PUBLISH\n'
+            +'BEGIN:VTIMEZONE\n'
+            +'TZID:America/Los_Angeles\n'
+            +'END:VTIMEZONE\n'
+            +'BEGIN:VEVENT\n'
+            +'SUMMARY:Example Event\n'
+            +'UID:@Default\n'
+            +'SEQUENCE:0\n'
+            +'STATUS:CONFIRMED\n'
+            +'TRANSP:TRANSPARENT\n'
+            +'DTSTART;TZID=America/Los_Angeles:20200101T180000\n'
+            +'DTEND;TZID=America/Los_Angeles:20200105T030000\n'
+            +'DTSTAMP:20250527T123400\n'
+            +'LOCATION:Washington State Convention Center\n705 Pike St, Seattle, WA\n'
+            +'DESCRIPTION:This is the event description\n'
+            +'END:VEVENT\n'
+            +'END:VCALENDAR\n'
+        
+        const link = document.createElement('a')
+        link.id = 'download-ics'
+        
+        link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+        link.setAttribute('download', `Tapahtumat-${selectedYear}.ics`);
+        link.click()
+        link.remove()
     })
 
     mainElement.scrollIntoView()

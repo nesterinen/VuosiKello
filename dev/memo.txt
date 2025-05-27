@@ -36,7 +36,7 @@ WORDPRESS:
     - backups for db
 
 VUOSIKALENTERI:
-    - outlook ics, printing csv
+    - outlook ics, printing csv # csv DONE
     #- dialog option for series on specific day every month #DONE
     #- default priority 5->3 #DONE
     #- <- VUODET -> selector #

@@ -309,10 +309,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         link.remove()
     })
 
-    function csvGenerator(items){
+    function csvGenerator(items, seperator=',', delimiter='\r\n'){
         // https://stackoverflow.com/questions/44396943/generate-a-csv-file-from-a-javascript-array-of-objects
         let csv = ''
 
+        /*
+        \n is a symbol for new line
+        \t is a symbol for tab
+        \r is for 'return'
+        */
         // Loop the array of objects
         for(let row = 0; row < items.length; row++){
             let keysAmount = Object.keys(items[row]).length
@@ -325,33 +330,87 @@ document.addEventListener('DOMContentLoaded', async () => {
             for(let key in items[row]){
                 // This is to not add a comma at the last cell
                 // The '\r\n' adds a new line
-                csv += key + (keysCounter+1 < keysAmount ? ',' : '\r\n' )
+                let translatedKey = ''
+
+                switch (key) {
+                    case 'id':
+                        translatedKey = 'Tunnus'; break;
+                    case 'series_id':
+                        translatedKey = 'Sarjatunnus'; break;
+                    case 'priority':
+                        translatedKey = 'Prioriteetti'; break;
+                    case 'start':
+                        //translatedKey = 'Alku päivämäärä'; break;
+                        translatedKey = 'päivämäärä'; break;
+                    case 'end':
+                        //translatedKey = 'Loppu päivämäärä'; break;
+                        translatedKey = 'kello'; break;
+                    case 'group':
+                        translatedKey = 'Ryhmät'; break;
+                    case 'title':
+                        translatedKey = 'Otsikko'; break;
+                    case 'content':
+                        translatedKey = 'Sisältö'; break;
+                    case 'reservor':
+                        translatedKey = 'Varaaja'; break;
+                    default:
+                        translatedKey = key;
+                }
+
+                csv += translatedKey + (keysCounter+1 < keysAmount ? seperator : delimiter )
+                //csv += key + (keysCounter+1 < keysAmount ? ',' : '\r\n' )
                 keysCounter++
             }
             } else {
                 for(let key in items[row]){
-                    /*
-                    if(key === 'id'){
-                        if(items[row][key] === 114){
-                            console.log('item', items[row]['start'].toUTCString())
+                    if (key === 'series_id'){
+                        if(items[row][key] === null){
+                            csv += '' + (keysCounter+1 < keysAmount ? seperator : delimiter )
+                            keysCounter++
+                            continue
                         }
+                    }
+
+                    if(key === 'group'){
+                        if(seperator !== ','){
+                            csv += items[row][key] + (keysCounter+1 < keysAmount ? seperator : delimiter)
+                        } else {
+                            csv += items[row][key].toString().replaceAll(',', ' ') + (keysCounter+1 < keysAmount ? seperator : delimiter )
+                        }
+                        keysCounter++
+                        continue
+                    }
+
+                    if(key === 'start'){
+                        csv += items[row][key].toLocaleDateString('fi-FI') + (keysCounter+1 < keysAmount ? seperator : delimiter )
+                        keysCounter++
+                        continue
+                    }
+
+                    if(key === 'end'){
+                        csv += `${items[row]['start'].toLocaleTimeString('fi-FI').slice(0, -3)} - ${items[row]['end'].toLocaleTimeString('fi-FI').slice(0, -3)}`  + (keysCounter+1 < keysAmount ? seperator : delimiter)
+                        keysCounter++
+                        continue
+                    }
+
+                    /*
+                    if(key === 'start' || key === 'end'){
+                        csv += items[row][key].toLocaleString('fi-FI', {timeZone: 'UTC'}) + (keysCounter+1 < keysAmount ? seperator : delimiter )
+                        keysCounter++
+                        continue
                     }
                     */
 
-                    if(key === 'group'){
-                        csv += items[row][key][0] + (keysCounter+1 < keysAmount ? ',' : '\r\n' )
-                        keysCounter++
-                        continue
-                    }
-
+                    /*
                     if(key === 'start' || key === 'end'){
                         //csv += items[row][key].toUTCString() + (keysCounter+1 < keysAmount ? ',' : '\r\n' )
-                        csv += items[row][key] + (keysCounter+1 < keysAmount ? ',' : '\r\n' )
+                        csv += items[row][key] + (keysCounter+1 < keysAmount ? seperator : delimiter )
                         keysCounter++
                         continue
                     }
+                    */
 
-                    csv += items[row][key] + (keysCounter+1 < keysAmount ? ',' : '\r\n' )
+                    csv += items[row][key] + (keysCounter+1 < keysAmount ? seperator : delimiter )
                     keysCounter++
                 }
             }
@@ -364,26 +423,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const csvDownloadButton = mainElement.querySelector('.csvDownloadButton')
     csvDownloadButton.addEventListener('click', () => {
-        const csvData = csvGenerator(yearEvents.events)
+        const csvData = csvGenerator(yearEvents.events, ';')
 
-        //https://stackoverflow.com/questions/42462764/javascript-export-csv-encoding-utf-8-issue
-
-        // if seperator is added byteOrderMark does not work....
         const byteOrderMark = "\uFEFF"
-        const seperator = "sep=,\r\n"
+        
         
         const link = document.createElement('a')
         link.id = 'download-csv'
-        link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(byteOrderMark + seperator + csvData));
-        //link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(csvData));
-        link.setAttribute('download', 'tapahtumat2.csv');
+        
+        link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(byteOrderMark + csvData));
+        link.setAttribute('download', `Tapahtumat-${selectedYear}.csv`);
         link.click()
         link.remove()
         
-        
     })
-
-    //csvDownloadButton.click()
 
     mainElement.scrollIntoView()
 })

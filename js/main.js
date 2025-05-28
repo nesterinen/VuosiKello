@@ -433,24 +433,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     function icsGenerator(events){
         function dateToStr(date){
             return date.toISOString()       //025-01-03T09:00:00.000Z
-                       //.slice(0, -5)        //2025-01-03T09:00:00
+                       .slice(0, -5)        //2025-01-03T09:00:00
+                       //.replaceAll('.', '') //2025-01-03T09:00:00
                        .replaceAll('-', '') //0250103T09:00:00
                        .replaceAll(':', '') //20250103T090000
         }
 
         const dateNow = dateToStr(new Date())
+
         const icsHeader = 
              'BEGIN:VCALENDAR\n'
             +'VERSION:2.0\n'
             +'PRODID:VuosiKello\n'
             +'CALSCALE:GREGORIAN\n'
             +'METHOD:PUBLISH\n'
+            +'X-WR-CALNAME:VuosiKello\n'
+            +'X-WR-TIMEZONE:Europe/Helsinki\n'
+            +'X-WR-CALDESC:VuosiKellon tapahtumat kalenteri muodossa.\n'
+
+
+        const icsTimeZone = 
+             'BEGIN:VTIMEZONE\n'
+            +'TZID:Europe/Helsinki\n'
+            +'END:VTIMEZONE\n'
         
         const icsFooter = 'END:VCALENDAR\n'
 
         let icsEventsData = ''
 
         /*
+        const example = events[51]
         const icsEvent =  
              'BEGIN:VEVENT\n'
             +`SUMMARY:${example.title}\n`
@@ -464,6 +476,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             +`LOCATION:${example.group}\n`
             +`DESCRIPTION:${example.content}\n`
             +'END:VEVENT\n'
+        console.log('event', icsEvent)
         */
         
         for (const event of events) {
@@ -474,15 +487,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 +'SEQUENCE:0\n'
                 +'STATUS:CONFIRMED\n'
                 +'TRANSP:TRANSPARENT\n'
-                +`DTSTART:${dateToStr(event.start)}\n`
-                +`DTEND:${dateToStr(event.end)}\n`
+                +`DTSTART;TZID=Europe/Helsinki:${dateToStr(event.start)}\n`
+                +`DTEND;TZID=Europe/Helsinki:${dateToStr(event.end)}\n`
                 +`DTSTAMP:${dateNow}\n`
                 +`LOCATION:${event.group}\n`
                 +`DESCRIPTION:${event.content}\n`
                 +'END:VEVENT\n'
         }
 
-        return icsHeader + icsEventsData + icsFooter
+        return icsHeader + icsTimeZone + icsEventsData + icsFooter
     }
 
     const icsDownloadButton = mainElement.querySelector('.icsDownloadButton')

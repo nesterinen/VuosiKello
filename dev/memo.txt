@@ -44,7 +44,7 @@ VUOSIKALENTERI:
 
 #PALAVERI<-
 
-REMOVE TIMEZONES!!!!
+#REMOVE TIMEZONES!!!! # done?
 
 infoContainer:
     - todo

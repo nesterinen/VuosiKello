@@ -388,13 +388,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
 
                 if(key === 'start'){
-                    csv += items[row][key].toLocaleDateString('fi-FI') + (keysCounter+1 < keysAmount ? seperator : delimiter )
+                    csv += items[row][key].toLocaleDateString('fi-FI', {timeZone: 'UTC'}) + (keysCounter+1 < keysAmount ? seperator : delimiter )
                     keysCounter++
                     continue
                 }
 
                 if(key === 'end'){
-                    csv += `${items[row]['start'].toLocaleTimeString('fi-FI').slice(0, -3)} - ${items[row]['end'].toLocaleTimeString('fi-FI').slice(0, -3)}`  + (keysCounter+1 < keysAmount ? seperator : delimiter)
+                    csv += `${items[row]['start'].toLocaleTimeString('fi-FI', {timeZone: 'UTC'}).slice(0, -3)} - ${items[row]['end'].toLocaleTimeString('fi-FI', {timeZone: 'UTC'}).slice(0, -3)}`  + (keysCounter+1 < keysAmount ? seperator : delimiter)
                     keysCounter++
                     continue
                 }
@@ -465,7 +465,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             +`DESCRIPTION:${example.content}\n`
             +'END:VEVENT\n'
         */
-
+        
         for (const event of events) {
             icsEventsData += 
                  'BEGIN:VEVENT\n'
@@ -520,7 +520,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             +'END:VEVENT\n'
             +'END:VCALENDAR\n'
         */
-
         
         const link = document.createElement('a')
         link.id = 'download-ics'

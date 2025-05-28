@@ -133,8 +133,8 @@ class InfoElement {
     }
 
     #dateToString(dateObj){
-        //let [date, time] = dateObj.toISOString().split('T')
-        let [date, time] = new Date(dateObj - this.#dateToday.getTimezoneOffset()*60_000).toISOString().split('T')
+        let [date, time] = dateObj.toISOString().split('T')
+        //let [date, time] = new Date(dateObj - this.#dateToday.getTimezoneOffset()*60_000).toISOString().split('T')
         date = date.split('-').reverse().join('.')
         time = time.split(':').slice(0, 2).join(':')
         return [date, time]        

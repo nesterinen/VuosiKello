@@ -135,8 +135,8 @@ async function EventCreationDialog(groups) {
                     newDateEnd.setHours(parseInt(eHours))
                     newDateEnd.setMinutes(parseInt(eMins))
                     arrayOfDates.push({
-                        start: newDate.toISOString(), // dateNoTimezone(newDate),
-                        end: newDateEnd.toISOString() //dateNoTimezone(newDateEnd)
+                        start: dateNoTimezone(newDate), //newDate.toISOString(), // dateNoTimezone(newDate),
+                        end: dateNoTimezone(newDateEnd) //newDateEnd.toISOString() //dateNoTimezone(newDateEnd)
                     })
                 }
             }
@@ -457,8 +457,8 @@ async function EventCreationDialog(groups) {
                 content,
                 priority,
                 reservor,
-                start: new Date(`${startDate}T${clock_start}`).toISOString(), //dateNoTimezone(new Date(`${startDate}T${clock_start}`)),
-                end: new Date(`${startDate}T${clock_end}`).toISOString(), //dateNoTimezone(new Date(`${startDate}T${clock_end}`)),
+                start: dateNoTimezone(new Date(`${startDate}T${clock_start}`)),//new Date(`${startDate}T${clock_start}`).toISOString(), //dateNoTimezone(new Date(`${startDate}T${clock_start}`)),
+                end: dateNoTimezone(new Date(`${startDate}T${clock_end}`)),//new Date(`${startDate}T${clock_end}`).toISOString(), //dateNoTimezone(new Date(`${startDate}T${clock_end}`)),
                 group: selectedGroupsArray,
                 arrayOfDates: null
             }

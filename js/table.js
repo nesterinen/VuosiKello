@@ -253,11 +253,10 @@ class VuosiTable {
         eventElement.classList.add('eventElement')
         eventElement.id = yearEvent.id
 
-        //let datstr = new Date(mydat - mydat.getTimezoneOffset()*60_000).toISOString()
-        let [year, clockStart] = new Date(yearEvent.start - this.dateToday.getTimezoneOffset()*60_000).toISOString().split('T')
-        let [, clockEnd] = new Date(yearEvent.end - this.dateToday.getTimezoneOffset()*60_000).toISOString().split('T')
-        //let [year, clockStart] = yearEvent.start.toISOString().split('T')
-        //let [, clockEnd] = yearEvent.end.toISOString().split('T')
+        //let [year, clockStart] = new Date(yearEvent.start - this.dateToday.getTimezoneOffset()*60_000).toISOString().split('T')
+        //let [, clockEnd] = new Date(yearEvent.end - this.dateToday.getTimezoneOffset()*60_000).toISOString().split('T')
+        let [year, clockStart] = yearEvent.start.toISOString().split('T')
+        let [, clockEnd] = yearEvent.end.toISOString().split('T')
 
         year = year.split('-').reverse().join('.')
         clockStart = clockStart.slice(0,5)

@@ -42,13 +42,16 @@ class YearEvents {
 
         for (const obj of eventsJsonArray) {
             if('id' in obj && 'start' in obj && 'group' in obj && 'title' in obj && 'content' in obj){
+                //if (obj.id === 26) console.log('obj', obj, 'todate', new Date(obj.start + '.000Z'))
                 this.events.push(
                     new YearEvent(
                         obj.id,
                         obj.series_id,
                         obj.priority,
-                        this.#addTimeZone(obj.start), //new Date(obj.start),
-                        this.#addTimeZone(obj.end), //new Date(obj.end),
+                        new Date(obj.start + '.000Z'),
+                        new Date(obj.end + '.000Z'),
+                        //this.#addTimeZone(obj.start), //new Date(obj.start),
+                        //this.#addTimeZone(obj.end), //new Date(obj.end),
                         obj.group, 
                         obj.title, 
                         obj.content,

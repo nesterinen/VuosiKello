@@ -82,8 +82,8 @@ async function EventCreationDialog(groups) {
                     newDateEnd.setHours(parseInt(eHours))
                     newDateEnd.setMinutes(parseInt(eMins))
                     arrayOfDates.push({
-                        start: newDate.toISOString(), // dateNoTimezone(newDate),
-                        end: newDateEnd.toISOString() //dateNoTimezone(newDateEnd)
+                        start: dateNoTimezone(newDate), //newDate.toISOString(), // dateNoTimezone(newDate),
+                        end: dateNoTimezone(newDateEnd)//newDateEnd.toISOString() //dateNoTimezone(newDateEnd)
                     })
                 }
             }
@@ -692,7 +692,7 @@ function InfoDialog(event, id, series_id, {deleteClick, seriesDeleteClick, downl
             </div>
         </div>
 
-        <button class='downloadButton baseButton'>lataa .ics</button>
+        <button class='downloadButton baseButton'>lataa tapahtuma tiedosto</button>
         <button class='deleteButton baseButton baseRed'>poista</button>
     `
 

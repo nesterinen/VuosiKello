@@ -21,14 +21,14 @@ UX Functionality, CRUD.
     -> Update individuals, and series..
 
 Misc:
-    save and download events as json, pdf & excel?
+    save and download events as json, pdf & excel? -done
     automatic backups?
 
 
 - groupfilter checkboxes -done
-- click on yearCircle month opens info circle? -todo?
+- click on yearCircle month opens info circle? -todo? -not going to be implemented
 - priority colors -kinda done
-- deadline nearing colors -table selects upcoming.
+- deadline nearing colors -table selects upcoming. -not going to be implemented
 
 #PALAVERI->
 WORDPRESS:
@@ -36,7 +36,7 @@ WORDPRESS:
     - backups for db
 
 VUOSIKALENTERI:
-    - outlook ics, printing csv # csv DONE, ics kinda done (ICS FEED??? host blabla.com/icsfile.ics at local network, does ics feed work???)
+    #- outlook ics, printing csv # csv DONE, ics kinda done (ICS FEED??? host blabla.com/icsfile.ics at local network, does ics feed work???)
     #- dialog option for series on specific day every month #DONE
     #- default priority 5->3 #DONE
     #- <- VUODET -> selector #

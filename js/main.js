@@ -142,7 +142,61 @@ document.addEventListener('DOMContentLoaded', async () => {
         {
             yearEvents,
             deleteClick: async (id, series_id) => {
-                const dialogResult = await DeleteDialog(yearEvents.getEvent(id), id, series_id).catch((e) => {
+                InfoDialog(yearEvents.getEvent(id), id, series_id, {
+                    downloadClick: () => {
+                        downloadICS([yearEvents.getEvent(id)])
+                    },
+
+                    deleteClick: () => {
+                        jQuery.ajax({
+                            type: "POST",
+                            dataType: "json",
+                            url: php_args_vuosi.ajax_url,
+                            data: {
+                                action: "vuosi_kello_delete_one",
+                                id: id
+                            },
+                            success: (response) => {
+                                yearEvents.deleteEvent(id)
+                            },
+                            error: (jqXHR) => {
+                                if(jqXHR.status&&jqXHR.status==200){
+                                    console.log('err', jqXHR);
+                                } else {
+                                    console.log('errorResponse:', jqXHR.responseText)
+                                }
+                            }
+                        }).catch((error) => {
+                            alert(`Virhe: ${error.statusText} (${error.status})`)
+                        })
+                    },
+
+                    seriesDeleteClick: () => {
+                        jQuery.ajax({
+                            type: "POST",
+                            dataType: "json",
+                            url: php_args_vuosi.ajax_url,
+                            data: {
+                                action: "vuosi_kello_delete_by_series",
+                                series_id
+                            },
+                            success: (response) => {
+                                yearEvents.deleteEventBySeries(series_id)
+                            },
+                            error: (jqXHR) => {
+                                if(jqXHR.status&&jqXHR.status==200){
+                                    console.log('err', jqXHR);
+                                } else {
+                                    console.log('errorResponse:', jqXHR.responseText)
+                                }
+                            }
+                        }).catch((error) => {
+                            alert(`Virhe: ${error.statusText} (${error.status})`)
+                        })
+                    }
+                })
+                /*
+                const dialogResult = await InfoDialog(yearEvents.getEvent(id), id, series_id).catch((e) => {
                     console.log('dialog', e)
                     return null
                 })
@@ -194,6 +248,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         alert(`Virhe: ${error.statusText} (${error.status})`)
                     })
                 }
+                */
             },
             eventClick: (eventObj) => {
                 yearEvents.selectEvent(eventObj.data)
@@ -498,49 +553,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         return icsHeader + icsTimeZone + icsEventsData + icsFooter
     }
 
-    const icsDownloadButton = mainElement.querySelector('.icsDownloadButton')
-    icsDownloadButton.addEventListener('click', () => {
-        if(yearEvents.events.length === 0){
+    function downloadICS(events){
+        if(events.length === 0 ||!Array.isArray(events)){
             alert('Ei ladattavia tapahtumia.')
             return
         }
 
-        const data = icsGenerator(yearEvents.events)
+        const fileName = events.length === 1 ? `Tapahtuma-${events[0].title}-${events[0].id}.ics` : `Tapahtumat-${selectedYear}.ics`
 
-        console.log('dat', data)
-
-        /*
-        const data = 
-             'BEGIN:VCALENDAR\n'
-            +'VERSION:2.0\n'
-            +'PRODID:Calendar\n'
-            +'CALSCALE:GREGORIAN\n'
-            +'METHOD:PUBLISH\n'
-            +'BEGIN:VTIMEZONE\n'
-            +'TZID:America/Los_Angeles\n'
-            +'END:VTIMEZONE\n'
-            +'BEGIN:VEVENT\n'
-            +'SUMMARY:Example Event\n'
-            +'UID:@Default\n'
-            +'SEQUENCE:0\n'
-            +'STATUS:CONFIRMED\n'
-            +'TRANSP:TRANSPARENT\n'
-            +'DTSTART;TZID=America/Los_Angeles:20200101T180000\n'
-            +'DTEND;TZID=America/Los_Angeles:20200105T030000\n'
-            +'DTSTAMP:20250527T123400\n'
-            +'LOCATION:Washington State Convention Center\n705 Pike St, Seattle, WA\n'
-            +'DESCRIPTION:This is the event description\n'
-            +'END:VEVENT\n'
-            +'END:VCALENDAR\n'
-        */
+        const data = icsGenerator(events)
         
         const link = document.createElement('a')
         link.id = 'download-ics'
         
         link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
-        link.setAttribute('download', `Tapahtumat-${selectedYear}.ics`);
+        link.setAttribute('download', fileName);
         link.click()
         link.remove()
+    }
+
+    const icsDownloadButton = mainElement.querySelector('.icsDownloadButton')
+    icsDownloadButton.addEventListener('click', () => {
+        downloadICS(yearEvents.events)
     })
 
     mainElement.scrollIntoView()

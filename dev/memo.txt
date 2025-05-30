@@ -36,7 +36,7 @@ WORDPRESS:
     - backups for db
 
 VUOSIKALENTERI:
-    - outlook ics, printing csv # csv DONE
+    - outlook ics, printing csv # csv DONE, ics kinda done (ICS FEED??? host blabla.com/icsfile.ics at local network, does ics feed work???)
     #- dialog option for series on specific day every month #DONE
     #- default priority 5->3 #DONE
     #- <- VUODET -> selector #

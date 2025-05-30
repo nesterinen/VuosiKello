@@ -2,7 +2,8 @@
     width: 15vw;
     margin-right: 0.25em;
     width: 21em;
-    max-height: 96vh;
+    /*max-height: 96vh;*/
+    height: 96vh;
     min-width: 19em;
 
     border: 1px solid black;

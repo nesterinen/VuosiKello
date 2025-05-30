@@ -62,11 +62,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <p>tableContainer</p>
             </div>
         </div>
-
-        <button class='testButton2'>Luo</button>
-        <button class='downloadButton'>JSON</button>
-        <button class='csvDownloadButton'>CSV</button>
-        <button class='icsDownloadButton'>ICS</button>
     `
 
 
@@ -195,66 +190,24 @@ document.addEventListener('DOMContentLoaded', async () => {
                         })
                     }
                 })
-                /*
-                const dialogResult = await InfoDialog(yearEvents.getEvent(id), id, series_id).catch((e) => {
-                    console.log('dialog', e)
-                    return null
-                })
-
-                if(!dialogResult) return
-                
-                if(dialogResult.series_id){
-                    jQuery.ajax({
-                        type: "POST",
-                        dataType: "json",
-                        url: php_args_vuosi.ajax_url,
-                        data: {
-                            action: "vuosi_kello_delete_by_series",
-                            series_id
-                        },
-                        success: (response) => {
-                            yearEvents.deleteEventBySeries(series_id)
-                        },
-                        error: (jqXHR) => {
-                            if(jqXHR.status&&jqXHR.status==200){
-                                console.log('err', jqXHR);
-                            } else {
-                                console.log('errorResponse:', jqXHR.responseText)
-                              }
-                        }
-                    }).catch((error) => {
-                        alert(`Virhe: ${error.statusText} (${error.status})`)
-                    })
-                } else { // delete individual
-                    jQuery.ajax({
-                        type: "POST",
-                        dataType: "json",
-                        url: php_args_vuosi.ajax_url,
-                        data: {
-                            action: "vuosi_kello_delete_one",
-                            id: id
-                        },
-                        success: (response) => {
-                            yearEvents.deleteEvent(id)
-                        },
-                        error: (jqXHR) => {
-                            if(jqXHR.status&&jqXHR.status==200){
-                                console.log('err', jqXHR);
-                            } else {
-                                console.log('errorResponse:', jqXHR.responseText)
-                              }
-                        }
-                    }).catch((error) => {
-                        alert(`Virhe: ${error.statusText} (${error.status})`)
-                    })
-                }
-                */
             },
             eventClick: (eventObj) => {
                 yearEvents.selectEvent(eventObj.data)
             },
             monthSelect: (month) => {
                 yearCircle.setMonth(month)
+            },
+            addClick: () => {
+                createEventDialog()
+            },
+            downloadCSV: () => {
+                downloadCSV()
+            },
+            downloadICS: () => {
+                downloadICS(yearEvents.events)
+            },
+            downloadJSON: () => {
+                downloadJSON()
             }
         }
     )
@@ -278,8 +231,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         yearCircle.setEventFilterByGroup(args.detail.group)
     })
 
-    const testButton2 = mainElement.querySelector('.testButton2')
-    testButton2.addEventListener('click', async () => {
+    async function createEventDialog(){
         const dialogResult = await EventCreationDialog(organizationGroups).catch((e) => {
             console.log(e)
             return null
@@ -348,10 +300,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 alert(`${error.statusText} (${error.status}) ${error.responseJSON.data}`)
             })
         }
-    })
+    }
 
-    const downloadButton = mainElement.querySelector('.downloadButton')
-    downloadButton.addEventListener('click', () => {
+    function downloadJSON(){
         if(yearEvents.events.length === 0){
             alert('Ei ladattavia tapahtumia.')
             return
@@ -368,7 +319,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         link.href = window.URL.createObjectURL(fileToSave)
         link.click()
         link.remove()
-    })
+    }
 
     function csvGenerator(items, seperator=',', delimiter='\r\n'){
         // https://stackoverflow.com/questions/44396943/generate-a-csv-file-from-a-javascript-array-of-objects
@@ -463,8 +414,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return csv
     }
 
-    const csvDownloadButton = mainElement.querySelector('.csvDownloadButton')
-    csvDownloadButton.addEventListener('click', () => {
+    function downloadCSV(){
         if(yearEvents.events.length === 0){
             alert('Ei ladattavia tapahtumia.')
             return
@@ -482,8 +432,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         link.setAttribute('download', `Tapahtumat-${selectedYear}.csv`);
         link.click()
         link.remove()
-        
-    })
+    }
 
     function icsGenerator(events){
         function dateToStr(date){
@@ -571,11 +520,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         link.click()
         link.remove()
     }
-
-    const icsDownloadButton = mainElement.querySelector('.icsDownloadButton')
-    icsDownloadButton.addEventListener('click', () => {
-        downloadICS(yearEvents.events)
-    })
 
     mainElement.scrollIntoView()
 })

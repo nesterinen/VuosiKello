@@ -4,16 +4,20 @@
     /*min-width: 38em;*/
     min-width: min-content;
     /*max-width: max-content;*/
+    /*max-height: 96vh;*/
+    height: 96vh;
 
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 38em;
 
     border: 1px solid black;
+
+    padding-bottom: 0;
 }
 
 .vktContainer {
-    max-height: 95vh;
+    /*max-height: 95vh;*/
 
     /*margin-left: 0.25em;*/
 
@@ -21,6 +25,9 @@
     display: flex;
     flex-direction: column;
     overflow: auto;
+
+    height: 100%;
+    margin-bottom: 0;
 }
 
 .monthSelector {
@@ -148,4 +155,17 @@
 
 .tableButton {
     width: 100%;
+}
+
+
+.eventTableFooterContainer {
+    border-top: 1px solid black;
+
+    margin-top: auto;
+
+    background-color: white; /*#5baa00*/
+    color: white;
+
+    display: grid;
+    grid-template-columns: 40% 20% 20% 20%;
 }

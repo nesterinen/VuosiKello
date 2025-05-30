@@ -27,13 +27,18 @@ class VuosiTable {
     firstEventToday = null //{element: null, data: null}
     dateToday = new Date()
 
-    constructor(element, {yearEvents, eventClick, deleteClick, monthSelect}) {
+    constructor(element, {yearEvents, eventClick, deleteClick, monthSelect, addClick, downloadCSV, downloadICS, downloadJSON}) {
         this.element = this.#CheckIfDomElement(element)
         this.YearEvents = yearEvents
 
         this.eventClick = eventClick && typeof eventClick == 'function' ? eventClick : this.#eventClickFunction
         this.deleteClick = deleteClick && typeof deleteClick == 'function' ? deleteClick : this.#deleteEventFunction
         this.monthSelect = monthSelect && typeof monthSelect == 'function' ? monthSelect : this.#monthSelectEventFunction
+        
+        this.addClick = addClick && typeof addClick == 'function' ? addClick : this.#addClickFunction
+        this.downloadCSV = downloadCSV && typeof downloadCSV == 'function' ? downloadCSV : this.#downloadFunction
+        this.downloadICS = downloadICS && typeof downloadICS == 'function' ? downloadICS : this.#downloadFunction
+        this.downloadJSON = downloadJSON && typeof downloadJSON == 'function' ? downloadJSON : this.#downloadFunction
     }
 
     #scrollToTodayEvent(){
@@ -117,6 +122,14 @@ class VuosiTable {
 
     #monthSelectEventFunction(params){
         this.#errorLogger('monthSelectEventFunction', params)
+    }
+
+    #addClickFunction(){
+        this.#errorLogger('addClickFunction')
+    }
+
+    #downloadFunction(){
+        this.#errorLogger('downloadFunction')
     }
 
     selectEvent(event){
@@ -236,8 +249,33 @@ class VuosiTable {
                 <div class='eventList'>
                     <div>Error...</div>
                 </div>
+
+                <div class='eventTableFooterContainer'>
+                    <button class='eTableAdd baseButton baseGreen'>Lisää tapahtuma</button>
+                    <button class='eTableCSV baseButton'>Lataa CSV</button>
+                    <button class='eTableICS baseButton'>Lataa ICS</button>
+                    <button class='eTableJSON baseButton'>Lataa JSON</button>
+                </div>
             </div>
         `
+
+        const addClickButton = this.element.querySelector('.eTableAdd')
+        addClickButton.addEventListener('click', () => {
+            this.addClick()
+        })
+
+        const csvDownloadButton = this.element.querySelector('.eTableCSV')
+        csvDownloadButton.addEventListener('click', () => {
+            this.downloadCSV()
+        })
+        const icsDownloadButton = this.element.querySelector('.eTableICS')
+        icsDownloadButton.addEventListener('click', () => {
+            this.downloadICS()
+        })
+        const jsonDownloadButton = this.element.querySelector('.eTableJSON')
+        jsonDownloadButton.addEventListener('click', () => {
+            this.downloadJSON()
+        })
 
         this.#updateTableHeader()
         this.updateTable()

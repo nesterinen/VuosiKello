@@ -41,6 +41,7 @@ VUOSIKALENTERI:
     #- default priority 5->3 #DONE
     #- <- VUODET -> selector #
     - way filter when group no longer exists...
+    - ics download, apply filter.
 
 #PALAVERI<-
 
@@ -48,6 +49,7 @@ VUOSIKALENTERI:
 
 infoContainer:
     - todo
+    - Kaikki -> Suodatin
 
 yearCircle:
     #- something interesting to the center? #done?? <-prev year next->

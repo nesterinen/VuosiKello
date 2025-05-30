@@ -31,6 +31,16 @@
     font-size: 2em;
 
     margin-bottom: 0.25em;
+
+    display: grid;
+    grid-template-columns: 30% 40% 30%;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.infoHeader .iconImg {
+    margin: auto;
 }
 
 .generalInfo .groupSelect {

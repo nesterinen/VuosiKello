@@ -63,8 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
         </div>
     `
-
-
+    //<img src='${php_args_vuosi.logo_url}' alt='PKMTT_LOGO' style="width:59px;height:34px;"/>
     const yearEvents = new YearEvents()
 
     fetchAll(selectedYear)
@@ -86,7 +85,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         {
             selectGroup: (group) => {
                 yearEvents.selectGroup(group)
-            }
+            },
+            iconUrl: php_args_vuosi.logo_url
         }
     )
 

@@ -29,10 +29,13 @@ class InfoElement {
 
     #dateToday = new Date()
 
-    constructor(element, groups, {selectGroup}){
+    constructor(element, groups, {selectGroup, iconUrl}){
         this.element = this.#CheckIfDomElement(element)
         this.selectGroup = selectGroup && typeof selectGroup == 'function' ? selectGroup : this.#groupFilterFunction
         this.groups = groups
+        this.iconUrl = iconUrl && typeof iconUrl == 'string' ? iconUrl : null
+
+        console.log('ic', iconUrl, this.iconUrl)
     }
 
     #CheckIfDomElement(element){
@@ -46,7 +49,7 @@ class InfoElement {
     render(){
         this.element.innerHTML = `
             <div class='generalInfo'>
-                <div class='infoHeader'>PKMTT</div>
+                <div class='infoHeader'></div>
                 <div class='groupSelectCheckBoxes'></div>
             </div>
 
@@ -54,6 +57,23 @@ class InfoElement {
                 <h1>...</h1>
             </div>
         `
+
+        const infoHeader = this.element.querySelector('.infoHeader')
+
+        const headerText = document.createElement('div')
+        headerText.textContent = 'PKMTT'
+
+        if(this.iconUrl){
+            const iconImg = document.createElement('img')
+            iconImg.src = this.iconUrl
+            iconImg.style = 'width:59px;height:34px;'
+            iconImg.alt = 'icon'
+            iconImg.classList.add('iconImg')
+
+            infoHeader.appendChild(iconImg)
+        }
+
+        infoHeader.appendChild(headerText)
 
         // Group checkbox selector start ##############################################################
         let showDropDown = false
@@ -63,7 +83,7 @@ class InfoElement {
             <div>
                 <div class='gsbHeaderText'>
                     <div>+</div>
-                    <div>Kaikki</div>
+                    <div>Suodatin</div>
                     <div>+</div>
                 </div>
             </div>
@@ -108,7 +128,7 @@ class InfoElement {
             if(checkedGroups.length === 0){
                 gsbHeader.innerHTML = `
                     <div>+</div>
-                    <div>Kaikki</div>
+                    <div>Suodatin</div>
                     <div>+</div>
                 `
             } else {

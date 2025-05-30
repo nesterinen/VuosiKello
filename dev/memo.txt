@@ -71,3 +71,5 @@ CRUDS:
 
 
 THEME SPICEPRESS
+
+dir -Recurse -Include *.php, *.js, *.css | Get-Content | Measure-Object -Line

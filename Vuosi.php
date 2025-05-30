@@ -2,7 +2,7 @@
 /**
  * Plugin Name: VuosiKello
  * Description: Organisaation tapahtumien yleiskatsaus vuosikello muodossa.
- * Version: 0.8
+ * Version: 0.9
  * Author: Aleksei Nesterinen
  * Author URI: none
 * Plugin URI: none
@@ -100,16 +100,17 @@ function vuosi_kello_plugin_activation(): void {
 }
 register_activation_hook(__FILE__, 'vuosi_kello_plugin_activation');
 
-
 // ajax, rest/crud api modifying db stuff for vuosikello
 include(plugin_dir_path(__FILE__) . 'php/Crud_Operations.php');
 function load_plugin(): void{
-    $version = '0.8';
+    $version = '0.9';
 
     global $vuosi_kello_page_name;
     if(!is_page($vuosi_kello_page_name)){
         return;
     }
+
+    $pkmtt_logo = plugin_dir_url(__FILE__) . 'img/PKMTT_LOGO.PNG';
 
     global $vuosi_kello_div_id;
 
@@ -188,7 +189,8 @@ function load_plugin(): void{
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'element_name' => $vuosi_kello_div_id,
             'actual_groups' => $actual_groups,
-            'default_groups' => $vuosi_kello_default_groups
+            'default_groups' => $vuosi_kello_default_groups,
+            'logo_url' => $pkmtt_logo,
         ]
     );
 }

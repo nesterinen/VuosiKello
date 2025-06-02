@@ -420,7 +420,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             return
         }
 
-        const csvData = csvGenerator(yearEvents.events, ';')
+        let filteredEvents = []
+
+        if (vuosiTable.groupFilter){
+            filteredEvents = yearEvents.events.filter((event) => {
+                for(const group_filter of vuosiTable.groupFilter){
+                    for(const event_group of event.group) {
+                        if(group_filter === event_group){
+                            return true
+                        }
+                    }
+                }
+            })
+        } else {
+            filteredEvents = yearEvents.events
+        }
+
+        const csvData = csvGenerator(filteredEvents, ';')
 
         const byteOrderMark = "\uFEFF"
         

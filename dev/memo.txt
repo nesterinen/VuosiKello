@@ -11,24 +11,24 @@ datatype: {
 }
 
 UX Functionality, CRUD.
-    -> Create individuals, and series..
+    #-> Create individuals, and series..
         -> Series requirements?:
             - First | Last working day of the month
             - Only on Odd | Even Week.
             - Specific days (every friday for example)
             - Specific date number (every 5th of month)
-    -> Delete individuals, and series..
+    #-> Delete individuals, and series..
     -> Update individuals, and series..
 
 Misc:
-    save and download events as json, pdf & excel? -done
+    #save and download events as json, pdf & excel? -done
     automatic backups?
 
 
-- groupfilter checkboxes -done
-- click on yearCircle month opens info circle? -todo? -not going to be implemented
-- priority colors -kinda done
-- deadline nearing colors -table selects upcoming. -not going to be implemented
+#- groupfilter checkboxes -done
+#- click on yearCircle month opens info circle? -todo? -not going to be implemented
+#- priority colors -kinda done
+#- deadline nearing colors -table selects upcoming. -not going to be implemented
 
 #PALAVERI->
 WORDPRESS:
@@ -39,9 +39,9 @@ VUOSIKALENTERI:
     #- outlook ics, printing csv # csv DONE, ics kinda done (ICS FEED??? host blabla.com/icsfile.ics at local network, does ics feed work???)
     #- dialog option for series on specific day every month #DONE
     #- default priority 5->3 #DONE
-    #- <- VUODET -> selector #
+    #- <- VUODET -> selector #D
     - way filter when group no longer exists...
-    - ics download, apply filter.
+    # - ics download #D
 
 #PALAVERI<-
 

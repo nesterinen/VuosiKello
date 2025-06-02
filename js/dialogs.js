@@ -693,7 +693,7 @@ function InfoDialog(event, id, series_id, {deleteClick, seriesDeleteClick, downl
             </div>
         </div>
 
-        <button class='downloadButton baseButton'>lataa tapahtuma tiedosto</button>
+        <button class='downloadButton baseButton'>lataa kalenteri tapahtuma</button>
         <button class='deleteButton baseButton baseRed'>poista</button>
     `
 

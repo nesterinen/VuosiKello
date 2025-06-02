@@ -442,9 +442,10 @@ async function EventCreationDialog(groups) {
                 validateAndColor(dialog.querySelector('.daySelect'), checked === 0 && seriesTypeSelector.options.selectedIndex > 0 && seriesTypeSelector.options.selectedIndex <= 3),
                 validateAndColor(dialog.querySelector('.dateInput'), startDate >= endDate && seriesTypeSelector.options.selectedIndex > 0),
                 validateAndColor(dialog.querySelector('.groupCheckSelector'), selectedGroupsArray.length === 0),
-                validateAndColor(dateDayInput, seriesTypeSelector.options.selectedIndex === 4 && (parseInt(dateDayInput.value) < 1 || parseInt(dateDayInput.value) > 31))
-            
+                //validateAndColor(dateDayInput, seriesTypeSelector.options.selectedIndex === 4 && (parseInt(dateDayInput.value) < 1 || parseInt(dateDayInput.value) > 31))
+                validateAndColor(dateDayInput, seriesTypeSelector.options.selectedIndex === 4 && !(parseInt(dateDayInput.value) >= 1 && parseInt(dateDayInput.value) <= 31))
             ]
+
             // if any invalid value return
             for (const invalid of validations){
                 if(invalid === true){

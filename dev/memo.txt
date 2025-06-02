@@ -49,7 +49,7 @@ VUOSIKALENTERI:
 
 infoContainer:
     - todo
-    - Kaikki -> Suodatin
+    #- Kaikki -> Suodatin #done
 
 yearCircle:
     #- something interesting to the center? #done?? <-prev year next->

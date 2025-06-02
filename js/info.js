@@ -34,8 +34,6 @@ class InfoElement {
         this.selectGroup = selectGroup && typeof selectGroup == 'function' ? selectGroup : this.#groupFilterFunction
         this.groups = groups
         this.iconUrl = iconUrl && typeof iconUrl == 'string' ? iconUrl : null
-
-        console.log('ic', iconUrl, this.iconUrl)
     }
 
     #CheckIfDomElement(element){

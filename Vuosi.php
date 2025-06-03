@@ -100,6 +100,46 @@ function vuosi_kello_plugin_activation(): void {
 }
 register_activation_hook(__FILE__, 'vuosi_kello_plugin_activation');
 
+
+function vuosi_kello_create_main_page(): void {
+    global $vuosi_kello_page_name;
+    global $vuosi_kello_div_id;
+
+    $query = new WP_Query(
+        [
+            'post_type'              => 'page',
+            'title'                  => $vuosi_kello_page_name,
+            'post_status'            => 'all',
+            'posts_per_page'         => 1,
+            'no_found_rows'          => true,
+            'ignore_sticky_posts'    => true,
+            'update_post_term_cache' => false,
+            'update_post_meta_cache' => false,
+            'orderby'                => 'post_date ID',
+            'order'                  => 'ASC',
+        ]
+    );
+
+    if ( ! empty( $query->post)) { 
+        //write_log('page exists already');
+        return;
+    }
+
+    $page_content = '<div id=' . $vuosi_kello_div_id . '></div>';
+
+    $vuosi_kello_page = [
+        'post_title' => wp_strip_all_tags($vuosi_kello_page_name),
+        'post_content' => $page_content,
+        'post_status' => 'publish',
+        'post_author' => 1,
+        'post_type' => 'page'
+    ];
+    
+    wp_insert_post($vuosi_kello_page);
+}
+register_activation_hook(__FILE__, 'vuosi_kello_create_main_page');
+
+
 // ajax, rest/crud api modifying db stuff for vuosikello
 include(plugin_dir_path(__FILE__) . 'php/Crud_Operations.php');
 function load_plugin(): void{

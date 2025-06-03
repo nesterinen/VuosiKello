@@ -76,4 +76,5 @@ dir -Recurse -Include *.php, *.js, *.css | Get-Content | Measure-Object -Line
 
 prod:
     pkmtt_logo 404
+    plugin activation automatic wp table creation fails, has to be created manually
     

@@ -65,7 +65,7 @@ class InfoElement {
             const iconImg = document.createElement('img')
             iconImg.src = this.iconUrl
             iconImg.style = 'width:59px;height:34px;'
-            iconImg.alt = 'icon'
+            iconImg.alt = ' '
             iconImg.classList.add('iconImg')
 
             infoHeader.appendChild(iconImg)

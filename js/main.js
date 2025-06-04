@@ -15,6 +15,45 @@ import VuosiTable from table.js
     end: datetime
 */
 
+class LoadingGraphic {
+    element
+    isLoading = false
+
+    constructor(element){
+        this.element = this.#CheckIfDomElement(element)
+    }
+
+    #CheckIfDomElement(element){
+        if(element && element instanceof HTMLElement){
+            return element
+        } else {
+            throw new Error(`${element} is not an instance of HTMLElement`)
+        }
+    }
+
+    /*
+    render(){
+        this.element.innerHTML = `
+            <div style='font-size: 10em; color: red;'>LOADING</div>
+        `
+
+        this.element.style = 'position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);'
+    }
+    */
+
+    start(){
+        this.element.innerHTML = `
+            <div style='font-size: 10em; color: red;'>LOADING</div>
+        `
+
+        this.element.style = 'position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);'
+    }
+
+    stop(){
+        this.element.innerHTML = ''
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     const mainElement = document.getElementById(php_args_vuosi.element_name)
     if (mainElement === null) return
@@ -22,6 +61,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     const organizationGroups = php_args_vuosi.actual_groups.length > 0 ? php_args_vuosi.actual_groups : php_args_vuosi.default_groups
 
     let selectedYear = new Date().getFullYear()
+
+    mainElement.innerHTML = `
+        <div class='vuosiKalenteriContainer'>
+            <div class='infoContainer'>
+                <p>infoContainer</p>
+            </div>
+
+            <div class='circleContainer'>
+                <p>circleContainer</p>
+            </div>
+
+            <div class='tableContainer'>
+                <p>tableContainer</p>
+            </div>
+
+            <div class='loadingContainer'></div>
+        </div>
+    `
+
+    const ldTest = new LoadingGraphic(mainElement.querySelector('.loadingContainer'))
+
+    //<img src='${php_args_vuosi.logo_url}' alt='PKMTT_LOGO' style="width:59px;height:34px;"/>
 
     async function fetchAll(year=null) {
         return new Promise((resolve, reject) => {
@@ -39,7 +100,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         })
     }
 
+    // DELAY TEST
     async function deleteOne(id) {
+        ldTest.start()
         return new Promise((resolve, reject) => {
             jQuery.ajax({
                 type: "POST",
@@ -48,7 +111,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 data: { action: "vuosi_kello_delete_one", id: id }
             })
             .done((response) => {
-                resolve(response.data)
+                //resolve(response.data)
+                setTimeout(() => {
+                    resolve(response.data)
+                    ldTest.stop()
+                }, 2000)
             })
             .catch((error) => {
                 reject(`${error.statusText}(${error.status}): ${error.responseText}`)
@@ -73,6 +140,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         })
     }
 
+    //DELAY TEST
     async function postOne({priority, reservor, group, title, content, start, end}) {
         return new Promise((resolve, reject) => {
             jQuery.ajax({
@@ -85,7 +153,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             })
             .done((response) => {
-                resolve(response.data)
+                //resolve(response.data)¨
+                setTimeout(() => {
+                    resolve(response.data)
+                }, 2000)
             })
             .catch((error) => {
                 reject(`${error.statusText}(${error.status}): ${error.responseText}`)
@@ -112,22 +183,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         })
     }
 
-    mainElement.innerHTML = `
-        <div class='vuosiKalenteriContainer'>
-            <div class='infoContainer'>
-                <p>infoContainer</p>
-            </div>
-
-            <div class='circleContainer'>
-                <p>circleContainer</p>
-            </div>
-
-            <div class='tableContainer'>
-                <p>tableContainer</p>
-            </div>
-        </div>
-    `
-    //<img src='${php_args_vuosi.logo_url}' alt='PKMTT_LOGO' style="width:59px;height:34px;"/>
     const yearEvents = new YearEvents()
 
     fetchAll(selectedYear)

@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             type: "POST",
             dataType: "json",
             url: php_args_vuosi.ajax_url,
-            data: {action: "vuosi_kello_get_all", year: year},
+            data: { action: "vuosi_kello_get_all", year: year },
             }).done((response) => {
                 resolve(response.data)
             })
@@ -45,7 +45,24 @@ document.addEventListener('DOMContentLoaded', async () => {
                 type: "POST",
                 dataType: "json",
                 url: php_args_vuosi.ajax_url,
-                data: { action: "vuosi_kello_delete_one", id: id}
+                data: { action: "vuosi_kello_delete_one", id: id }
+            })
+            .done((response) => {
+                resolve(response.data)
+            })
+            .catch((error) => {
+                reject(`${error.statusText}(${error.status}): ${error.responseText}`)
+            })
+        })
+    }
+
+    async function deleteSeries(series_id) {
+        return new Promise((resolve, reject) => {
+            jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: php_args_vuosi.ajax_url,
+            data: { action: "vuosi_kello_delete_by_series", series_id: series_id }
             })
             .done((response) => {
                 resolve(response.data)
@@ -152,7 +169,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                     deleteClick: () => {
                         deleteOne(id)
-                            .then(response => {
+                            .then(() => {
                                 yearEvents.deleteEvent(id)
                             })
                             .catch(error => {
@@ -162,28 +179,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     },
 
                     seriesDeleteClick: () => {
-                        // refactor
-                        jQuery.ajax({
-                            type: "POST",
-                            dataType: "json",
-                            url: php_args_vuosi.ajax_url,
-                            data: {
-                                action: "vuosi_kello_delete_by_series",
-                                series_id
-                            },
-                            success: (response) => {
+                        deleteSeries(series_id)
+                            .then(() => {
                                 yearEvents.deleteEventBySeries(series_id)
-                            },
-                            error: (jqXHR) => {
-                                if(jqXHR.status&&jqXHR.status==200){
-                                    console.log('err', jqXHR);
-                                } else {
-                                    console.log('errorResponse:', jqXHR.responseText)
-                                }
-                            }
-                        }).catch((error) => {
-                            alert(`Virhe: ${error.statusText} (${error.status})`)
-                        })
+                            })
+                            .catch(error => {
+                                console.log('dels err:', error)
+                                alert(error)
+                            })
                     }
                 })
             },

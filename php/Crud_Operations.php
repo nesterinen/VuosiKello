@@ -134,7 +134,7 @@ function vuosi_kello_delete_one(): void {
     $result = $wpdb->delete($table_name, [
         'id' => $_POST['id']
     ]);
-    
+
     if($result === 1){
         wp_send_json_success($result, 200);
     } else if ($result === false || $result === 0){
@@ -221,11 +221,11 @@ function vuosi_kello_delete_by_series(): void {
 
     switch (true) {
         case $result === false:
-            wp_send_json_error($result, 500);
+            wp_send_json_error('delete_by_series failure (false)', 500);
             break;
         
         case $result === 0:
-            wp_send_json_error($result, 400);
+            wp_send_json_error('delete_by_series failure (0)', 500);
             break;
 
         case $result >= 1:

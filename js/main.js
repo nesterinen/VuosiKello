@@ -39,32 +39,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         })
     }
 
-    /*
-    async function deleteOne(params) {
+    async function deleteOne(id) {
         return new Promise((resolve, reject) => {
             jQuery.ajax({
                 type: "POST",
                 dataType: "json",
                 url: php_args_vuosi.ajax_url,
-                data: {
-                    action: "vuosi_kello_delete_one",
-                    id: id
-                },
-                success: (response) => {
-                    yearEvents.deleteEvent(id)
-                },
-                error: (jqXHR) => {
-                    if(jqXHR.status&&jqXHR.status==200){
-                        console.log('err', jqXHR);
-                    } else {
-                        console.log('errorResponse:', jqXHR.responseText)
-                    }
-                }
-            }).catch((error) => {
-                alert(`Virhe: ${error.statusText} (${error.status})`)
+                data: { action: "vuosi_kello_delete_one", id: id}
+            })
+            .done((response) => {
+                resolve(response.data)
+            })
+            .catch((error) => {
+                reject(`${error.statusText}(${error.status}): ${error.responseText}`)
             })
         })
-    }*/
+    }
 
     mainElement.innerHTML = `
         <div class='vuosiKalenteriContainer'>
@@ -161,28 +151,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     },
 
                     deleteClick: () => {
-                        // refactor
-                        jQuery.ajax({
-                            type: "POST",
-                            dataType: "json",
-                            url: php_args_vuosi.ajax_url,
-                            data: {
-                                action: "vuosi_kello_delete_one",
-                                id: id
-                            },
-                            success: (response) => {
+                        deleteOne(id)
+                            .then(response => {
                                 yearEvents.deleteEvent(id)
-                            },
-                            error: (jqXHR) => {
-                                if(jqXHR.status&&jqXHR.status==200){
-                                    console.log('err', jqXHR);
-                                } else {
-                                    console.log('errorResponse:', jqXHR.responseText)
-                                }
-                            }
-                        }).catch((error) => {
-                            alert(`Virhe: ${error.statusText} (${error.status})`)
-                        })
+                            })
+                            .catch(error => {
+                                console.log('del err:', error)
+                                alert(error)
+                            })
                     },
 
                     seriesDeleteClick: () => {

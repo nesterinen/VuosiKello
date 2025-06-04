@@ -134,11 +134,11 @@ function vuosi_kello_delete_one(): void {
     $result = $wpdb->delete($table_name, [
         'id' => $_POST['id']
     ]);
-
-    if($result !== false){
+    
+    if($result === 1){
         wp_send_json_success($result, 200);
-    } else {
-        wp_send_json_error($result, 500);
+    } else if ($result === false || $result === 0){
+        wp_send_json_error('delete_one failure (false|0)', 500);
     }
 }
 

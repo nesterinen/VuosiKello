@@ -93,6 +93,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         })
     }
 
+    async function postSeries({arrayOfDates, priority, reservor, group, title, content, start, end}) {
+        return new Promise((resolve, reject) => {
+            jQuery.ajax({
+                type: "POST",
+                dataType: "json",
+                url: php_args_vuosi.ajax_url,
+                data: {
+                    action: "vuosi_kello_post_series",
+                    arrayOfDates, priority, reservor, group, title, content, start, end
+                }
+            }).done((response) => {
+                resolve(response.data)
+            })
+            .catch((error) => {
+                reject(`${error.statusText}(${error.status}): ${error.responseText}`)
+            })
+        })
+    }
+
     mainElement.innerHTML = `
         <div class='vuosiKalenteriContainer'>
             <div class='infoContainer'>
@@ -279,31 +298,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 })
         } else {
             const {arrayOfDates, priority, reservor, group, title, content, start, end} = dialogResult.data
-            // refactor
-            jQuery.ajax({
-                type: "POST",
-                dataType: "json",
-                url: php_args_vuosi.ajax_url,
-                data: {
-                    action: "vuosi_kello_post_series",
-                    arrayOfDates, priority, reservor, group, title, content, start, end
-                },
-                success: (response) => {
-                    response.data.events.map((obj) => {
+
+            postSeries({arrayOfDates, priority, reservor, group, title, content, start, end})
+                .then(response => {
+                    response.events.map((obj) => {
                         yearEvents.addEvent(obj, false)
                     })
                     yearEvents.sortEventsByDateAndCallEvent()
-                },
-                error: (jqXHR) => {
-                    if(jqXHR.status&&jqXHR.status==200){
-                        console.log('err', jqXHR);
-                    } else {
-                        console.log('errorResponse:', jqXHR.responseText)
-                      }
-                }
-            }).catch((error) => {
-                alert(`${error.statusText} (${error.status}) ${error.responseJSON.data}`)
-            })
+                })
+                .catch(error => {
+                    console.log('post series err:', error)
+                    alert(error)
+                })
         }
     }
 

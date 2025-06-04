@@ -68,9 +68,8 @@ function vuosi_kello_get_all(): void {
     //$year_ago = date("Y-m-d", $time);
 
     $result = $wpdb->get_results("SELECT * FROM {$table_name}" . $extra_query);
-    //write_log($result);
 
-    if($result !== false){
+    if($result !== false && !empty($result)){
         foreach ($result as $index => $event) {
             $result[$index]->group = json_decode($event->groups_json);
             $result[$index]->id = (int)$event->id;
@@ -80,8 +79,10 @@ function vuosi_kello_get_all(): void {
             }
         }
         wp_send_json_success($result, 200);
-    } else {
-        wp_send_json_error($result, 500);
+    } else if ($result === false){
+        wp_send_json_error('get_all failure (false)', 500);
+    } else if (empty($result)){
+        wp_send_json_error('get_all failure (empty)', 500);
     }
 }
 add_action("wp_ajax_vuosi_kello_get_all", "vuosi_kello_get_all");

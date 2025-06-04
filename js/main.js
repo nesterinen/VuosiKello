@@ -30,23 +30,41 @@ document.addEventListener('DOMContentLoaded', async () => {
             dataType: "json",
             url: php_args_vuosi.ajax_url,
             data: {action: "vuosi_kello_get_all", year: year},
-                success: (response) => {
-                    resolve(response.data)
-                },
-                error: (jqXHR) => {
-                    if(jqXHR.status&&jqXHR.status==200){
-                        //console.log('err', jqXHR);
-                        reject(`jqXHR_: ${jqXHR}`)
-                    } else {
-                        //console.log('errorResponse:', jqXHR.responseText)
-                        reject(`jqXHR: ${jqXHR.responseText}`)
-                    }
-                }
-            }).catch((error) => {
-                reject(`Virhe: ${error.statusText} (${error.status})`)
+            }).done((response) => {
+                resolve(response.data)
+            })
+            .catch((error) => {
+                reject(`${error.statusText}(${error.status}): ${error.responseText}`)
             })
         })
     }
+
+    /*
+    async function deleteOne(params) {
+        return new Promise((resolve, reject) => {
+            jQuery.ajax({
+                type: "POST",
+                dataType: "json",
+                url: php_args_vuosi.ajax_url,
+                data: {
+                    action: "vuosi_kello_delete_one",
+                    id: id
+                },
+                success: (response) => {
+                    yearEvents.deleteEvent(id)
+                },
+                error: (jqXHR) => {
+                    if(jqXHR.status&&jqXHR.status==200){
+                        console.log('err', jqXHR);
+                    } else {
+                        console.log('errorResponse:', jqXHR.responseText)
+                    }
+                }
+            }).catch((error) => {
+                alert(`Virhe: ${error.statusText} (${error.status})`)
+            })
+        })
+    }*/
 
     mainElement.innerHTML = `
         <div class='vuosiKalenteriContainer'>

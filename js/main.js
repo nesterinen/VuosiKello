@@ -143,6 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     },
 
                     deleteClick: () => {
+                        // refactor
                         jQuery.ajax({
                             type: "POST",
                             dataType: "json",
@@ -167,6 +168,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     },
 
                     seriesDeleteClick: () => {
+                        // refactor
                         jQuery.ajax({
                             type: "POST",
                             dataType: "json",
@@ -244,7 +246,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if(dialogResult.series === false) {
             const {priority, reservor, group, title, content, start, end} = dialogResult.data
-            
+            // refactor
             jQuery.ajax({
                 type: "POST",
                 dataType: "json",
@@ -274,7 +276,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         } else {
             const {arrayOfDates, priority, reservor, group, title, content, start, end} = dialogResult.data
-
+            // refactor
             jQuery.ajax({
                 type: "POST",
                 dataType: "json",

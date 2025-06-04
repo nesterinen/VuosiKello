@@ -491,24 +491,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const icsFooter = 'END:VCALENDAR\n'
 
         let icsEventsData = ''
-
-        /*
-        const example = events[51]
-        const icsEvent =  
-             'BEGIN:VEVENT\n'
-            +`SUMMARY:${example.title}\n`
-            +`UID:${example.id}\n`
-            +'SEQUENCE:0\n'
-            +'STATUS:CONFIRMED\n'
-            +'TRANSP:TRANSPARENT\n'
-            +`DTSTART:${dateToStr(example.start)}\n`
-            +`DTEND:${dateToStr(example.end)}\n`
-            +`DTSTAMP:${dateNow}\n`
-            +`LOCATION:${example.group}\n`
-            +`DESCRIPTION:${example.content}\n`
-            +'END:VEVENT\n'
-        console.log('event', icsEvent)
-        */
         
         for (const event of events) {
             icsEventsData += 

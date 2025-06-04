@@ -73,6 +73,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         })
     }
 
+    async function postOne({priority, reservor, group, title, content, start, end}) {
+        return new Promise((resolve, reject) => {
+            jQuery.ajax({
+                type: "POST",
+                dataType: "json",
+                url: php_args_vuosi.ajax_url,
+                data: {
+                    action: "vuosi_kello_post_one",
+                    priority, reservor, group, title, content, start, end
+                }
+            })
+            .done((response) => {
+                resolve(response.data)
+            })
+            .catch((error) => {
+                reject(`${error.statusText}(${error.status}): ${error.responseText}`)
+            })
+        })
+    }
+
     mainElement.innerHTML = `
         <div class='vuosiKalenteriContainer'>
             <div class='infoContainer'>
@@ -243,34 +263,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if(dialogResult.series === false) {
             const {priority, reservor, group, title, content, start, end} = dialogResult.data
-            // refactor
-            jQuery.ajax({
-                type: "POST",
-                dataType: "json",
-                url: php_args_vuosi.ajax_url,
-                data: {
-                    action: "vuosi_kello_post_one",
-                    priority, reservor, group, title, content, start, end
-                },
-                success: (response) => {
-                    console.log('response', response)
-                    yearEvents.addEvent({
-                        id: response.data.id,
-                        priority, reservor, group, title, content, start, end
-                    })
-                    yearEvents.selectEventById(response.data.id)
-                },
-                error: (jqXHR) => {
-                    if(jqXHR.status&&jqXHR.status==200){
-                        console.log('err', jqXHR);
-                    } else {
-                        console.log('errorResponse:', jqXHR.responseText)
-                      }
-                }
-            }).catch((error) => {
-                alert(`${error.statusText} (${error.status}) ${error.responseJSON.data}`)
-            })
 
+            postOne({priority, reservor, group, title, content, start, end})
+                .then(response => {
+                    yearEvents.addEvent({
+                        id: response.id,
+                        priority, reservor, group, title, content, start, end
+                        //priority, reservor, group, title, content, start, end
+                    })
+                    yearEvents.selectEventById(response.id)
+                })
+                .catch(error => {
+                    console.log('post one err:', error)
+                    alert(error)
+                })
         } else {
             const {arrayOfDates, priority, reservor, group, title, content, start, end} = dialogResult.data
             // refactor

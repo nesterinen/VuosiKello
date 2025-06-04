@@ -37,15 +37,15 @@ function vuosi_kello_event_validation($event, $checkDates=true): string | null {
     }
 
     if($event['priority'] < 0 || $event['priority'] > 5) {
-        return 'invalid priority';
+        return 'invalid priority not between 0-5';
     }
 
-    if($event['group'] == null){
-        return 'invalid group (null)';
+    if($event['group'] == null || gettype($event['group']) !== "array"){
+        return 'invalid group type';
     }
 
     if(count($event['group']) === 0){
-        return 'invalid group (0)';
+        return 'invalid group length (0)';
     }
 
     return null;
@@ -112,11 +112,11 @@ function vuosi_kello_post_one(): void {
 
     switch (true) {
         case $result === false:
-            wp_send_json_error($result, 500);
+            wp_send_json_error('post_one failure (false)', 500);
             break;
         
         case $result === 0:
-            wp_send_json_error($result, 400);
+            wp_send_json_error('post_one failure (0)', 500);
             break;
 
         case $result >= 1:

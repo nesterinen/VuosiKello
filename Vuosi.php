@@ -165,6 +165,13 @@ function load_plugin(): void{
     wp_enqueue_style(handle: 'wsp-dialogs-style', src: plugin_dir_url(file: __FILE__) . 'css/dialogs.css');
 
     wp_register_script(
+        handle: 'loading-graphic',
+        src: "{$js_file_dir}/loading.js",
+        deps: [],
+        ver: $version
+    );
+
+    wp_register_script(
         handle: 'year-dialogs',
         src: "{$js_file_dir}/dialogs.js",
         deps: [],
@@ -211,6 +218,7 @@ function load_plugin(): void{
         src: "{$js_file_dir}/main.js",
         deps: [
             'jquery',
+            'loading-graphic',
             'year-dialogs',
             'year-table',
             'year-events-handler',

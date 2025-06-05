@@ -2,7 +2,7 @@
 /**
  * Plugin Name: VuosiKello
  * Description: Organisaation tapahtumien yleiskatsaus vuosikello muodossa.
- * Version: 0.9.5
+ * Version: 0.9.8
  * Author: Aleksei Nesterinen
  * Author URI: https://github.com/nesterinen
  * Plugin URI: https://codeload.github.com/nesterinen/VuosiKello/zip/refs/heads/main
@@ -143,7 +143,7 @@ register_activation_hook(__FILE__, 'vuosi_kello_create_main_page');
 // ajax, rest/crud api modifying db stuff for vuosikello
 include(plugin_dir_path(__FILE__) . 'php/Crud_Operations.php');
 function load_plugin(): void{
-    $version = '0.9.5';
+    $version = '0.9.8';
 
     global $vuosi_kello_page_name;
     if(!is_page($vuosi_kello_page_name)){

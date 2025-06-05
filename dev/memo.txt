@@ -78,3 +78,10 @@ prod:
     pkmtt_logo 404
     plugin activation automatic wp table creation fails, has to be created manually
     
+05062025
+TOFO:
+    - !IMPORTANT!: update functionality!!!!
+    - TABLE: filter by event title
+    - FUNCTION: last specified day(mon-sun) on every month
+    - FUNCTION: every two weeks && oddweeks
+    - FUNCTION: first arkipäivä(working day?) of the month

@@ -43,7 +43,10 @@ class LoadingGraphic {
 
     start(){
         this.element.innerHTML = `
-            <div style='font-size: 10em; color: red;'>LOADING</div>
+            <div class='LoadingGraphic'>
+                <div class='loadingText'>Ladataan</div>
+                <div class='rotatingBorder'></div>
+            </div>
         `
 
         this.element.style = 'position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);'
@@ -80,11 +83,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
     `
 
-    const ldTest = new LoadingGraphic(mainElement.querySelector('.loadingContainer'))
-
+    const loading = new LoadingGraphic(mainElement.querySelector('.loadingContainer'))
+    //loading.start()
     //<img src='${php_args_vuosi.logo_url}' alt='PKMTT_LOGO' style="width:59px;height:34px;"/>
 
     async function fetchAll(year=null) {
+        loading.start()
         return new Promise((resolve, reject) => {
             jQuery.ajax({
             type: "POST",
@@ -98,11 +102,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 reject(`${error.statusText}(${error.status}): ${error.responseText}`)
             })
         })
+        .finally(() => loading.stop())
     }
 
-    // DELAY TEST
     async function deleteOne(id) {
-        ldTest.start()
+        loading.start()
         return new Promise((resolve, reject) => {
             jQuery.ajax({
                 type: "POST",
@@ -111,19 +115,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                 data: { action: "vuosi_kello_delete_one", id: id }
             })
             .done((response) => {
-                //resolve(response.data)
-                setTimeout(() => {
-                    resolve(response.data)
-                    ldTest.stop()
-                }, 2000)
+                resolve(response.data)
             })
             .catch((error) => {
                 reject(`${error.statusText}(${error.status}): ${error.responseText}`)
             })
         })
+        .finally(() => loading.stop())
     }
 
     async function deleteSeries(series_id) {
+        loading.start()
         return new Promise((resolve, reject) => {
             jQuery.ajax({
             type: "POST",
@@ -138,10 +140,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 reject(`${error.statusText}(${error.status}): ${error.responseText}`)
             })
         })
+        .finally(() => loading.stop())
     }
 
-    //DELAY TEST
     async function postOne({priority, reservor, group, title, content, start, end}) {
+        loading.start()
         return new Promise((resolve, reject) => {
             jQuery.ajax({
                 type: "POST",
@@ -153,18 +156,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             })
             .done((response) => {
-                //resolve(response.data)¨
-                setTimeout(() => {
-                    resolve(response.data)
-                }, 2000)
+                resolve(response.data)
             })
             .catch((error) => {
                 reject(`${error.statusText}(${error.status}): ${error.responseText}`)
             })
         })
+        .finally(() => loading.stop())
     }
 
     async function postSeries({arrayOfDates, priority, reservor, group, title, content, start, end}) {
+        loading.start()
         return new Promise((resolve, reject) => {
             jQuery.ajax({
                 type: "POST",
@@ -181,6 +183,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 reject(`${error.statusText}(${error.status}): ${error.responseText}`)
             })
         })
+        .finally(() => loading.stop())
     }
 
     const yearEvents = new YearEvents()

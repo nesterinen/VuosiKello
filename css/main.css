@@ -107,49 +107,7 @@ main {
     background-color: #ad2307;
 }
 /*################################################*/
-
 /*
-@keyframes ldgKeyframes {
-    0% {
-        background-color: red;
-    }
-    25%  {
-        background-color: yellow;
-    }
-    50%  {
-        background-color: blue;
-    }
-    100% {
-        background-color: green;
-    }
-
-}
-
-@keyframes test123 {
-    0%{background-position:10% 0%}
-    50%{background-position:91% 100%}
-    100%{background-position:10% 0%}
-}
-
-.LoadingGraphic {
-    font-size: 10em;
-    line-height: 1em;
-
-    color: black;
-    border: 2px solid black;
-    border-radius: 10px;
-
-    background: linear-gradient(90deg,rgba(42, 123, 155, 1) 0%, rgba(87, 199, 133, 1) 50%, rgba(237, 221, 83, 1) 100%);
-    background-size: 200% 200%;
-
-    //animation-name: test123;
-    //animation-duration: 4s;
-    //animation-iteration-count: infinite;
-
-    animation: test123 5s ease infinite;
-}
-*/
-
 @keyframes bgBlur {
     from {
         backdrop-filter: blur(0);
@@ -172,13 +130,6 @@ main {
 
     animation: bgBlur 1s linear;
     backdrop-filter: blur(5px);
-
-
-    /*
-    transition-delay: 1s;
-    transition-property: backdrop-filter;
-    backdrop-filter: blur(1px);
-    */
 }
 
 .LoadingGraphic .loadingText {
@@ -208,5 +159,5 @@ main {
     width: 3em;
 
     animation: bgRotation 5s linear infinite;
-    /*filter: blur(2px);*/
 }
+*/

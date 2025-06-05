@@ -1,0 +1,52 @@
+@keyframes bgBlur {
+    from {
+        backdrop-filter: blur(0);
+    }
+    to {
+        backdrop-filter: blur(5px);
+    }
+}
+
+.LoadingGraphic {
+    text-align: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    
+    width: 100vw;
+    height: 100vh;
+
+    animation: bgBlur 1s linear;
+    backdrop-filter: blur(5px);
+}
+
+.LoadingGraphic .loadingText {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+
+    font-size: 1.5em;
+    color: black;
+}
+
+@keyframes bgRotation {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+.rotatingBorder {
+    font-size: 3em;
+    border: 10px dotted black;
+
+    border-radius: 50%;
+    height: 3em;
+    width: 3em;
+
+    animation: bgRotation 5s linear infinite;
+}

@@ -198,7 +198,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                         yearCircle.setDate(new Date(Date.UTC(selectedYear)))
                         yearCircle.update()
                     })
-                    .catch(err => console.log('err', err))
+                    .catch(err => {
+                        selectedYear += 1
+                        console.log('err', err)
+                        alert(err)
+                    })
                     .finally(() => buttonElement.disabled = false)
             },
             nextButton: (buttonElement) => {
@@ -210,7 +214,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                         yearCircle.setDate(new Date(Date.UTC(selectedYear)))
                         yearCircle.update()
                     })
-                    .catch(err => console.log('err', err))
+                    .catch(err => {
+                        selectedYear -=1
+                        console.log('err', err)
+                        alert(err)
+                    })
                     .finally(() => buttonElement.disabled = false)
             }
         }

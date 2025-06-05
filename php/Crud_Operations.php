@@ -69,7 +69,7 @@ function vuosi_kello_get_all(): void {
 
     $result = $wpdb->get_results("SELECT * FROM {$table_name}" . $extra_query);
 
-    if($result !== false && !empty($result)){
+    if($result !== false){
         foreach ($result as $index => $event) {
             $result[$index]->group = json_decode($event->groups_json);
             $result[$index]->id = (int)$event->id;
@@ -81,8 +81,6 @@ function vuosi_kello_get_all(): void {
         wp_send_json_success($result, 200);
     } else if ($result === false){
         wp_send_json_error('get_all failure (false)', 500);
-    } else if (empty($result)){
-        wp_send_json_error('get_all failure (empty)', 500);
     }
 }
 add_action("wp_ajax_vuosi_kello_get_all", "vuosi_kello_get_all");

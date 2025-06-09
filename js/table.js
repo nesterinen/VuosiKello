@@ -18,6 +18,7 @@ class VuosiTable {
     selectedMonth = 0
     monthFilter = false
     groupFilter = null
+    titleFilter = ''
 
     #errorLog = true
 
@@ -42,9 +43,13 @@ class VuosiTable {
     }
 
     #scrollToTodayEvent(){
+        let headerHeight = this.element.querySelector('.eventTableHeaderContainer').scrollHeight
+        headerHeight = headerHeight ? headerHeight : 0
+        
         if(this.firstEventToday){
             this.element.querySelector('.eventList').scrollTo({
-                top: this.firstEventToday.element.offsetTop -  this.firstEventToday.element.scrollHeight - this.firstEventToday.element.offsetHeight,
+                //top: this.firstEventToday.element.offsetTop -  this.firstEventToday.element.scrollHeight - this.firstEventToday.element.offsetHeight,
+                top: this.firstEventToday.element.offsetTop -  this.firstEventToday.element.scrollHeight - headerHeight,
                 left: 0,
                 behavior: 'smooth'
             })
@@ -52,9 +57,13 @@ class VuosiTable {
     }
 
     #scrollToEventElement(eventElement){
+        let headerHeight = this.element.querySelector('.eventTableHeaderContainer').scrollHeight
+        headerHeight = headerHeight ? headerHeight : 0
+
         if(eventElement && eventElement instanceof HTMLElement){
             this.element.querySelector('.eventList').scrollTo({
-                top: eventElement.offsetTop -  eventElement.scrollHeight - eventElement.offsetHeight,
+                //top: eventElement.offsetTop -  eventElement.scrollHeight - eventElement.offsetHeight,
+                top: eventElement.offsetTop -  eventElement.scrollHeight - headerHeight,
                 left: 0,
                 behavior: 'smooth'
             })
@@ -205,10 +214,8 @@ class VuosiTable {
         const header = document.createElement('div')
         header.classList.add('eventTableHeader')
         header.innerHTML = `
-            <div>
-                <div class='tableHeaderText'>Kuukausi:</div>
-                <select class='monthSelect'></select>
-            </div>
+            <div class='tableHeaderText'>Kuukausi:</div>
+            <select class='monthSelect'></select>
         `
 
         /*Month Selector ############################################*/
@@ -237,7 +244,25 @@ class VuosiTable {
         })
         /*Month Selector end ########################################*/
 
+        /*Title filter ############################################## */
+        const search = document.createElement('div')
+        search.classList.add('eventTableSearch')
+        search.innerHTML = `
+            <div class='tableHeaderText'>Otsikko:</div>
+            <input class='titleFilterInput'/>
+        `
+        const titleInput = search.querySelector('.titleFilterInput')
+        // change happens on enter, input happens when typing
+        titleInput.addEventListener('input', () => {
+            this.titleFilter = titleInput.value
+            //this.#errorLogger('titleFilter:', this.titleFilter)
+            this.updateTable()
+        })
+        //titleInput.oninput = (e) => console.log('eWTF', e)
+
+        /*Title filter end ########################################## */
         parentElement.appendChild(header)
+        parentElement.appendChild(search)
     }
 
     render(){
@@ -330,6 +355,7 @@ class VuosiTable {
         return eventElement
     }
 
+    //refactor later? rerendering everything everytime instead of hiding seems pretty ineffictient
     updateTable(selectId=null){
         const eventList = this.element.querySelector('.eventList')
         eventList.innerHTML = ''
@@ -362,6 +388,13 @@ class VuosiTable {
 
             if(this.monthFilter){
                 if(yearEvent.start.getMonth() !== this.selectedMonth) {
+                    continue
+                }
+            }
+
+            if(this.titleFilter !== ''){
+                //if(!yearEvent.title.includes(this.titleFilter)){
+                if(!yearEvent.title.toLowerCase().includes(this.titleFilter.toLowerCase())){
                     continue
                 }
             }

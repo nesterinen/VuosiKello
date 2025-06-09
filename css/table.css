@@ -67,35 +67,63 @@
 .eventTableHeaderContainer {
     /*width: auto;*/
     width: 100%;
-}
+    border-bottom: 1px solid black;
 
-.eventTableHeader {
-    display: grid;
+    /*display: flex;*/
+    background-color: #5baa00;
 
     /*
-    grid-template-columns: auto auto;
+    display: grid;
+    grid-template-columns: 50% 50%;
     */
-    border-bottom: 1px solid black;
-    padding-bottom: 0.25em;
-    padding-top: 0.25em;
-
-    margin-bottom: 1px;
-
-    background-color: #5baa00;
+    display: flex;
 }
 
+
+.eventTableHeader {
+    /*display: flex;*/
+    padding-bottom: 0.25em;
+    padding-top: 0.25em;
+    border-right: 1px solid black;
+}
+
+.eventTableSearch {
+    /*display: flex;*/
+    padding-bottom: 0.25em;
+    padding-top: 0.25em;
+    border-right: 1px solid black;
+}
+
+.eventTableHeader select {
+    height: 2.2em;
+    width: 10em;
+
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+}
+
+.eventTableSearch input {
+    height: 2.2em;
+    width: 10em;
+
+    margin-left: 0.25em;
+    margin-right: 0.25em; 
+}
+
+
+/*
 .eventTableHeader div {
     display: grid;
     align-content: center;
     grid-template-columns: min-content auto 5px;
-    /*padding: 0.2em;*/
 }
+*/
 
 .tableHeaderText {
     margin-left: 0.2em;
     color: white;
     font-weight: bold;
-    font-size: 2em;
+    font-size: 1.5em;
 }
 
 .eventElement {

@@ -14,9 +14,9 @@ UX Functionality, CRUD.
     #-> Create individuals, and series..
         -> Series requirements?:
             - First | Last working day of the month
-            - Only on Odd | Even Week.
-            - Specific days (every friday for example)
-            - Specific date number (every 5th of month)
+            #- Only on Odd | Even Week.
+            #- Specific days (every friday for example)
+            #- Specific date number (every 5th of month)
     #-> Delete individuals, and series..
     -> Update individuals, and series..
 
@@ -59,8 +59,8 @@ yearTable:
     - todos
 
 dialogs:
-    loading??:
-        -dialog when loading something? should this even be dialog?
+    #loading??:
+        #-dialog when loading something? should this even be dialog?
 
     creation:
         #-checkbox drop down needs to be unselected when clicking anything else. #done
@@ -81,7 +81,7 @@ prod:
 05062025
 TOFO:
     - !IMPORTANT!: update functionality!!!!
-    - TABLE: filter by event title
+    #- TABLE: filter by event title
     - FUNCTION: last specified day(mon-sun) on every month
     - FUNCTION: every two weeks && oddweeks
     - FUNCTION: first arkipäivä(working day?) of the month

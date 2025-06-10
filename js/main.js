@@ -342,6 +342,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    //Refactor/relocate downloads/generators to utils or other file.
     function downloadJSON(){
         if(yearEvents.events.length === 0){
             alert('Ei ladattavia tapahtumia.')

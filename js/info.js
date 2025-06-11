@@ -56,11 +56,10 @@ class InfoElement {
             </div>
         `
 
+        
         const infoHeader = this.element.querySelector('.infoHeader')
-
         const headerText = document.createElement('div')
         headerText.textContent = 'PKMTT'
-
         if(this.iconUrl){
             const iconImg = document.createElement('img')
             iconImg.src = this.iconUrl
@@ -69,9 +68,11 @@ class InfoElement {
             iconImg.classList.add('iconImg')
 
             infoHeader.appendChild(iconImg)
+        } else {
+            infoHeader.appendChild(document.createElement('div'))
         }
-
         infoHeader.appendChild(headerText)
+        
 
         // Group checkbox selector start ##############################################################
         let showDropDown = false

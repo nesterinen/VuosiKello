@@ -150,6 +150,7 @@ function load_plugin(): void{
         return;
     }
 
+    // 404 on production...
     $pkmtt_logo = plugin_dir_url(__FILE__) . 'img/PKMTT_LOGO.PNG';
 
     global $vuosi_kello_div_id;

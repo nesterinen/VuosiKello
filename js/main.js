@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             selectGroup: (group) => {
                 yearEvents.selectGroup(group)
             },
-            iconUrl: php_args_vuosi.logo_url
+            //iconUrl: php_args_vuosi.logo_url
         }
     )
 

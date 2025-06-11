@@ -249,7 +249,7 @@ class VuosiTable {
         search.classList.add('eventTableSearch')
         search.innerHTML = `
             <div class='tableHeaderText'>Otsikko:</div>
-            <input class='titleFilterInput'/>
+            <input class='titleFilterInput' value='${this.titleFilter}'/>
         `
         const titleInput = search.querySelector('.titleFilterInput')
         // change happens on enter, input happens when typing

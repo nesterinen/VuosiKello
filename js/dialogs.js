@@ -36,6 +36,18 @@ function getWeek(date){
     return Math.ceil(dayOfYear/7)
 }
 
+function validateAndColor(element, isInvalid){
+    if(isInvalid){
+        //element.style = 'outline: 2px solid red; z-index: 1;'
+        element.classList.add('invalidValue')
+    } else {
+        //element.style = 'outline: none;'
+        element.classList.remove('invalidValue')
+    }
+
+    return isInvalid
+}
+
 async function EventCreationDialog(groups) {
     let extraIsVisible = false
     //const seriesTypes = ['weekly', 'oddWeeks', 'evenWeeks', 'lastDayOfMonth', 'firstDayOfMonth']
@@ -142,18 +154,6 @@ async function EventCreationDialog(groups) {
             }
 
             return arrayOfDates
-    }
-
-    function validateAndColor(element, isInvalid){
-        if(isInvalid){
-            //element.style = 'outline: 2px solid red; z-index: 1;'
-            element.classList.add('invalidValue')
-        } else {
-            //element.style = 'outline: none;'
-            element.classList.remove('invalidValue')
-        }
-
-        return isInvalid
     }
 
     return new Promise((resolve, reject) => {
@@ -750,7 +750,9 @@ function InfoDialog(event, id, series_id, {deleteClick, seriesDeleteClick, downl
     dialog.showModal()
 }
 
-function SettingsDialog(event, groups){
+function SettingsDialog(event, groups, {updateOneClick, updateSeriesClick}){
+    let selectedGroupsArray = []
+
     const priorities = [
         '1 - suurin',
         '2 - suuri',
@@ -794,8 +796,8 @@ function SettingsDialog(event, groups){
                 <div class='baseElement clockStartStop'>
                     <div class='baseText'>alku</div>
                     <div class='baseText'>loppu</div>
-                    <input type='time' class='startInput'/>
-                    <input type='time' class='endInput'/>
+                    <input type='time' class='startInput' disabled/>
+                    <input type='time' class='endInput' disabled/>
                 </div>
 
                 <div class='baseElement prioritySelector'>
@@ -805,14 +807,21 @@ function SettingsDialog(event, groups){
             </div>
 
 
-            <div class='baseElement'>
-                <div class='baseText'>varaaja</div>
-                <input class='reserverInput'/>
+            <div class='baseElement reservorNid'>
+                <div>
+                    <div class='baseText'>varaaja</div>
+                    <input class='reserverInput'/>
+                </div>
+
+                <div class='idsContainer'>
+                    <div class='baseText'>id: ${event.id}</div>
+                    ${event.series_id ? `<div class='baseText'>sarja: ${event.series_id}</div>` : ''}
+                </div>
             </div>
             
             <div class='buttonContainer'>
-                <button class='baseButton baseGreen'>päivitä tapahtuma</button>
-                <button class='extraButton baseButton'>btn2</button>
+                <button class='extraButton baseButton updateEventButton'>päivitä tapahtuma</button>
+                ${event.series_id ? `<button class='extraButton baseButton'>päivitä sarja</button>` : ''}
             </div>
 
         </div>
@@ -927,8 +936,8 @@ function SettingsDialog(event, groups){
     updateGroupSelectorHeader()
     /* Group selector Stop ################*/
 
-    const contentInput = dialog.querySelector('.contentInput')
-    contentInput.value = event.content
+    const content = dialog.querySelector('.contentInput')
+    content.value = event.content
 
     const [, startTime] = dateToString(event.start)
     const [, endTime] = dateToString(event.end)
@@ -945,7 +954,7 @@ function SettingsDialog(event, groups){
         option.appendChild(document.createTextNode(p))
         prioritySelector.appendChild(option)
     }
-    prioritySelector.value = priorities[event.priority]
+    prioritySelector.value = priorities[event.priority - 1]
 
     const reservor = dialog.querySelector('.reserverInput')
     reservor.value = event.reservor
@@ -953,6 +962,59 @@ function SettingsDialog(event, groups){
     const closeButton = dialog.querySelector('.ddHred')
     closeButton.addEventListener('click', () => {
         dialog.remove()
+    })
+
+    function updateAndCallBack(callBackFunction){
+        const validations = [
+            validateAndColor(title, title.value.length === 0),
+            validateAndColor(reservor, reservor.value.length === 0),
+            //validateAndColor(dialog.querySelector('.endInput'), clock_start >= clock_end),
+            validateAndColor(dialog.querySelector('.groupCheckSelector'), selectedGroupsArray.length === 0),
+        ]
+
+        // if any invalid value return
+        for (const invalid of validations){
+            if(invalid === true){
+                return
+            }
+        }
+
+        const returnEvent = {
+            title: title.value,
+            group: selectedGroupsArray,
+            content: content.value,
+            priority: prioritySelector.options.selectedIndex + 1,
+            reservor: reservor.value
+        }
+
+        let changes = 0
+        Object.keys(returnEvent).map(key => {
+            if(Array.isArray(returnEvent[key])){
+                if(JSON.stringify(returnEvent[key]) !== JSON.stringify(event[key])){
+                    changes += 1
+                    //console.log('array', key, 'out', returnEvent[key], 'in', event[key])
+                }
+                return
+            }
+
+            if(returnEvent[key] !== event[key]){
+                changes += 1
+                //console.log('key', key, 'out', returnEvent[key], 'in', event[key])
+            }
+        })
+
+        if(changes === 0) {
+            alert('Tapahtumaan ei ole tehty muutoksia')
+            return
+        }
+
+        callBackFunction(returnEvent)
+        dialog.remove()
+    }
+
+    const updateEventButton = dialog.querySelector('.updateEventButton')
+    updateEventButton.addEventListener('click', () => {
+        updateAndCallBack(updateOneClick)
     })
 
     document.body.appendChild(dialog)

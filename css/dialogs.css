@@ -226,3 +226,22 @@
     display: grid;
     grid-template-columns: 50% 50%;
 }
+
+.SettingsDialog .reservorNid {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.SettingsDialog .buttonContainer {
+    display: flex;
+}
+
+.SettingsDialog .buttonContainer button {
+    width: 100%;
+}
+
+.SettingsDialog .idsContainer {
+    margin-top: auto;
+    margin-left: auto;
+    color: grey;
+}

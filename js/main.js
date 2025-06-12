@@ -159,7 +159,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                 yearEvents.selectEvent(vuosiTable.firstEventToday.data)
             }
 
-            SettingsDialog(yearEvents.getEvent(397), organizationGroups)
+            /*
+            SettingsDialog(
+                yearEvents.getEvent(422),
+                organizationGroups,
+                {
+                    updateOneClick: (asd) => {console.log('asd', asd)},
+                    updateSeriesClick: (asd) => {console.log('asd', asd)} 
+                }
+            )
+            */
         })
         .catch(err => {
             alert(err)

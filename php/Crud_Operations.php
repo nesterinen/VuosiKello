@@ -156,6 +156,9 @@ function vuosi_kello_post_series(): void {
     } else if (count($_POST['arrayOfDates']) === 0) {
         wp_send_json_error('series has no dates', 400);
         return;
+    } else if (count($_POST['arrayOfDates']) >= 365){
+        wp_send_json_error('series has too many events', 400);
+        return;
     }
 
 

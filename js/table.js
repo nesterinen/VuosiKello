@@ -248,7 +248,7 @@ class VuosiTable {
         const search = document.createElement('div')
         search.classList.add('eventTableSearch')
         search.innerHTML = `
-            <div class='tableHeaderText'>Otsikko:</div>
+            <div class='tableHeaderText'>Hae:</div>
             <input class='titleFilterInput' value='${this.titleFilter}'/>
         `
         const titleInput = search.querySelector('.titleFilterInput')

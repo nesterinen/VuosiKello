@@ -750,9 +750,7 @@ function InfoDialog(event, id, series_id, {deleteClick, seriesDeleteClick, downl
     dialog.showModal()
 }
 
-function SettingsDialog(event){
-    console.log('ev', event)
-
+function SettingsDialog(event, groups){
     const priorities = [
         '1 - suurin',
         '2 - suuri',
@@ -824,6 +822,7 @@ function SettingsDialog(event){
 
     /* Group selector Start ###############*/
     let showDropDown = false
+
     const groupSelector = dialog.querySelector('.groupCheckSelector')
     groupSelector.innerHTML = `
         <div>
@@ -836,6 +835,96 @@ function SettingsDialog(event){
         <div class='gcsSelections'>
         </div>
     `
+
+    const gcsHeader = groupSelector.querySelector('.gcsHeaderText')
+    let abortter = new AbortController() // abortter is used to kill document event listener
+    gcsHeader.addEventListener('click', () => {
+        showDropDown = !showDropDown
+
+        if(showDropDown){
+            groupSelections.style = `display: block; width: ${gcsHeader.clientWidth}px;`
+            //groupSelections.style = 'display: block;'
+
+            //close group checkbox dropdown if clicking outside of it, like normal dropdown.
+            document.addEventListener('click', event => {
+                if(!groupSelections.contains(event.target) && event.target.parentNode != gcsHeader) {
+                    gcsHeader.click() // this will get us to the else{} part
+                }
+            }, {
+                signal: abortter.signal
+            })
+        } else {
+            groupSelections.style = 'display: none;'
+
+            abortter.abort('selector closed.')
+            abortter = new AbortController() // abort() changes controller permanently, so we create new one.
+        }
+    })
+
+    const groupSelections = groupSelector.querySelector('.gcsSelections')
+
+    function addSelection(group, checked=false){
+        const selectBoxDiv = document.createElement('div')
+        if(checked) {
+            selectBoxDiv.innerHTML = `
+                <label for="ec#${group}">
+                <input type="checkbox" id="ec#${group}" checked='true'/>${group}</label>
+            `
+        } else {
+            selectBoxDiv.innerHTML = `
+                <label for="ec#${group}">
+                <input type="checkbox" id="ec#${group}" />${group}</label>
+            `
+        }
+
+        groupSelections.appendChild(selectBoxDiv)
+    }
+
+    groups.map(group => {
+        if(event.group.includes(group)){
+            addSelection(group, true)
+            return
+        }
+        addSelection(group)
+    })
+
+    function updateGroupSelectorHeader(){
+        const allCheckBoxElements = groupSelections.querySelectorAll('input')
+        const checkedGroups = []
+        for (const checkBoxElement of allCheckBoxElements) {
+            if(checkBoxElement.checked){
+                checkedGroups.push(checkBoxElement.id.replace('ec#', ''))
+            }
+        }
+
+        selectedGroupsArray = checkedGroups
+        
+        if(checkedGroups.length === 0){
+            gcsHeader.innerHTML = `
+                <div>+</div>
+                <div>Valitse</div>
+                <div>+</div>
+            `
+        } else if (checkedGroups.length === 1){
+            gcsHeader.innerHTML = `
+                <div></div>
+                <div>${checkedGroups[0]}</div>
+                <div></div>
+            `
+        } else {
+            gcsHeader.innerHTML = `
+                <div></div>
+                <div>Ryhmiä: ${checkedGroups.length}</div>
+                <div></div>
+            `
+        }
+    }
+
+    groupSelections.addEventListener('change', (e) => {
+        updateGroupSelectorHeader()
+    })
+
+    updateGroupSelectorHeader()
     /* Group selector Stop ################*/
 
     const contentInput = dialog.querySelector('.contentInput')

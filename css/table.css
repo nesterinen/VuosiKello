@@ -130,7 +130,7 @@
     border: 1px solid grey;
 
     display: grid;
-    grid-template-columns: 15% 65% 20%;
+    grid-template-columns: 15% 60% 25%;
 
     margin-bottom: 0.3em;
 }
@@ -185,6 +185,23 @@
     width: 100%;
 }
 
+.eventButtons .fileButton:hover {
+    color: white;
+    outline: 1px solid black;
+    background-color: #0a8bd1;
+}
+
+.eventButtons .settingsButton:hover {
+    color: white;
+    outline: 1px solid black;
+    background-color: #5baa00;
+}
+
+.eventButtons .deleteButton:hover {
+    color: white;
+    outline: 1px solid black;
+    background-color: #d12c0a;
+}
 
 .eventTableFooterContainer {
     border-top: 1px solid black;

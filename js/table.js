@@ -338,17 +338,40 @@ class VuosiTable {
             </div>
 
             <div class='eventButtons'>
-                <button class='deleteButton baseButton tableButton'>&#9881;</button>
+                <button class='baseButton tableButton fileButton'>
+                    <span class='glyphicon glyphicon-file'></span>
+                </button>
+
+                <button class='baseButton tableButton settingsButton'>
+                    <span class='glyphicon glyphicon-cog'></span>
+                </button>
+
+                <button class='baseButton tableButton deleteButton'>
+                    <span class='glyphicon glyphicon-trash'></span>
+                </button>
             </div>
         `
+        // waste basket 🗑 🗑️
+        // gear ⚙ &#9881;
+        
+        const fileButton = eventElement.querySelector('.fileButton')
+        fileButton.addEventListener('click', () => {
+            console.log('file')
+        })
 
-        const deleteButton = eventElement.querySelector('.deleteButton')
-        deleteButton.addEventListener('click', () => {
+        const settingsButton = eventElement.querySelector('.settingsButton')
+        settingsButton.addEventListener('click', () => {
             this.deleteClick(yearEvent.id, yearEvent.series_id)
         })
 
+        const deleteButton = eventElement.querySelector('.deleteButton')
+        deleteButton.addEventListener('click', () => {
+            console.log('delete')
+        })
+
+
         eventElement.addEventListener('click', (e) => {
-            if(e.target instanceof HTMLButtonElement) return
+            if(e.target instanceof HTMLButtonElement || e.target instanceof HTMLSpanElement) return
             this.eventClick({element: eventElement, data:yearEvent})
         })
 

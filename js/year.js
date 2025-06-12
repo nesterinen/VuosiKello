@@ -174,31 +174,6 @@ class VuosiKalenteri {
 
     updateCenterElement(){
         this.element.querySelector('.CircleCenter').querySelector('.ycHeaderText').textContent = this.#dateNow.getFullYear()
-        /*
-        this.element.querySelector('.CircleCenter').innerHTML = `
-            <div class='ycHeaderText'>${this.#dateNow.getFullYear()}</div>
-            <div class='ycBaseText'>${this.dateString(this.#dateNow)}</div>
-        `
-        */
-
-        /*
-        const center = this.element.querySelector('.CircleCenter')
-        center.innerHTML = `
-            <button class='ycPrevButton'>&#11164;</button>
-            <div class='ycHeaderText'>${this.#dateNow.getFullYear()}</div>
-            <button class='ycNextButton'>&#11166;</button>
-        `
-
-        const prevButtonElement = center.querySelector('.ycPrevButton')
-        prevButtonElement.addEventListener('click', () => {
-            this.prevButton(prevButtonElement)
-        })
-
-        const nextButtonElement = center.querySelector('.ycNextButton')
-        nextButtonElement.addEventListener('click', () => {
-            this.nextButton(nextButtonElement)
-        })
-        */
     }
 
     updateMonthElements(){
@@ -315,6 +290,11 @@ class VuosiKalenteri {
     update(){
         this.updateCenterElement()
         this.updateMonthElements()
+    }
+
+    highlightEvent(id){
+        console.log('id', id)
+        console.log('elem', this.monthElements)
     }
 
     _getColorFromPriority(priority){

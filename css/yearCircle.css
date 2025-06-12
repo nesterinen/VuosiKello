@@ -18,7 +18,7 @@
 }
 
 #MonthCircle #MonthElement {
-    border:1px solid black;
+    border: 2px solid black;
     color: black;
     border-radius: 50%;
 
@@ -52,7 +52,12 @@
 
 #MonthCircle #MonthElement:hover {
     /*border-color: grey;*/
-    outline: 1px solid black;
+    outline: 2px solid black;
+}
+
+.pastMonth {
+    color: grey;
+    border: 1px solid grey !important;
 }
 
 .mtBaseText {

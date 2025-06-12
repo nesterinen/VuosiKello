@@ -277,6 +277,10 @@ class VuosiKalenteri {
                 this.monthElements[month].classList.remove('selectedMonth')
             }
 
+            if(month < this.#dateNow.getMonth()) {
+                this.monthElements[month].classList.add('pastMonth')
+            }
+
             if (eventsMonthSorted[month].length > 0) {
                 //BAD solution for filtering out older events to push current at the top
                 if(month === this.#dateNow.getMonth() && eventsMonthSorted[month].length > this.maxEventsPerMonth){
@@ -299,7 +303,6 @@ class VuosiKalenteri {
             
                 for (let index = 0; index < this.maxEventsPerMonth && index < eventsMonthSorted[month].length; index++) {
                     const newEventElement = createMonthElement(this, eventsMonthSorted[month][index])
-                    
 
                     this.monthElements[month].append(newEventElement)
                 }

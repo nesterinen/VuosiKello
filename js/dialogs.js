@@ -753,16 +753,113 @@ function InfoDialog(event, id, series_id, {deleteClick, seriesDeleteClick, downl
 function SettingsDialog(event){
     console.log('ev', event)
 
+    const priorities = [
+        '1 - suurin',
+        '2 - suuri',
+        '3 - vakio',
+        '4 - matala',
+        '5 - matalin'
+    ]
+
     const dialog = document.createElement('dialog')
     dialog.classList.add('SettingsDialog')
     dialog.innerHTML = `
         <div class='ddHeader'>
-            <div class='ddHtab'></div>
-            <div class='ddHred'>&#x2715;</div>
+                <div class='ddHtab'></div>
+                <div class='ddHred'>&#x2715;</div>
         </div>
 
-        <p>bla bla</p>
+        <div class='ecContainer'>
+        <div class='baseSettings'>
+
+            <div class='titleGroup'>
+
+                <div class='baseElement'>
+                    <div class='baseText'>otsikko</div>
+                    <input class='baseInput titleInput'/>
+                </div>
+                
+                <div class='baseElement'>
+                    <div class='baseText'>ryhmä</div>
+                    <div class='groupCheckSelector'></div>
+                </div>
+
+            </div>
+
+            
+            <div class='baseElement'>
+                <div class='baseText'>sisältö</div>
+                <textarea rows='10' cols='50' class='baseTextArea contentInput' spellcheck='false'></textarea>
+            </div>
+
+            <div class='cNpContainer'>
+                <div class='baseElement clockStartStop'>
+                    <div class='baseText'>alku</div>
+                    <div class='baseText'>loppu</div>
+                    <input type='time' class='startInput'/>
+                    <input type='time' class='endInput'/>
+                </div>
+
+                <div class='baseElement prioritySelector'>
+                    <div class='baseText'>prioriteetti</div>
+                    <select class='prioritySelect'></select>
+                </div>
+            </div>
+
+
+            <div class='baseElement'>
+                <div class='baseText'>varaaja</div>
+                <input class='reserverInput'/>
+            </div>
+            
+            <div class='buttonContainer'>
+                <button class='baseButton baseGreen'>päivitä tapahtuma</button>
+                <button class='extraButton baseButton'>btn2</button>
+            </div>
+
+        </div>
     `
+    const title = dialog.querySelector('.titleInput')
+    title.value = event.title
+
+    /* Group selector Start ###############*/
+    let showDropDown = false
+    const groupSelector = dialog.querySelector('.groupCheckSelector')
+    groupSelector.innerHTML = `
+        <div>
+            <div class='gcsHeaderText'>
+                <div>+</div>
+                <div>Valitse</div>
+                <div>+</div>
+            </div>
+        </div>
+        <div class='gcsSelections'>
+        </div>
+    `
+    /* Group selector Stop ################*/
+
+    const contentInput = dialog.querySelector('.contentInput')
+    contentInput.value = event.content
+
+    const [, startTime] = dateToString(event.start)
+    const [, endTime] = dateToString(event.end)
+
+    const clockStart = dialog.querySelector('.startInput')
+    clockStart.value = startTime
+
+    const clockEnd = dialog.querySelector('.endInput')
+    clockEnd.value = endTime
+
+    const prioritySelector = dialog.querySelector('.prioritySelect')
+    for (const p of priorities) {
+        const option = document.createElement('option')
+        option.appendChild(document.createTextNode(p))
+        prioritySelector.appendChild(option)
+    }
+    prioritySelector.value = priorities[event.priority]
+
+    const reservor = dialog.querySelector('.reserverInput')
+    reservor.value = event.reservor
 
     const closeButton = dialog.querySelector('.ddHred')
     closeButton.addEventListener('click', () => {

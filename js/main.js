@@ -158,6 +158,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             if(vuosiTable.firstEventToday){
                 yearEvents.selectEvent(vuosiTable.firstEventToday.data)
             }
+
+            SettingsDialog(yearEvents.getEvent(397))
         })
         .catch(err => {
             alert(err)
@@ -561,6 +563,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     mainElement.scrollIntoView()
-
-    //SettingsDialog(yearEvents.getEvent(455))
 })

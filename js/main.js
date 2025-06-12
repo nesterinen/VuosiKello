@@ -158,6 +158,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             if(vuosiTable.firstEventToday){
                 yearEvents.selectEvent(vuosiTable.firstEventToday.data)
             }
+
+            /*
+            SettingsDialog(
+                yearEvents.getEvent(422),
+                organizationGroups,
+                {
+                    updateOneClick: (asd) => {console.log('asd', asd)},
+                    updateSeriesClick: (asd) => {console.log('asd', asd)} 
+                }
+            )
+            */
         })
         .catch(err => {
             alert(err)

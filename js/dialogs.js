@@ -749,3 +749,26 @@ function InfoDialog(event, id, series_id, {deleteClick, seriesDeleteClick, downl
     document.body.appendChild(dialog)
     dialog.showModal()
 }
+
+function SettingsDialog(event){
+    console.log('ev', event)
+
+    const dialog = document.createElement('dialog')
+    dialog.classList.add('SettingsDialog')
+    dialog.innerHTML = `
+        <div class='ddHeader'>
+            <div class='ddHtab'></div>
+            <div class='ddHred'>&#x2715;</div>
+        </div>
+
+        <p>bla bla</p>
+    `
+
+    const closeButton = dialog.querySelector('.ddHred')
+    closeButton.addEventListener('click', () => {
+        dialog.remove()
+    })
+
+    document.body.appendChild(dialog)
+    dialog.showModal()
+}

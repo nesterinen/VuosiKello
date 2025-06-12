@@ -561,4 +561,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     mainElement.scrollIntoView()
+
+    //SettingsDialog(yearEvents.getEvent(455))
 })

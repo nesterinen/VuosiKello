@@ -106,7 +106,6 @@
     overscroll-behavior: contain;
 }
 
-
 .DeleteDialog .ddHeader{
     display: grid;
     grid-template-columns: auto 3.25em;
@@ -198,4 +197,18 @@
 }
 .invalidValue:focus {
     outline: 2px dotted red;
+}
+
+.SettingsDialog {
+    padding: 0;
+    min-width: 19em;
+    width: 20vw;
+}
+
+.SettingsDialog .ddHeader {
+    display: grid;
+    grid-template-columns: auto 3.25em;
+    height: 3.25em;
+    border-bottom: 1px solid black;
+    margin-bottom: 0.5em;
 }

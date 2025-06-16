@@ -87,5 +87,5 @@ TOFO:
     - FUNCTION: first arkipäivä(working day?) of the month
 
 16062025
- -suodatin glitches when group name has a space...
+ -suodatin glitches when group name has a space...(temporarily fixed..?? not an space issue but a length one?)
  -settings group dropdown "conflict" if group has been removed

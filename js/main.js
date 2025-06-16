@@ -291,11 +291,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     yearEvents.getEvent(id),
                     organizationGroups,
                     {
-                        updateOneClick: (asd) => {
-                            console.log('asd', asd)
+                        updateOneClick: (event) => {
+                            console.log('one', event)
                         },
-                        updateSeriesClick: (asd) => {
-                            console.log('asd', asd)
+                        updateSeriesClick: (event) => {
+                            console.log('series', event)
                         } 
                     }
             )

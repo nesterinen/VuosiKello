@@ -88,3 +88,4 @@ TOFO:
 
 16062025
  -suodatin glitches when group name has a space...
+ -settings group dropdown "conflict" if group has been removed

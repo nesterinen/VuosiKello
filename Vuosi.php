@@ -160,12 +160,12 @@ function load_plugin(): void{
     $actual_groups = vuosi_kello_get_groups_array();
 
     $js_file_dir = plugin_dir_url(file: __FILE__) . 'js';
-    wp_enqueue_style(handle: 'wsp-styles', src: plugin_dir_url(file: __FILE__) . 'css/main.css');
-    wp_enqueue_style(handle: 'wsp-table-style', src: plugin_dir_url(file: __FILE__) . 'css/table.css');
-    wp_enqueue_style(handle: 'wsp-info-style', src: plugin_dir_url(file: __FILE__) . 'css/info.css');
-    wp_enqueue_style(handle: 'wsp-yearCircle-style', src: plugin_dir_url(file: __FILE__) . 'css/yearCircle.css');
-    wp_enqueue_style(handle: 'wsp-dialogs-style', src: plugin_dir_url(file: __FILE__) . 'css/dialogs.css');
-    wp_enqueue_style(handle: 'wsp-loading-style', src: plugin_dir_url(file: __FILE__) . 'css/loading.css');
+    wp_enqueue_style(handle: 'wsp-styles', src: plugin_dir_url(file: __FILE__) . 'css/main.css', ver: $version);
+    wp_enqueue_style(handle: 'wsp-table-style', src: plugin_dir_url(file: __FILE__) . 'css/table.css', ver: $version);
+    wp_enqueue_style(handle: 'wsp-info-style', src: plugin_dir_url(file: __FILE__) . 'css/info.css', ver: $version);
+    wp_enqueue_style(handle: 'wsp-yearCircle-style', src: plugin_dir_url(file: __FILE__) . 'css/yearCircle.css', ver: $version);
+    wp_enqueue_style(handle: 'wsp-dialogs-style', src: plugin_dir_url(file: __FILE__) . 'css/dialogs.css', ver: $version);
+    wp_enqueue_style(handle: 'wsp-loading-style', src: plugin_dir_url(file: __FILE__) . 'css/loading.css', ver: $version);
 
     wp_register_script(
         handle: 'loading-graphic',

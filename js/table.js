@@ -28,7 +28,7 @@ class VuosiTable {
     firstEventToday = null //{element: null, data: null}
     dateToday = new Date()
 
-    constructor(element, {yearEvents, eventClick, deleteClick, monthSelect, addClick, downloadCSV, downloadICS, downloadJSON}) {
+    constructor(element, {yearEvents, eventClick, deleteClick, monthSelect, addClick, downloadCSV, downloadICS, downloadJSON, clickFileButton, clickSettingsButton}) {
         this.element = this.#CheckIfDomElement(element)
         this.YearEvents = yearEvents
 
@@ -40,6 +40,9 @@ class VuosiTable {
         this.downloadCSV = downloadCSV && typeof downloadCSV == 'function' ? downloadCSV : this.#downloadFunction
         this.downloadICS = downloadICS && typeof downloadICS == 'function' ? downloadICS : this.#downloadFunction
         this.downloadJSON = downloadJSON && typeof downloadJSON == 'function' ? downloadJSON : this.#downloadFunction
+
+        this.fileButton = clickFileButton && typeof clickFileButton == 'function' ? clickFileButton : this.#fileButtonFunction
+        this.settingsButton = clickSettingsButton && typeof clickSettingsButton == 'function' ? clickSettingsButton : this.#settingsClickFunction
     }
 
     #scrollToTodayEvent(){
@@ -139,6 +142,14 @@ class VuosiTable {
 
     #downloadFunction(){
         this.#errorLogger('downloadFunction')
+    }
+
+    #fileButtonFunction(id){
+        this.#errorLogger('fileClickFunction', id)
+    }
+
+    #settingsClickFunction(id){
+        this.#errorLogger('settingsClickFunction', id)
     }
 
     selectEvent(event){
@@ -356,17 +367,17 @@ class VuosiTable {
         
         const fileButton = eventElement.querySelector('.fileButton')
         fileButton.addEventListener('click', () => {
-            console.log('file')
+            this.fileButton(yearEvent.id)
         })
 
         const settingsButton = eventElement.querySelector('.settingsButton')
         settingsButton.addEventListener('click', () => {
-            this.deleteClick(yearEvent.id, yearEvent.series_id)
+            this.settingsButton(yearEvent.id)
         })
 
         const deleteButton = eventElement.querySelector('.deleteButton')
         deleteButton.addEventListener('click', () => {
-            console.log('delete')
+            this.deleteClick(yearEvent.id, yearEvent.series_id)
         })
 
 

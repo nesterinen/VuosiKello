@@ -242,10 +242,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             yearEvents,
             deleteClick: async (id, series_id) => {
                 InfoDialog(yearEvents.getEvent(id), id, series_id, {
-                    downloadClick: () => {
-                        downloadICS([yearEvents.getEvent(id)])
-                    },
-
                     deleteClick: () => {
                         deleteOne(id)
                             .then(() => {
@@ -286,6 +282,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             },
             downloadJSON: () => {
                 downloadJSON()
+            },
+            clickFileButton: (id) => {
+                downloadICS([yearEvents.getEvent(id)])
+            },
+            clickSettingsButton: (id) => {
+                SettingsDialog(
+                    yearEvents.getEvent(id),
+                    organizationGroups,
+                    {
+                        updateOneClick: (asd) => {
+                            console.log('asd', asd)
+                        },
+                        updateSeriesClick: (asd) => {
+                            console.log('asd', asd)
+                        } 
+                    }
+            )
             }
         }
     )

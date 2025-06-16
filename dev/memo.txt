@@ -85,3 +85,6 @@ TOFO:
     - FUNCTION: last specified day(mon-sun) on every month
     - FUNCTION: every two weeks && oddweeks
     - FUNCTION: first arkipäivä(working day?) of the month
+
+16062025
+ -suodatin glitches when group name has a space...

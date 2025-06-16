@@ -643,7 +643,7 @@ async function InfoDialogOld(event, id, series_id) {
     })
 }
 
-function InfoDialog(event, id, series_id, {deleteClick, seriesDeleteClick, downloadClick}) {
+function InfoDialog(event, id, series_id, {deleteClick, seriesDeleteClick}) {
     days = ['sunnuntai',
         'maanantai',
         'tiistai',
@@ -693,9 +693,9 @@ function InfoDialog(event, id, series_id, {deleteClick, seriesDeleteClick, downl
             </div>
         </div>
 
-        <button class='downloadButton baseButton'>lataa kalenteri tapahtuma</button>
         <button class='deleteButton baseButton baseRed'>poista</button>
     `
+    // <button class='downloadButton baseButton'>lataa kalenteri tapahtuma</button>
 
     const deleteButton = dialog.querySelector('.deleteButton')
     deleteButton.addEventListener('click', () => {
@@ -735,6 +735,7 @@ function InfoDialog(event, id, series_id, {deleteClick, seriesDeleteClick, downl
         dialog.appendChild(deleteSeriesButton)
     }
 
+    /*
     const downloadButton = dialog.querySelector('.downloadButton')
     downloadButton.addEventListener('click', () => {
         if(downloadClick){
@@ -745,6 +746,7 @@ function InfoDialog(event, id, series_id, {deleteClick, seriesDeleteClick, downl
             return
         }
     })
+    */
 
     document.body.appendChild(dialog)
     dialog.showModal()

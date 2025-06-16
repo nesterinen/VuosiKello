@@ -118,11 +118,12 @@ class InfoElement {
             const checkedGroups = []
             for (const checkBoxElement of allCheckBoxElements) {
                 if(checkBoxElement.checked){
-                    checkedGroups.push(checkBoxElement.id)
+                    checkedGroups.push(checkBoxElement.id.replaceAll(' ', ''))
                 }
             }
             
             this.selectGroup(checkedGroups)
+            console.log('chech', checkedGroups)
 
             if(checkedGroups.length === 0){
                 gsbHeader.innerHTML = `

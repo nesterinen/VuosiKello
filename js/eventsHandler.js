@@ -221,11 +221,22 @@ class YearEvents {
             throw new Error('event with id:', id, 'not found!')
         }
 
+        //find returns (object reference) instead of value so it can be edited like this
         for (const [key, value] of Object.entries(event)){
             eventToUpdate[key] = value
         }
         
         this.#errorLogger('event with id:', id, 'updated')
         this.updateEventDispatch()
+    }
+
+    updateEventsBySeriesId(series_id, event){
+        if(typeof series_id !== 'number' || series_id % 1 !== 0) {
+            throw new Error('series_id is not a integer')
+        }
+
+        console.log('asdasd', series_id, event)
+
+        //.filter
     }
 }

@@ -308,11 +308,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             clickFileButton: (id) => {
                 downloadICS([yearEvents.getEvent(id)])
             },
-            clickSettingsButton: (id) => {
+            clickSettingsButton: (id, series_id) => {
                 SettingsDialog(
                     yearEvents.getEvent(id),
                     organizationGroups,
                     {
+                        /*
                         updateOneClick: (event) => {
                             updateOne(event, id)
                                 .then(result => {
@@ -321,16 +322,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 })
                                 .catch(error => {
                                     console.log('update1 err:', error)
-                                alert(error)
-                            })
-                        },
-                        /*
-                        updateOneClick: (event) => {
-                            console.log('one', event)
+                                    alert(error)
+                                })
                         },
                         */
+                        
+                        updateOneClick: (event) => {
+                            yearEvents.updateEventById(id, event)
+                        },
+                        
                         updateSeriesClick: (event) => {
-                            console.log('series', event)
+                            yearEvents.updateEventsBySeriesId(series_id, event)
                         } 
                     }
             )

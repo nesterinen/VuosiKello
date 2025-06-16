@@ -148,8 +148,8 @@ class VuosiTable {
         this.#errorLogger('fileClickFunction', id)
     }
 
-    #settingsClickFunction(id){
-        this.#errorLogger('settingsClickFunction', id)
+    #settingsClickFunction(id, series_id){
+        this.#errorLogger('settingsClickFunction', id, series_id)
     }
 
     selectEvent(event){
@@ -372,7 +372,7 @@ class VuosiTable {
 
         const settingsButton = eventElement.querySelector('.settingsButton')
         settingsButton.addEventListener('click', () => {
-            this.settingsButton(yearEvent.id)
+            this.settingsButton(yearEvent.id, yearEvent.series_id)
         })
 
         const deleteButton = eventElement.querySelector('.deleteButton')

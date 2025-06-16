@@ -149,12 +149,34 @@ document.addEventListener('DOMContentLoaded', async () => {
         .finally(() => loading.stop())
     }
 
+    async function updateOne(event, id) {
+        loading.start()
+        return new Promise((resolve, reject) => {
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: php_args_vuosi.ajax_url,
+                data: {
+                    action: 'vuosi_kello_update_one',
+                    event,
+                    id
+                }
+            }).done((response) => {
+                resolve(response.data)
+            })
+            .catch((error) => {
+                reject(`${error.statusText}(${error.status}): ${error.responseText}`)
+            })
+        })
+        .finally(() => loading.stop())
+    }
+
     const yearEvents = new YearEvents()
 
     fetchAll(selectedYear)
         .then(result => {
             yearEvents.Initialize(result)
-            yearEvents.updateEvent()
+            yearEvents.updateEventDispatch()
             if(vuosiTable.firstEventToday){
                 yearEvents.selectEvent(vuosiTable.firstEventToday.data)
             }
@@ -292,8 +314,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                     organizationGroups,
                     {
                         updateOneClick: (event) => {
+                            updateOne(event, id)
+                                .then(result => {
+                                    yearEvents.updateEventById(id, event)
+                                    infoElement.deselectEvent()
+                                })
+                                .catch(error => {
+                                    console.log('update1 err:', error)
+                                alert(error)
+                            })
+                        },
+                        /*
+                        updateOneClick: (event) => {
                             console.log('one', event)
                         },
+                        */
                         updateSeriesClick: (event) => {
                             console.log('series', event)
                         } 

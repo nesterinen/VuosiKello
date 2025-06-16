@@ -821,7 +821,10 @@ function SettingsDialog(event, groups, {updateOneClick, updateSeriesClick}){
                 </div>
             </div>
         
-
+            <div class='buttonContainer'>
+                <button class='extraButton baseButton updateEventButton'>päivitä tapahtuma</button>
+                ${event.series_id ? `<button class='extraButton baseButton updateSeriesButton'>päivitä sarja</button>` : ''}
+            </div>
         </div>
     `
     /*
@@ -1017,12 +1020,10 @@ function SettingsDialog(event, groups, {updateOneClick, updateSeriesClick}){
         dialog.remove()
     }
 
-    /*
     const updateEventButton = dialog.querySelector('.updateEventButton')
     updateEventButton.addEventListener('click', () => {
         updateAndCallBack(updateOneClick)
     })
-    */
 
     const updateSeriesButton = dialog.querySelector('.updateSeriesButton')
     if(updateSeriesButton){

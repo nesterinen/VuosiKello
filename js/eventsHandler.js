@@ -208,7 +208,24 @@ class YearEvents {
         document.dispatchEvent(new CustomEvent(this.groupSelectName, {detail:{group:group}}))
     }
 
-    updateEvent(){
+    updateEventDispatch(){
         document.dispatchEvent(new Event(this.eventUpdateName))
+    }
+
+    updateEventById(id, event){
+        if(typeof id !== 'number' || id % 1 !== 0) {
+            throw new Error('id is not a integer')
+        }
+        const eventToUpdate = this.events.find((yearEvent) => yearEvent.id === id)
+        if(!eventToUpdate){
+            throw new Error('event with id:', id, 'not found!')
+        }
+
+        for (const [key, value] of Object.entries(event)){
+            eventToUpdate[key] = value
+        }
+        
+        this.#errorLogger('event with id:', id, 'updated')
+        this.updateEventDispatch()
     }
 }

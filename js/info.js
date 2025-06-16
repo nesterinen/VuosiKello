@@ -52,7 +52,7 @@ class InfoElement {
             </div>
 
             <div class='eventInfo'>
-                <h1>...</h1>
+                <div class='eiBaseText'>...</div>
             </div>
         `
 
@@ -123,8 +123,7 @@ class InfoElement {
             }
             
             this.selectGroup(checkedGroups)
-            console.log('chech', checkedGroups)
-
+            
             if(checkedGroups.length === 0){
                 gsbHeader.innerHTML = `
                     <div>+</div>
@@ -196,6 +195,13 @@ class InfoElement {
             </div>
             `
 
+    }
+
+    deselectEvent(){
+        const eventInfo = this.element.querySelector('.eventInfo')
+        eventInfo.innerHTML = `
+            <div class='eiBaseText'>...</div>
+        `
     }
 
     #errorLogger(...params){

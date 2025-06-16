@@ -30,11 +30,12 @@ $vuosi_kello_group_table_name = 'vuosi_kello_groups';
 global $vuosi_kello_default_groups;
 $vuosi_kello_default_groups = [
     'Hallinto',
-    'Esihenkilöt',
-    'Henkilöstö',
+    'Työsuojelu',
     'Wörkkis',
-    'Asumispalvelut',
-    'Kouhu'
+    'Jokikievari',
+    'Kotikievari',
+    'Kouhu',
+    'Olohuone Kotoisa'
 ];
 
 //group settings admin page, group table initializations & etc..

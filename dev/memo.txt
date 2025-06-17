@@ -18,7 +18,7 @@ UX Functionality, CRUD.
             #- Specific days (every friday for example)
             #- Specific date number (every 5th of month)
     #-> Delete individuals, and series..
-    -> Update individuals, and series..
+    #-> Update individuals, and series..
 
 Misc:
     #save and download events as json, pdf & excel? -done
@@ -60,7 +60,7 @@ yearTable:
 
 dialogs:
     #loading??:
-        #-dialog when loading something? should this even be dialog?
+        #-dialog when loading something? should this even be dialog? #done
 
     creation:
         #-checkbox drop down needs to be unselected when clicking anything else. #done
@@ -80,8 +80,8 @@ prod:
     
 05062025
 TOFO:
-    - !IMPORTANT!: update functionality!!!!
-    #- TABLE: filter by event title
+    #- !IMPORTANT!: update functionality!!!! #done
+    #- TABLE: filter by event title #done
     - FUNCTION: last specified day(mon-sun) on every month
     - FUNCTION: every two weeks && oddweeks
     - FUNCTION: first arkipäivä(working day?) of the month

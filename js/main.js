@@ -390,12 +390,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function createEventDialog(){
         const dialogResult = await EventCreationDialog(organizationGroups).catch((e) => {
-            console.log(e)
+            console.log('EventCreationDialog error:', e)
             return null
         })
 
         if (!dialogResult) {
-            console.log('done')
+            console.log('dialogResult is:', dialogResult)
             return
         }
 

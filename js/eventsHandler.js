@@ -235,8 +235,13 @@ class YearEvents {
             throw new Error('series_id is not a integer')
         }
 
-        console.log('asdasd', series_id, event)
+        for (let i = 0; i < this.events.length; i++){
+            if(this.events[i].series_id === series_id){
+                this.events[i] = {...this.events[i], ...event}
+            }
+        }
 
-        //.filter
+        this.#errorLogger('event(s) with series_id:', series_id, 'updated')
+        this.updateEventDispatch()
     }
 }

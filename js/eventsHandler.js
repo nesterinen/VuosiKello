@@ -235,13 +235,18 @@ class YearEvents {
             throw new Error('series_id is not a integer')
         }
 
+        let sumOfEdits = 0
+
         for (let i = 0; i < this.events.length; i++){
             if(this.events[i].series_id === series_id){
                 this.events[i] = {...this.events[i], ...event}
+                sumOfEdits += 1
             }
         }
 
         this.#errorLogger('event(s) with series_id:', series_id, 'updated')
         this.updateEventDispatch()
+
+        return sumOfEdits
     }
 }

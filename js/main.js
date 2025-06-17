@@ -171,6 +171,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         .finally(() => loading.stop())
     }
 
+    async function updateSeries(event, series_id) {
+        loading.start()
+        return new Promise((resolve, reject) => {
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: php_args_vuosi.ajax_url,
+                data: {
+                    action: 'vuosi_kello_update_series',
+                    event,
+                    series_id
+                }
+            }).done((response) => {
+                resolve(response.data)
+            })
+            .catch((error) => {
+                reject(`${error.statusText}(${error.status}): ${error.responseText}`)
+            })
+        })
+        .finally(() => loading.stop())
+    }
+
     const yearEvents = new YearEvents()
 
     fetchAll(selectedYear)
@@ -313,7 +335,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     yearEvents.getEvent(id),
                     organizationGroups,
                     {
-                        /*
                         updateOneClick: (event) => {
                             updateOne(event, id)
                                 .then(result => {
@@ -325,15 +346,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                                     alert(error)
                                 })
                         },
-                        */
-                        
-                        updateOneClick: (event) => {
-                            yearEvents.updateEventById(id, event)
-                        },
-                        
+                        //updateOneClick: (event) => {yearEvents.updateEventById(id, event)},
+
                         updateSeriesClick: (event) => {
-                            yearEvents.updateEventsBySeriesId(series_id, event)
-                        } 
+                            updateSeries(event, series_id)
+                                .then(result => {
+                                    const edits = yearEvents.updateEventsBySeriesId(series_id, event)
+                                    if(edits !== result){ //if client edits different amount of edits than the server edited in db.
+                                        throw new Error(`client server mismatch: client(${edits}) != server(${result})`)
+                                    }
+                                    infoElement.deselectEvent()
+                                })
+                                .catch(error => {
+                                    console.log('update1 err:', error)
+                                    alert(error)
+                                })
+                        }
+                        //updateSeriesClick: (event) => {yearEvents.updateEventsBySeriesId(series_id, event)} 
                     }
             )
             }

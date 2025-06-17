@@ -273,10 +273,53 @@ function vuosi_kello_update_one(): void {
             break;
 
         case $result >= 1:
-            wp_send_json_success('updated', 200);
+            wp_send_json_success($result, 200);
     }
 
     //wp_send_json_success('doneTODO', 200);
 }
 add_action("wp_ajax_vuosi_kello_update_one", "vuosi_kello_update_one");
 add_action("wp_ajax_nopriv_vuosi_kello_update_one", "vuosi_kello_update_one");
+
+function vuosi_kello_update_series(): void {
+    $validation_result = vuosi_kello_event_validation($_POST['event'], false);
+    if($validation_result !== null){
+        wp_send_json_error($validation_result, 400);
+        return;
+    }
+
+    if(!isset($_POST['series_id'])){
+        wp_send_json_error('post is missing series_id', 400);
+        return;
+    }
+   
+    global $wpdb;
+    $table_name = get_vuosi_kello_table();
+
+    $result = $wpdb->update(
+        $table_name,
+        [
+            'priority' => $_POST['event']['priority'],
+            'reservor' => $_POST['event']['reservor'],
+            'groups_json' => json_encode($_POST['event']['group']),
+            'title' => $_POST['event']['title'],
+            'content' => $_POST['event']['content'],
+        ],
+        ['series_id' => $_POST['series_id']],
+    );
+
+    switch (true) {
+        case $result === false:
+            wp_send_json_error('update_one failure (false)', 500);
+            break;
+        
+        case $result === 0:
+            wp_send_json_error('update_one failure (0)', 500);
+            break;
+
+        case $result >= 1:
+            wp_send_json_success($result, 200);
+    }
+}
+add_action("wp_ajax_vuosi_kello_update_series", "vuosi_kello_update_series");
+add_action("wp_ajax_nopriv_vuosi_kello_update_series", "vuosi_kello_update_series");

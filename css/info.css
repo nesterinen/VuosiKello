@@ -1,10 +1,10 @@
 .infoContainer {
     width: 15vw;
     margin-right: 0.25em;
-    width: 21em;
+    width: 20em;
     /*max-height: 96vh;*/
     height: 96vh;
-    min-width: 19em;
+    min-width: 12em;
 
     border: 1px solid black;
 }
@@ -135,13 +135,27 @@
 */
 
 .eiDateTime {
-    display: grid;
     text-align: center;
-    grid-template-columns: 33% 33% 33%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    /*
+    display: grid;
+    grid-template-columns: 50% 50%;
+    */
     align-content: center;
 
     padding-bottom: 0.1em;
     padding-top: 0.1em;
+}
+
+.eDTchild {
+    margin-left: auto;
+    margin-right: auto;
+    /*
+    margin-left: clamp(0,1em, auto, 10em);
+    margin-right: clamp(0,1em, auto, 10em);
+    */
 }
 
 .eiTextArea {

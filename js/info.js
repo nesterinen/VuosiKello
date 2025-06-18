@@ -171,19 +171,20 @@ class InfoElement {
 
         eventInfo.innerHTML = `
             <div class='eiEventHeader'>
-                <div class='eiHeaderText'>${event.title} (${event.priority})</div>
+                <div class='eiHeaderText'>${event.title}</div>
                 <div class='eiHeaderText2Groups'>${spacedGroups}</div>
             </div>
 
 
             <div class='eiDateTime'>
-                <div class='eiBaseText'>${weekDay}</div>
-                <div class='eiBaseText'>${startDate}</div>
-                <div class='eiBaseText'>${startTime} - ${endTime}</div>
+                <div class='eiBaseText eDTchild'>${weekDay}</div>
+                <div class='eiBaseText eDTchild'>${startDate}</div>
+                <div class='eiBaseText eDTchild'>${startTime}-${endTime}</div>
+                <div class='eiBaseText eDTchild'>prioriteetti: ${event.priority}</div>
             </div>
 
             <div>
-                <textarea class='eiTextArea' readonly>${event.content}</textarea>
+                <textarea class='eiTextArea' readonly disabled>${event.content}</textarea>
             </div>
             
             <div class='eiEventFooter'>

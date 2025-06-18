@@ -2,7 +2,9 @@
 .tableContainer {
     width: 100vw;
     /*min-width: 38em;*/
-    min-width: min-content;
+
+    /*min-width: min-content;*/
+
     /*max-width: max-content;*/
     /*max-height: 96vh;*/
     height: 96vh;
@@ -13,6 +15,8 @@
 
     border: 1px solid black;
 
+
+    width: 20em;
     padding-bottom: 0;
 }
 
@@ -129,8 +133,13 @@
 .eventElement {
     border: 1px solid grey;
 
+    /*
     display: grid;
     grid-template-columns: 15% 60% 25%;
+    */
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
 
     margin-bottom: 0.3em;
 }
@@ -148,8 +157,9 @@
     padding-right: 0.1em;
     padding-bottom: 0.1em;
     overflow: hidden;
-    min-width: 20em;
+    /*min-width: 20em;*/
     padding-left: 1em;
+    max-width: 55%;
 }
 
 .eventContent {
@@ -159,8 +169,15 @@
 
 .eventDateInfo {
     text-align: center;
-    margin: auto;
+    margin-top: auto;
+    margin-bottom: auto;
     min-width: 3.5em;
+    width: 4.5em;
+}
+
+.centerItem {
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .eventOtherInfo {
@@ -171,6 +188,10 @@
 .eventButtons {
     display: flex;
     justify-content: center;
+    margin-left: auto;
+
+    width: 30%;
+    margin-right: 0.5em;
 }
 
 .withMarker {

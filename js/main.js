@@ -626,9 +626,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 +`DTEND;TZID=Europe/Helsinki:${dateToStr(event.end)}\n`
                 +`DTSTAMP:${dateNow}\n`
                 +`LOCATION:${event.group}\n`
-                +`DESCRIPTION:${event.content}\n`
+                +`DESCRIPTION:${event.content.replaceAll("\n", "\\n")}\n`
+                //+`DESCRIPTION;ENCODING=QUOTED-PRINTABLE:${event.content.replaceAll("\n", "=0D=0A")}\n`
+                //+`DESCRIPTION:${event.content}\n`
                 +'END:VEVENT\n'
-        } // .replaceAll("\r\n", "\\n") //description test
+        } 
 
         return icsHeader + icsTimeZone + icsEventsData + icsFooter
     }

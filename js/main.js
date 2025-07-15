@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         .finally(() => loading.stop())
     }
 
-    async function updateOne(event, id) {
+    async function updateOne(event, id, clockTimes) {
         loading.start()
         return new Promise((resolve, reject) => {
             jQuery.ajax({
@@ -159,7 +159,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 data: {
                     action: 'vuosi_kello_update_one',
                     event,
-                    id
+                    id,
+                    clockTimes
                 }
             }).done((response) => {
                 resolve(response.data)
@@ -171,7 +172,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         .finally(() => loading.stop())
     }
 
-    async function updateSeries(event, series_id) {
+    async function updateSeries(event, series_id, clockTimes) {
         loading.start()
         return new Promise((resolve, reject) => {
             jQuery.ajax({
@@ -181,7 +182,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 data: {
                     action: 'vuosi_kello_update_series',
                     event,
-                    series_id
+                    series_id,
+                    clockTimes
                 }
             }).done((response) => {
                 resolve(response.data)
@@ -335,10 +337,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     yearEvents.getEvent(id),
                     organizationGroups,
                     {
-                        updateOneClick: (event) => {
-                            updateOne(event, id)
+                        updateOneClick: (event, clockTimes) => {
+                            updateOne(event, id, clockTimes)
                                 .then(result => {
-                                    yearEvents.updateEventById(id, event)
+                                    yearEvents.updateEventById(id, event, clockTimes)
                                     infoElement.deselectEvent()
                                 })
                                 .catch(error => {
@@ -348,10 +350,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                         },
                         //updateOneClick: (event) => {yearEvents.updateEventById(id, event)},
 
-                        updateSeriesClick: (event) => {
-                            updateSeries(event, series_id)
+                        updateSeriesClick: (event, clockTimes) => {
+                            updateSeries(event, series_id, clockTimes)
                                 .then(result => {
-                                    const edits = yearEvents.updateEventsBySeriesId(series_id, event)
+                                    const edits = yearEvents.updateEventsBySeriesId(series_id, event, clockTimes)
                                     if(edits !== result){ //if client edits different amount of edits than the server edited in db.
                                         throw new Error(`client server mismatch: client(${edits}) != server(${result})`)
                                     }
@@ -626,7 +628,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 +`LOCATION:${event.group}\n`
                 +`DESCRIPTION:${event.content}\n`
                 +'END:VEVENT\n'
-        }
+        } // .replaceAll("\r\n", "\\n") //description test
 
         return icsHeader + icsTimeZone + icsEventsData + icsFooter
     }

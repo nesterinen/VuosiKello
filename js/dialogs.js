@@ -798,8 +798,8 @@ function SettingsDialog(event, groups, {updateOneClick, updateSeriesClick}){
                 <div class='baseElement clockStartStop'>
                     <div class='baseText'>alku</div>
                     <div class='baseText'>loppu</div>
-                    <input type='time' class='startInput' disabled/>
-                    <input type='time' class='endInput' disabled/>
+                    <input type='time' class='startInput'/>
+                    <input type='time' class='endInput'/>
                 </div>
 
                 <div class='baseElement prioritySelector'>
@@ -992,7 +992,12 @@ function SettingsDialog(event, groups, {updateOneClick, updateSeriesClick}){
             group: selectedGroupsArray,
             content: content.value,
             priority: prioritySelector.options.selectedIndex + 1,
-            reservor: reservor.value
+            reservor: reservor.value,
+        }
+
+        const clockTimes = {
+            clockStart: clockStart.value,
+            clockEnd: clockEnd.value
         }
 
         let changes = 0
@@ -1011,12 +1016,16 @@ function SettingsDialog(event, groups, {updateOneClick, updateSeriesClick}){
             }
         })
 
+        if(clockTimes.clockStart !== startTime || clockTimes.clockEnd !== endTime){
+            changes += 1
+        }
+
         if(changes === 0) {
             alert('Tapahtumaan ei ole tehty muutoksia')
             return
         }
 
-        callBackFunction(returnEvent)
+        callBackFunction(returnEvent, clockTimes)
         dialog.remove()
     }
 

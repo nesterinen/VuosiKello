@@ -212,7 +212,7 @@ class YearEvents {
         document.dispatchEvent(new Event(this.eventUpdateName))
     }
 
-    updateEventById(id, event){
+    updateEventById(id, event, clockTimes=null){
         if(typeof id !== 'number' || id % 1 !== 0) {
             throw new Error('id is not a integer')
         }
@@ -225,12 +225,19 @@ class YearEvents {
         for (const [key, value] of Object.entries(event)){
             eventToUpdate[key] = value
         }
+
+        if(clockTimes){
+            const [sh, sm] = clockTimes.clockStart.split(':')
+            eventToUpdate.start.setUTCHours(sh, sm)
+            const [eh, em] = clockTimes.clockEnd.split(':')
+            eventToUpdate.end.setUTCHours(eh, em)
+        }
         
         this.#errorLogger('event with id:', id, 'updated')
         this.updateEventDispatch()
     }
 
-    updateEventsBySeriesId(series_id, event){
+    updateEventsBySeriesId(series_id, event, clockTimes=null){
         if(typeof series_id !== 'number' || series_id % 1 !== 0) {
             throw new Error('series_id is not a integer')
         }
@@ -240,6 +247,12 @@ class YearEvents {
         for (let i = 0; i < this.events.length; i++){
             if(this.events[i].series_id === series_id){
                 this.events[i] = {...this.events[i], ...event}
+                if(clockTimes){
+                    const [sh, sm] = clockTimes.clockStart.split(':')
+                    this.events[i].start.setUTCHours(sh, sm)
+                    const [eh, em] = clockTimes.clockEnd.split(':')
+                    this.events[i].end.setUTCHours(eh, em)
+                }
                 sumOfEdits += 1
             }
         }

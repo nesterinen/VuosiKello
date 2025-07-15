@@ -247,7 +247,16 @@ function vuosi_kello_update_one(): void {
         wp_send_json_error('post is missing id', 400);
         return;
     }
-   
+
+    //validate clock start & end.
+    $time_regex = "/^(?:[01][0-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9])?$/";
+    if(!preg_match($time_regex, $_POST['clockTimes']['clockStart'])){
+        wp_send_json_error("invalid clock start: {$_POST['clockTimes']['clockStart']}", 400);
+    }
+    if(!preg_match($time_regex, $_POST['clockTimes']['clockEnd'])){
+        wp_send_json_error("invalid clock end: {$_POST['clockTimes']['clockEnd']}", 400);
+    }
+
     global $wpdb;
     $table_name = get_vuosi_kello_table();
 
@@ -262,6 +271,19 @@ function vuosi_kello_update_one(): void {
         ],
         ['id' => $_POST['id']],
     );
+
+    // UPDATE DATE CLOCK TIME SEPERATELY
+    $spaghetti_code = $wpdb->get_results(
+        "UPDATE {$table_name} 
+        SET start = concat(date(start), ' {$_POST['clockTimes']['clockStart']}'),
+        end = concat(date(start), ' {$_POST['clockTimes']['clockEnd']}')
+        WHERE id = {$_POST['id']};
+        "
+    );
+
+    if($result !== false){
+        $result += $wpdb->rows_affected;
+    }
 
     switch (true) {
         case $result === false:
@@ -292,6 +314,16 @@ function vuosi_kello_update_series(): void {
         wp_send_json_error('post is missing series_id', 400);
         return;
     }
+
+    //validate clock start & end.
+    $time_regex = "/^(?:[01][0-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9])?$/";
+    if(!preg_match($time_regex, $_POST['clockTimes']['clockStart'])){
+        wp_send_json_error("invalid clock start: {$_POST['clockTimes']['clockStart']}", 400);
+    }
+    if(!preg_match($time_regex, $_POST['clockTimes']['clockEnd'])){
+        wp_send_json_error("invalid clock end: {$_POST['clockTimes']['clockEnd']}", 400);
+    }
+
    
     global $wpdb;
     $table_name = get_vuosi_kello_table();
@@ -307,6 +339,19 @@ function vuosi_kello_update_series(): void {
         ],
         ['series_id' => $_POST['series_id']],
     );
+
+    // UPDATE DATE CLOCK TIME SEPERATELY
+    $spaghetti_code = $wpdb->get_results(
+        "UPDATE {$table_name} 
+        SET start = concat(date(start), ' {$_POST['clockTimes']['clockStart']}'),
+        end = concat(date(start), ' {$_POST['clockTimes']['clockEnd']}')
+        WHERE series_id = {$_POST['series_id']};
+        "
+    );
+
+    if($result !== false && $result === 0){
+        $result += $wpdb->rows_affected;
+    }
 
     switch (true) {
         case $result === false:

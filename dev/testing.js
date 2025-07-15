@@ -11,6 +11,7 @@ selected_value['number'] = 6969
 console.log('wtf:', lista_obj[1])
 */
 
+/*
 const obj1 = {
     name: 'asd',
     value: 'asd',
@@ -31,3 +32,8 @@ const obj3 = {
 }
 
 console.log('obj3', obj3)
+*/
+let sh, sm, eh, em
+[sh, sm] = "12:34:56".split(':')
+[eh, em] = "11:22:33".split(':')
+console.log(sh, sm, eh, em)

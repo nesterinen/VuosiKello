@@ -33,7 +33,7 @@ function vuosi_kello_plugin_activation_group(): void {
         }
     }
 }
-register_activation_hook(__FILE__, 'vuosi_kello_plugin_activation_group');
+//register_activation_hook(__FILE__, 'vuosi_kello_plugin_activation_group');
 
 function settings_add_admin_page(){
     add_options_page(

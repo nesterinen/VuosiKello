@@ -40,6 +40,7 @@ $vuosi_kello_default_groups = [
 
 //group settings admin page, group table initializations & etc..
 include(plugin_dir_path(__FILE__) . 'group_settings/settings.php');
+register_activation_hook(__FILE__, 'vuosi_kello_plugin_activation_group');
 
 function get_vuosi_kello_table(): string{
     global $wpdb;

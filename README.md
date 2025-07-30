@@ -1,6 +1,6 @@
 <h1 align="center">Vuosikello - Wordpress plugin</h1>
 
-<p align="center"><img src="dev/vuosikello.png"/></p>
+<p align="center"><img src="dev/vuosikello105.png"/></p>
 
 
 <h3>info</h3>
@@ -15,9 +15,24 @@
 <h3>asennus</h3>
 <ul>
 <li><a href="https://codeload.github.com/nesterinen/VuosiKello/zip/refs/heads/main"> Lataa(.zip) </a></li>
-<li>Kirjaudu Wordpress sivustoon /wp-admin/</li>
+<li>Kirjaudu Wordpress sivustoon {esimerkki.com}/wp-admin/</li>
 <li>Lisäosat -> Asenna lisäosa -> Lataa lisäosa -> Selaa..</li>
 <li>Ladatut tiedostot -> VuosiKello-main.zip</li>
 </ul>
 
-<p>lisäosan päivitys toimii täysin samalla tavalla.</p>
+<p>lisäosan päivitys toimii täysin tavalla.</p>
+
+<h3>ryhmien päivitys</h3>
+<ul>
+<li>Kirjaudu Wordpress sivustoon {esimerkki.com}/wp-admin/</li>
+<li>Asetukset -> VuosiKello</li>
+<li>Lisää: kirjoita ryhmän nimi syöttöön ja paina "lisää"</li>
+<li>Poista: paina poistettavan ryhmän nimen viereistä "poista" painiketta</li>
+<li>"palauta vakio ryhmät" painike poistaa kaikki nykyiset ryhmät ja lisää automaattisesti vakio ryhmät:     'Hallinto',
+    'Työsuojelu',
+    'Wörkkis',
+    'Jokikievari',
+    'Kotikievari',
+    'Kouhu',
+    'Olohuone Kotoisa'</li>
+</ul>

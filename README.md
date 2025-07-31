@@ -36,3 +36,6 @@
     'Kouhu',
     'Olohuone Kotoisa'</li>
 </ul>
+
+<h3>grafiikan yleiskatsaus</h3>
+<p align="center"><img src="dev/vk_basic_guide.png"/></p>
